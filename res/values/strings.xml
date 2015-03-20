@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Thankyou Charitable Trust</string>
+    <string name="title_activity_register">Thankyou Charitable Trust</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="register_account">Registration</string>
+    <string name="post">Post</string>
+    <string name="message">message</string>
+    <string name="get_data">Get data</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_send">Send</string>
+    <string name="message_name_placeholder">Profile Pic Goes Here</string>
+    <string name="placeholderName">User Name Goes Here</string>
+    <string name="title_activity_single_project">SingleProject</string>
+
+</resources>
