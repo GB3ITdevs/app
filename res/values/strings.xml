@@ -15,5 +15,10 @@
     <string name="message_name_placeholder">Profile Pic Goes Here</string>
     <string name="placeholderName">User Name Goes Here</string>
     <string name="title_activity_single_project">SingleProject</string>
+    <string name="title_activity_welcome_screen">WelcomeScreen</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="about_us">About Us</string>
+    <string name="title_activity_about_us">AboutUs</string>
 
 </resources>

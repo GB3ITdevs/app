@@ -28,7 +28,7 @@
         android:layout_marginTop="5dp" >
         
       <EditText
-        android:id="@+id/text"
+        android:id="@+id/text_Comments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/edit_message" 
@@ -36,7 +36,7 @@
         />
 
       <Button
-          android:id="@+id/button1"
+          android:id="@+id/button_Post_Comments"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"

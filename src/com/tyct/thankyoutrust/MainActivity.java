@@ -1,6 +1,7 @@
 package com.tyct.thankyoutrust;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.tyct.thankyoutrust.model.Message;
@@ -14,6 +15,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Adapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +29,8 @@ public class MainActivity extends ListActivity {
 	TextView output;
 	ProgressBar pb;
 	List<MyTask> tasks;
+	List<PostTask> posttasks;
+	Message messageEntity;
 	
 	List<Message> messageList;
 
@@ -41,6 +49,10 @@ public class MainActivity extends ListActivity {
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
 		}
+		
+		//Button to post to comments
+		Button postCommentButton = (Button) findViewById(R.id.button_Post_Comments);
+		postCommentButton.setOnClickListener(new postCommentHandler());
 	
 	}
 
@@ -127,7 +139,95 @@ public class MainActivity extends ListActivity {
 		
 		@Override
 		protected void onProgressUpdate(String... values) {
-//			updateDisplay(values[0]);
+			//updateDisplay(values[0]);
+		}
+		
+	}
+	
+	
+	//Class to handle posting comments
+	public class postCommentHandler implements OnClickListener
+	{
+
+		@Override
+		public void onClick(View v) {
+			//Get Text from editText field
+			EditText commentData = (EditText) findViewById(R.id.text_Comments);
+			//put Text into string form
+			String commentString = commentData.getText().toString();
+			
+			//Info ID (hard coded for now, but will need to get logged in user id)
+			int userID = 01;
+			
+			//Postal Code info (hard coded for now, but will need to get logged in person postalcode)
+			int postalInfo = 9001;
+
+			if(commentData.equals(null))
+			{
+				Toast.makeText(MainActivity.this, "You will need to add write a message to post", Toast.LENGTH_LONG).show();
+			}
+			else
+			{
+			
+			//Create new Message Object, the passing data into sets
+			messageEntity = new Message();
+			messageEntity.setInfoID(userID);
+			messageEntity.setPostalCode(postalInfo);
+			messageEntity.setComment(commentString);
+			
+			posttasks = new ArrayList<>();
+			PostTask task = new PostTask();
+			task.execute();
+			commentData.setText("");
+			
+			}
+		//Debugging Activity	
+//		String messageEntityString = MessageJSONParser.POSTMessage(messageEntity);
+//		Toast.makeText(MainActivity.this, messageEntityString, Toast.LENGTH_LONG).show();
+			
+		}
+		
+	}
+	
+	private class PostTask extends AsyncTask<String, String, String> 
+	{
+		String messageEntityString = MessageJSONParser.POSTMessage(messageEntity);
+
+		@Override
+		protected void onPreExecute() {
+//			updateDisplay("Starting task");
+			
+			if (posttasks.size() == 0) {
+				pb.setVisibility(View.VISIBLE);
+			}
+			posttasks.add(this);
+		}
+		
+		@Override
+		protected String doInBackground(String... params) 
+		{
+			HttpManager.postData("http://gb3it.pickworth.info:3000/comments", messageEntityString);
+			String result = "Message Posted";
+			return result;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			
+			//String messageResult = (result);
+			
+			posttasks.remove(this);
+			if (tasks.size() == 0) 
+			{
+				pb.setVisibility(View.INVISIBLE);
+			}
+			
+
+		}
+		
+		@Override
+		protected void onProgressUpdate(String... values) {
+			updateDisplay();
 		}
 		
 	}
