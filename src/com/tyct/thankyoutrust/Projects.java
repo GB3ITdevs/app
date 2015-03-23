@@ -1,24 +1,24 @@
 package com.tyct.thankyoutrust;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tyct.thankyoutrust.model.Project;
-import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
-
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.tyct.thankyoutrust.model.Project;
+import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
 
 public class Projects extends Activity 
 {
@@ -32,7 +32,7 @@ public class Projects extends Activity
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_projects);
 		
 		//Create a new list of tasks
 		tasks = new ArrayList<>();

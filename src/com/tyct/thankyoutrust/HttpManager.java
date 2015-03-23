@@ -12,67 +12,94 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-public class HttpManager {
+//Class to manage the HTTP Connection to the database
+public class HttpManager 
+{
 
-	public static String getData(String uri) {
-
+	//Method to retrieve JSON data in string format from a parsed in URL
+public static String getData(String uri) 
+{
+		//Declare a Buffered Reader and set default to null
 		BufferedReader reader = null;
-
-		try {
+		
+		try 
+		{
+			//Create a URL from the parsed in URL string
 			URL url = new URL(uri);
+			
+			//Create a new HTTP URL Connection from the URL
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
+			
+			//Create a new String Builder
 			StringBuilder sb = new StringBuilder();
-			reader = new BufferedReader(new InputStreamReader(
-					con.getInputStream()));
-
+			
+			//Initialize the Buffered Reader to the input stream from the HTTP URL Connection
+			reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			
+			//Declare a new string
 			String line;
-			while ((line = reader.readLine()) != null) {
+			
+			//While the read line method of the buffered reader is not null add the input line to the string builder
+			while ((line = reader.readLine()) != null) 
+			{
 				sb.append(line + "\n");
 			}
-
+			
+			//Return the string builder in string format
 			return sb.toString();
-
-		} catch (Exception e) {
+			
+		} 
+		
+		//If the is an exception, print the stack trace and return null
+		catch (Exception e) 
+		{
 			e.printStackTrace();
 			return null;
-		} finally {
-			if (reader != null) {
-				try {
+		} 
+		
+		//Then close the Buffered Reader
+		finally 
+		{
+			if (reader != null) 
+			{
+				try 
+				{
 					reader.close();
-				} catch (IOException e) {
+				} 
+				//If the is an exception, print the stack trace and return null
+				catch (IOException e) 
+				{
 					e.printStackTrace();
 					return null;
 				}
 			}
 		}
-
+		
 	}
 
-	public static void postData(String uri, String jsonString) {
+	//Method to post a parsed in JSON data in string format to a parsed in URL
+	public static void postData(String uri, String jsonString)
+	{
+		//Create a new URL
 		URL url;
-		//BufferedWriter reader = null;
-		//DataOutputStream output;
+		
 		try 
 		{
+			//Set the URL to the parsed in URL string
 			url = new URL(uri);
-			//HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			
+			//Create a new default HTTP Client
 			HttpClient httpClient = new DefaultHttpClient();
+			
+			//Create a new HTTP post from the URL
 			HttpPost httpPost = new HttpPost(url.toURI());
+			
+			//
 			httpPost.setEntity(new StringEntity(jsonString));
 			
-			//httpPost.setHeader("Content-Type", "application/json");
-			//httpPost.setHeader("Accept-Encoding", "application/json");
-			//httpPost.setHeader("Accept-Language", "en-US");
+			httpPost.setHeader("Content-Type", "application/json");
 			
 			httpClient.execute(httpPost);
-			
-			//reader = new BufferedWriter(new OutputStreamWriter(con.getOutputStream()));
-			//output = new DataOutputStream(con.getOutputStream());
-			//output.writeBytes(jsonString);
-			//reader.write(jsonString);
-			//reader.close();
-			//output.close();
 			
 		} 
 		catch (IOException e) 

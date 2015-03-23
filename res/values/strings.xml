@@ -15,5 +15,10 @@
     <string name="message_name_placeholder">Profile Pic Goes Here</string>
     <string name="placeholderName">User Name Goes Here</string>
     <string name="title_activity_single_project">SingleProject</string>
-
+    <string name="title_activity_projects">ProjectsActivity</string>
+    <string name="postalCodeTitle">Postal Code:</string>
+    <string name="applicantNameTitle">Applicant Name:</string>
+    <string name="fundsRequestedTitle">Funds Requested:</string>
+    <string name="useOfFundsTitles">Use Of Funds:</string>
+    
 </resources>
