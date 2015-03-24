@@ -1,7 +1,6 @@
 package com.tyct.thankyoutrust;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.tyct.thankyoutrust.model.Message;
@@ -16,10 +15,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +36,7 @@ public class MainActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		//Progress Bar
 		pb = (ProgressBar) findViewById(R.id.progressBar1);
 		pb.setVisibility(View.INVISIBLE);
 		
@@ -82,13 +80,7 @@ public class MainActivity extends ListActivity {
 	}
 
 	protected void updateDisplay() {
-		
-//		if (messageList != null) {
-//			for (Message message : messageList) {
-//				output.append(message.getInfoID() + "    "  + message.getComment() + "\n" + "\n");
-//			}
-//		}
-		
+		//get list view from MessageAdapter
 		MessageAdapter adapter = new MessageAdapter(this, R.layout.item_message, messageList);
 		setListAdapter(adapter);
 		
@@ -161,23 +153,31 @@ public class MainActivity extends ListActivity {
 			
 			//Postal Code info (hard coded for now, but will need to get logged in person postalcode)
 			int postalInfo = 9001;
-
+			
+			//If statement, checks to make sure that user has put something into the edit text field
 			if(commentData.equals(null))
 			{
+				//If Edit Text is empty it will show a toast
 				Toast.makeText(MainActivity.this, "You will need to add write a message to post", Toast.LENGTH_LONG).show();
 			}
 			else
 			{
+			//If Edit Text is not empty it will Post to the new message to the database
 			
-			//Create new Message Object, the passing data into sets
+			//Create new Message Object, then pass data into sets
 			messageEntity = new Message();
+			//Passes the infoID
 			messageEntity.setInfoID(userID);
+			//Passes the Postal Code
 			messageEntity.setPostalCode(postalInfo);
+			//Passes the comment
 			messageEntity.setComment(commentString);
 			
+			//Calls the PostTask Method, and posts the messageEntity
 			posttasks = new ArrayList<>();
 			PostTask task = new PostTask();
 			task.execute();
+			//Sets the Edit Text field to empty
 			commentData.setText("");
 			
 			}

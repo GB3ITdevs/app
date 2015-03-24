@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/projectName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="1" >
+
+        <TextView
+            android:id="@+id/postCodeTitle"
+            android:layout_column="0"
+            android:layout_gravity="start|center_vertical"
+            android:layout_row="0"
+            android:text="@string/postalCodeTitle" />
+
+        <TextView
+            android:id="@+id/applicantNameTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="@string/applicantNameTitle" />
+
+        <TextView
+            android:id="@+id/postalCode"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_row="0"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/applicantName"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_row="1"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/fundsRequestedTitle"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_row="2"
+            android:text="@string/fundsRequestedTitle" />
+
+        <TextView
+            android:id="@+id/fundsRequested"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_row="2"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/useOfFundsTitle"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_row="3"
+            android:text="@string/useOfFundsTitles" />
+
+        <TextView
+            android:id="@+id/useOfFunds"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_row="3"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/projectBlurb"
+            android:layout_column="0"
+            android:layout_gravity="left|top"
+            android:layout_row="4"
+            android:text="blurb" />
+
+    </GridLayout>
+
+</LinearLayout>

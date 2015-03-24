@@ -384,8 +384,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			showProgress(false);
 
 			if (success) {
-				Toast.makeText(LoginActivity.this, "Successful login", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(LoginActivity.this, "Successful login", Toast.LENGTH_SHORT).show();
 				//finish();
+				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+				startActivity(intent);
 			} else {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));
