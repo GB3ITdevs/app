@@ -7,25 +7,25 @@
     
     <ImageView
         android:id="@+id/imageAvatar"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"
         android:contentDescription="@string/placeholder"
-        android:src="@drawable/profilepic"
+        android:src="@drawable/profile_place_holder"
         />
 
     <TextView
         android:id="@+id/tvName"
-        android:layout_width="70dp"
+        android:layout_width="60dp"
         android:layout_height="30dp"
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="3dp"
         android:layout_below="@+id/imageAvatar"
         android:text="@string/placeholderName"
-        android:textSize="12sp" />
+        android:textSize="10sp" />
 
     <TextView
         android:id="@+id/tvDate"
@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/tvName"
         android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
         android:textColor="#B8B8C0"
         android:textSize="12sp" />
 
@@ -42,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/imageAvatar"
          android:layout_marginLeft="5dp"
-        android:layout_marginBottom="3dp"
+        android:layout_marginBottom="15dp"
         android:textSize="14sp"
         android:layout_toRightOf="@+id/tvName" />
 

@@ -11,21 +11,21 @@
         android:layout_weight="1"
         android:layout_margin="7dp"
         android:divider="@android:color/transparent"
-        android:dividerHeight="10dp" >
+        android:dividerHeight="8dp" >
     </ListView>
 
     <ProgressBar
         android:id="@+id/progressBar1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:visibility="invisible" />
 
 <LinearLayout
         android:id="@+id/laytbtns"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp" >
+        android:layout_marginTop="3dp"
+        android:weightSum="1" >
         
       <EditText
         android:id="@+id/text_Comments"
@@ -37,10 +37,11 @@
 
       <Button
           android:id="@+id/button_Post_Comments"
-          android:layout_width="0dp"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_weight="1"
-          android:text="@string/post" />
+          android:text="@string/post" 
+          />
 
       </LinearLayout>
     
