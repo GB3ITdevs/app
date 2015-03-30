@@ -57,27 +57,28 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
 		tvDate.setText(message.getDate());
 		
-		///===========================================================
-		//
-		//Temporary just display the infoID instead of name of person.
-		//
-		//*********NEED TO REPLACE INFOID WITH NAME******************
+		//String to hold the users display Name
 		String displayName = null;
 		
+		//for users in the userlist where user info id equals message get info id
 		for(Users user : userList)
 		{
 			if(user.getInfoID()==message.getInfoID())
 			{
-				
+				//get last name from user list
 				String lastName = user.getLastName();
+				//get first name from user list
 				String firstName = user.getFirstName();
+				//store firstname and last name in a string
 				displayName = firstName + " " + lastName;
 			}
 		}
+		
+		//Set Textview for Name then Display users display name
 		TextView tvId = (TextView) view.findViewById(R.id.tvName);
 		tvId.setText(displayName);
 		
-		
+		//return the view
 		return view;
 	}
 		

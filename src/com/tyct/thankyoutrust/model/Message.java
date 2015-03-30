@@ -1,5 +1,9 @@
 package com.tyct.thankyoutrust.model;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class Message {
 	private int commentID;
 	private int infoID;
@@ -32,6 +36,9 @@ public class Message {
 		this.comment = comment;
 	}
 	public String getDate() {
+//		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-YYYY");
+//		String dateString = sdf.format(date);
+		
 		return date;
 	}
 	public void setDate(String date) {
