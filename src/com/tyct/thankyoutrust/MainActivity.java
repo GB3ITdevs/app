@@ -137,8 +137,6 @@ public class MainActivity extends ListActivity {
 		protected void onPostExecute(String result) {
 
 			messageList = MessageJSONParser.parseFeed(result);
-			
-			updateDisplay();
 
 			tasks.remove(this);
 			if (tasks.size() == 0) {
@@ -247,7 +245,7 @@ public class MainActivity extends ListActivity {
 				
 				//refresh the display for the list view.
 				display();
-
+				userDisplay();
 			}
 			// Debugging Activity
 			// String messageEntityString =

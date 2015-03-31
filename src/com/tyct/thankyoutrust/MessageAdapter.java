@@ -44,7 +44,6 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 
 		//Reverse order the messageList.
 		Message message = getItem(position);
-		
 		//Old Code that worked fine but did not reverse order anything
 		//Message message = messageList.get(position);
 		
