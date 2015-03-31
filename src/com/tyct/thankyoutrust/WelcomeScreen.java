@@ -69,8 +69,8 @@ public class WelcomeScreen extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			//Temp Toast until we decided what happens with this button
-			Toast.makeText(WelcomeScreen.this, "Registration Page that Mike took upon himself to make it one with the Login. Boo Mike!", Toast.LENGTH_LONG).show();
+			Intent intent = new Intent(WelcomeScreen.this, RegisterActivity.class);
+			startActivity(intent);
 		}
 		
 	}
