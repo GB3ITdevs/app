@@ -7,8 +7,19 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
-   <item android:id="@+id/action_get_data"
-        android:title="@string/get_data"
+    
+   <item android:id="@+id/action_home"
+        android:title="@string/home"
         android:orderInCategory="100"
-        android:showAsAction="always"/>
+        android:showAsAction="ifRoom"/>
+   
+   <item android:id="@+id/action_projects"
+        android:title="@string/projects"
+        android:orderInCategory="200"
+        android:showAsAction="ifRoom"/>
+   
+      <item android:id="@+id/action_about_us"
+        android:title="@string/about_us"
+        android:orderInCategory="300"
+        android:showAsAction="ifRoom"/>
 </menu>

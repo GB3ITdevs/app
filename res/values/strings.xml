@@ -8,7 +8,7 @@
     <string name="register_account">Registration</string>
     <string name="post">Post</string>
     <string name="message">message</string>
-    <string name="get_data">Get data</string>
+    <string name="home">Home</string>
     <string name="placeholder">Placeholder</string>
     <string name="edit_message">Enter a message</string>
     <string name="button_send">Send</string>
@@ -25,5 +25,6 @@
     <string name="applicantNameTitle">Applicant Name:</string>
     <string name="fundsRequestedTitle">Funds Requested:</string>
     <string name="useOfFundsTitles">Use Of Funds:</string>
+    <string name="projects">Projects</string>
 
 </resources>

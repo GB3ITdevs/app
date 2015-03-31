@@ -1,6 +1,7 @@
 package com.tyct.thankyoutrust;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,14 +22,23 @@ public class AboutUs extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+		Intent goTo = new Intent();
+		if (item.getItemId() == R.id.action_projects) 
+		{
+			goTo = new Intent(AboutUs.this, Projects.class);
+			
 		}
-		return super.onOptionsItemSelected(item);
+		if (item.getItemId() == R.id.action_home) 
+		{
+			goTo = new Intent(AboutUs.this, MainActivity.class);
+		}
+		if (item.getItemId() == R.id.action_about_us) 
+		{
+			goTo = new Intent(AboutUs.this, AboutUs.class);
+		}
+		startActivity(goTo);
+		return false;
 	}
 }

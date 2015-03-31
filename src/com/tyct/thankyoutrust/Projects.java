@@ -8,11 +8,13 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -64,6 +66,27 @@ public class Projects extends Activity
 		//Auto-generated:
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+		Intent goTo = new Intent();
+		if (item.getItemId() == R.id.action_projects) 
+		{
+			goTo = new Intent(Projects.this, Projects.class);
+			
+		}
+		if (item.getItemId() == R.id.action_home) 
+		{
+			goTo = new Intent(Projects.this, MainActivity.class);
+		}
+		if (item.getItemId() == R.id.action_about_us) 
+		{
+			goTo = new Intent(Projects.this, AboutUs.class);
+		}
+		startActivity(goTo);
+		return false;
 	}
 
 	
