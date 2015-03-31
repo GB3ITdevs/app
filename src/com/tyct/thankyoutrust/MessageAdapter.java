@@ -1,11 +1,7 @@
 package com.tyct.thankyoutrust;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import com.tyct.thankyoutrust.model.Message;
-import com.tyct.thankyoutrust.model.Users;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -16,17 +12,19 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.tyct.thankyoutrust.model.Message;
+import com.tyct.thankyoutrust.model.Users;
+
 public class MessageAdapter extends ArrayAdapter<Message> {
 
-	private Context context;
-	private List<Message> messageList;
-	private List<Users> userList;
+	Context context;
+	List<Users> userList;
 
-	public MessageAdapter(Context context, int resource, List<Message> objects, List<Users> o1) {
-		super(context, resource, objects);
-		this.context = context;
-		this.messageList = objects;
-		this.userList = o1;
+	public MessageAdapter(Context contextPassed, int resource, List<Message> objects, List<Users> o1) {
+		super(contextPassed, resource, objects);
+		
+		context = contextPassed;
+		userList = o1;
 	}
 	
 	//Get Item and reverse order it
@@ -46,6 +44,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 
 		//Reverse order the messageList.
 		Message message = getItem(position);
+		
 		//Old Code that worked fine but did not reverse order anything
 		//Message message = messageList.get(position);
 		
@@ -58,7 +57,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		tvDate.setText(message.getDate());
 		
 		//String to hold the users display Name
-		String displayName = null;
+		String displayName = "";
 		
 		//for users in the userlist where user info id equals message get info id
 		for(Users user : userList)
