@@ -11,6 +11,8 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -43,16 +45,14 @@ import com.tyct.thankyoutrust.parsers.UsersJSONParser;
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	
-	List<MyTask> tasks;
-	
+	SharedPreferences sharedPrefs;
+	Editor prefsEditor;
+	List<MyTask> tasks;	
 	List<Users> userList;
+	
+	// User Session Manager Class
+    SessionManager session;
 
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	//private static final String[] DUMMY_CREDENTIALS = new String[] {
-	//		"foo@example.com:hello", "bar@example.com:world" };
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
@@ -68,6 +68,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		
+		// User Session Manager
+        session = new SessionManager(getApplicationContext());
 
 		// Set up the login form.
 		mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -372,8 +375,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 					return user.getPassword().equals(mPassword);
 				}
 			}
-
-			// TODO: register the new account here.
 			
 			return true;
 		}
@@ -385,7 +386,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 			if (success) {
 				Toast.makeText(LoginActivity.this, "Successful login", Toast.LENGTH_SHORT).show();
-				//finish();
+				
+				session.createUserLoginSession("Username", mEmail);
+				Intent i = new Intent(LoginActivity.this, MainActivity.class);
+				startActivity(i);
+				finish();
 			} else {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));

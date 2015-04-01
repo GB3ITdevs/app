@@ -2,6 +2,7 @@ package com.tyct.thankyoutrust;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import com.tyct.thankyoutrust.model.Message;
@@ -33,11 +34,17 @@ public class MainActivity extends ListActivity {
 	Message messageEntity;
 	
 	List<Message> messageList;
+	
+	// User Session Manager Class
+    SessionManager session;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		 // Session class instance
+        session = new SessionManager(getApplicationContext());
 		
 		pb = (ProgressBar) findViewById(R.id.progressBar1);
 		pb.setVisibility(View.INVISIBLE);
@@ -53,7 +60,19 @@ public class MainActivity extends ListActivity {
 		//Button to post to comments
 		Button postCommentButton = (Button) findViewById(R.id.button_Post_Comments);
 		postCommentButton.setOnClickListener(new postCommentHandler());
-	
+		
+		// Check user login (this is the important point)
+        // If User is not logged in , This will redirect user to LoginActivity
+        // and finish current activity from activity stack.
+        if(session.checkLogin())
+            finish();
+         
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+        
+        // get email
+        HashMap<String, String> userEmail = user;
+        Toast.makeText(this, userEmail.toString(), Toast.LENGTH_LONG).show();
 	}
 
 	@Override
