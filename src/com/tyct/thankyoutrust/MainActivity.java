@@ -68,11 +68,14 @@ public class MainActivity extends ListActivity {
             finish();
          
         // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
+        HashMap<String, String> userStored = session.getUserDetails();
         
         // get email
-        HashMap<String, String> userEmail = user;
-        Toast.makeText(this, userEmail.toString(), Toast.LENGTH_LONG).show();
+        String userEmail = userStored.get("email");
+        
+        // get user id
+        int userId = Integer.parseInt(userStored.get("id"));
+        Toast.makeText(this, userEmail + ", usid: " + userId, Toast.LENGTH_LONG).show();
 	}
 
 	@Override

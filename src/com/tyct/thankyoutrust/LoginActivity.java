@@ -44,14 +44,16 @@ import com.tyct.thankyoutrust.parsers.UsersJSONParser;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
-	
-	SharedPreferences sharedPrefs;
-	Editor prefsEditor;
+		
 	List<MyTask> tasks;	
 	List<Users> userList;
 	
 	// User Session Manager Class
     SessionManager session;
+
+    SharedPreferences sharedPrefs;
+	Editor prefsEditor;
+	int loggedInUserId;
 
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -372,6 +374,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			for (Users user : userList) {
 				if (user.getEmail().equals(mEmail)) {
 					// Account exists, return true if the password matches.
+					loggedInUserId = user.getInfoID();
 					return user.getPassword().equals(mPassword);
 				}
 			}
@@ -387,7 +390,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			if (success) {
 				Toast.makeText(LoginActivity.this, "Successful login", Toast.LENGTH_SHORT).show();
 				
-				session.createUserLoginSession("Username", mEmail);
+				session.createUserLoginSession(loggedInUserId, mEmail);
 				Intent i = new Intent(LoginActivity.this, MainActivity.class);
 				startActivity(i);
 				finish();
