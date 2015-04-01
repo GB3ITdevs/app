@@ -61,7 +61,7 @@ public class HttpManager {
 			HttpPost httpPost = new HttpPost(url.toURI());
 			httpPost.setEntity(new StringEntity(jsonString));
 			
-			//httpPost.setHeader("Content-Type", "application/json");
+			httpPost.setHeader("Content-Type", "application/json");
 			//httpPost.setHeader("Accept-Encoding", "application/json");
 			//httpPost.setHeader("Accept-Language", "en-US");
 			

@@ -2,7 +2,6 @@ package com.tyct.thankyoutrust;
 
 
 import java.util.List;
-
 import com.tyct.thankyoutrust.model.Message;
 
 
@@ -45,8 +44,14 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
 		tvDate.setText(message.getDate());
 		
-		//Text View for Name *************JUST A PLACE HOLDER FOR NOW***************
-		//TextView tvName = (TextView) view.findViewById(R.id.tvName);
+		///===========================================================
+		//
+		//Temporary just display the infoID instead of name of person.
+		//
+		//*********NEED TO REPLACE INFOID WITH NAME******************
+		
+		TextView tvId = (TextView) view.findViewById(R.id.tvName);
+		tvId.setText(String.valueOf(message.getInfoID()));
 		
 		
 		return view;

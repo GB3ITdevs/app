@@ -37,4 +37,20 @@ public class MessageJSONParser {
 		}
 		
 	}
-}
+	
+	// Post user data to database
+				public static String POSTMessage(Message message) {
+					String json = "";
+					JSONObject jsonMessage = new JSONObject();
+					try {
+						jsonMessage.accumulate("infoID", Integer.toString(message.getInfoID()));
+						jsonMessage.accumulate("postalCode", Integer.toString(message.getPostalCode()));
+						jsonMessage.accumulate("comment", message.getComment());
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					json = "{\"comment\":" + jsonMessage.toString() + "}";
+					return json;
+				}
+			}
