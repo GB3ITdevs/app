@@ -9,6 +9,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -30,6 +31,8 @@ public class Projects extends Activity
 	ProgressBar pb;
 	Project selectedProject;
 	
+	SharedPreferences prefs;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -42,6 +45,8 @@ public class Projects extends Activity
 		//Initialize the progress bar and set it to not be visible
 		pb = (ProgressBar) findViewById(R.id.progressBar1);
 		pb.setVisibility(View.INVISIBLE);
+		
+		prefs = getSharedPreferences("UserDetails", MODE_PRIVATE);
 		
 		//If the phone is online retrieve the projects info from the url
 		if (isOnline()) 

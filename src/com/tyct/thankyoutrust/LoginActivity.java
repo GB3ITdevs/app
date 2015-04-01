@@ -11,6 +11,8 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -47,6 +49,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	
 	List<Users> userList;
 
+	SharedPreferences prefs;
+	Editor editor;
+	int loggedInInfoId;
+	
 	/**
 	 * A dummy authentication store containing known user names and passwords.
 	 * TODO: remove after connecting to a real authentication system.
@@ -65,7 +71,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	private View mLoginFormView;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
@@ -86,6 +93,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 						return false;
 					}
 				});
+		
+		prefs = getSharedPreferences("UserDetails", MODE_PRIVATE);
+		editor = prefs.edit();
 
 		// Sign in button handler
 		Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
@@ -367,7 +377,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 			
 			for (Users user : userList) {
-				if (user.getEmail().equals(mEmail)) {
+				if (user.getEmail().equals(mEmail)) 
+				{
+					loggedInInfoId = user.getInfoID();
 					// Account exists, return true if the password matches.
 					return user.getPassword().equals(mPassword);
 				}
@@ -383,7 +395,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			mAuthTask = null;
 			showProgress(false);
 
-			if (success) {
+			if (success) 
+			{
+				editor.putInt("UserInfoId", loggedInInfoId);
+				editor.putString("userEmail", mEmail);
+				editor.commit();
 				//Toast.makeText(LoginActivity.this, "Successful login", Toast.LENGTH_SHORT).show();
 				//finish();
 				Intent intent = new Intent(LoginActivity.this, MainActivity.class);

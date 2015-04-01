@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -33,6 +34,8 @@ public class ProjectDetailsFragment extends Fragment
 		int infoID;
 		RatingBar ratingBar;
 		
+		SharedPreferences prefs;
+		
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
@@ -60,8 +63,11 @@ public class ProjectDetailsFragment extends Fragment
 			tvProjectBlurb.setText(projectDisplayed.getProjectBlurb());
 			ratingBar.setOnRatingBarChangeListener(ratingChangeListener);
 			
-			//Dummy logged in infoID
-			infoID = 1;
+			prefs = ma.prefs;
+			
+			//Get the logged in user info id from the shared preferences
+			infoID = prefs.getInt("UserInfoId", 0);
+			//infoID = 1;
 			
 			//Check if the project has already been rated and if so make it unavailable to rate
 			checkForExistingRating();

@@ -12,6 +12,7 @@ import com.tyct.thankyoutrust.parsers.UsersJSONParser;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -35,6 +36,8 @@ public class MainActivity extends ListActivity {
 	List<PostTask> posttasks;
 	Message messageEntity;
 	
+	SharedPreferences prefs;
+	
 
 	List<Message> messageList;
 	List<Users> userList;
@@ -52,6 +55,8 @@ public class MainActivity extends ListActivity {
 
 		display();
 		userDisplay();
+		
+		prefs = getSharedPreferences("UserDetails", MODE_PRIVATE);
 
 		// Button to post to comments
 		Button postCommentButton = (Button) findViewById(R.id.button_Post_Comments);
@@ -230,7 +235,7 @@ public class MainActivity extends ListActivity {
 
 			// Info ID (hard coded for now, but will need to get logged in user
 			// id)
-			int userID = 01;
+			int userID = prefs.getInt("UserInfoId", 0);
 
 			// Postal Code info (hard coded for now, but will need to get logged
 			// in person postalcode)
