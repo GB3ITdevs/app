@@ -1,6 +1,9 @@
 package com.tyct.thankyoutrust;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import com.tyct.thankyoutrust.model.Message;
 
@@ -53,9 +56,33 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		TextView tvComment = (TextView) view.findViewById(R.id.tvComment);
 		tvComment.setText(message.getComment());
 		
-		//Text View that displays messages
-		TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
-		tvDate.setText(message.getDate());
+		//Get date that is a string 
+		String date=(message.getDate()); 
+		
+		//Set up date formatter 
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm"); 
+		
+		//Varible to hold new date 
+		Date formatInDateFrom = null; 
+		
+		//Parse String date to Date 
+		try { 
+			formatInDateFrom = (Date)formatter.parse(date);
+		} catch (ParseException e) { 
+			// TODO Auto-generated catch block e.printStackTrace(); 
+		} 
+		
+		//Set up new format ("WeekDay, Day, Month ' Year Hour:Mintues M") 
+		SimpleDateFormat newFormat = new SimpleDateFormat("EEE, d MMM, ''yy H:mm aaa"); 
+		
+		//reformat date and put back into a string 
+		String formattedDate = newFormat.format(formatInDateFrom); 
+		
+		//Set up TextView that displays dates 
+		TextView tvDate = (TextView) view.findViewById(R.id.tvDate); 
+		
+		//Put Formatted Date into TextView 
+		tvDate.setText(formattedDate);
 		
 		//String to hold the users display Name
 		String displayName = "";

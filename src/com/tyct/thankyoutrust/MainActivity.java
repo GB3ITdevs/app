@@ -104,7 +104,6 @@ public class MainActivity extends ListActivity {
 			goTo = new Intent(MainActivity.this, AboutUs.class);
 		}
 		startActivity(goTo);
-		finish();
 		return false;
 	}
 
