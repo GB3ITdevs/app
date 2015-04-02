@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Built application files
 *.apk
 *.ap_
@@ -46,3 +47,6 @@ local.properties
 .target
 # TeXlipse plugin
 .texlipse
+=======
+/gen
+>>>>>>> refs/heads/Blair

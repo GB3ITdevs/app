@@ -388,7 +388,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			showProgress(false);
 
 			if (success) {
-				Toast.makeText(LoginActivity.this, "Successful login", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(LoginActivity.this, "Successful login", Toast.LENGTH_SHORT).show();
 				
 				session.createUserLoginSession(loggedInUserId, mEmail);
 				Intent i = new Intent(LoginActivity.this, MainActivity.class);

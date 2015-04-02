@@ -14,17 +14,28 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.tyct.thankyoutrust.model.Message;
+import com.tyct.thankyoutrust.model.Users;
+
 public class MessageAdapter extends ArrayAdapter<Message> {
 
-	private Context context;
-	private List<Message> messageList;
+	Context context;
+	List<Users> userList;
 
-	public MessageAdapter(Context context, int resource, List<Message> objects) {
-		super(context, resource, objects);
-		this.context = context;
-		this.messageList = objects;
+	public MessageAdapter(Context contextPassed, int resource, List<Message> objects, List<Users> o1) {
+		super(contextPassed, resource, objects);
+		
+		context = contextPassed;
+		userList = o1;
 	}
-
+	
+	//Get Item and reverse order it
+	@Override
+	public Message getItem(int position)
+	{
+	    return super.getItem(getCount() - 1 - position);
+	}
+	
 	@SuppressLint("ViewHolder")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -33,8 +44,10 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 				(LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.item_message, parent, false);
 
-		//Display flower name in the TextView widget
-		Message message = messageList.get(position);
+		//Reverse order the messageList.
+		Message message = getItem(position);
+		//Old Code that worked fine but did not reverse order anything
+		//Message message = messageList.get(position);
 		
 		//Text View that displays the comments
 		TextView tvComment = (TextView) view.findViewById(R.id.tvComment);
@@ -44,16 +57,28 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
 		tvDate.setText(message.getDate());
 		
-		///===========================================================
-		//
-		//Temporary just display the infoID instead of name of person.
-		//
-		//*********NEED TO REPLACE INFOID WITH NAME******************
+		//String to hold the users display Name
+		String displayName = "";
 		
+		//for users in the userlist where user info id equals message get info id
+		for(Users user : userList)
+		{
+			if(user.getInfoID()==message.getInfoID())
+			{
+				//get last name from user list
+				String lastName = user.getLastName();
+				//get first name from user list
+				String firstName = user.getFirstName();
+				//store firstname and last name in a string
+				displayName = firstName + " " + lastName;
+			}
+		}
+		
+		//Set Textview for Name then Display users display name
 		TextView tvId = (TextView) view.findViewById(R.id.tvName);
-		tvId.setText(String.valueOf(message.getInfoID()));
+		tvId.setText(displayName);
 		
-		
+		//return the view
 		return view;
 	}
 		
