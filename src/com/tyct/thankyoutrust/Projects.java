@@ -86,6 +86,7 @@ public class Projects extends Activity
 			goTo = new Intent(Projects.this, AboutUs.class);
 		}
 		startActivity(goTo);
+		finish();
 		return false;
 	}
 
