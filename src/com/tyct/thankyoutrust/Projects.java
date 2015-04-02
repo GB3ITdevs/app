@@ -1,6 +1,5 @@
 package com.tyct.thankyoutrust;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class Projects extends Activity
 				Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
 			}
 		
-		ListView projectListView = (ListView) findViewById(R.id.projectList);
+		//ListView projectListView = (ListView) findViewById(R.id.projectList);
 		
 		//projectListView.set
 			
