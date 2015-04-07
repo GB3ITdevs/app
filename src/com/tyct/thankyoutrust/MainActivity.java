@@ -104,6 +104,10 @@ public class MainActivity extends ListActivity {
 		{
 			goTo = new Intent(MainActivity.this, MainActivity.class);
 		}
+		if (item.getItemId() == R.id.action_profile) 
+		{
+			goTo = new Intent(MainActivity.this, ProfileActivity.class);
+		}
 		if (item.getItemId() == R.id.action_about_us) 
 		{
 			goTo = new Intent(MainActivity.this, AboutUs.class);

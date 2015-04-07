@@ -8,8 +8,8 @@
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_margin="7dp"
+        android:layout_weight="1"
         android:divider="@android:color/transparent"
         android:dividerHeight="8dp" >
     </ListView>
@@ -20,30 +20,26 @@
         android:layout_height="wrap_content"
         android:visibility="invisible" />
 
-<LinearLayout
+    <LinearLayout
         android:id="@+id/laytbtns"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:weightSum="1" >
-        
-      <EditText
-        android:id="@+id/text_Comments"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/edit_message" 
-        android:layout_weight="1"
-        />
 
-      <Button
-          android:id="@+id/button_Post_Comments"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:text="@string/post" 
-          />
+        <EditText
+            android:id="@+id/text_Comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/edit_message" />
 
-      </LinearLayout>
-    
+        <Button
+            android:id="@+id/button_Post_Comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/post" />
+    </LinearLayout>
+
 </LinearLayout>
-

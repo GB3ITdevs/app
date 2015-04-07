@@ -19,7 +19,7 @@
         android:visibility="gone" />
 
     <ScrollView
-        android:id="@+id/scrollView1"
+        android:id="@+id/scrollViewProfile"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 

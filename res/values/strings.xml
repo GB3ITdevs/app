@@ -20,11 +20,16 @@
     <string name="register">Register</string>
     <string name="about_us">About Us</string>
     <string name="title_activity_about_us">AboutUs</string>
-     <string name="title_activity_projects">ProjectsActivity</string>
+    <string name="title_activity_projects">ProjectsActivity</string>
     <string name="postalCodeTitle">Postal Code:</string>
     <string name="applicantNameTitle">Applicant Name:</string>
     <string name="fundsRequestedTitle">Funds Requested:</string>
     <string name="useOfFundsTitles">Use Of Funds:</string>
     <string name="projects">Projects</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="prompt_city">City</string>
+    <string name="prompt_suburb">Suburb</string>
+    <string name="prompt_postcode">Postcode</string>
+    <string name="profile">Profile</string>
 
 </resources>

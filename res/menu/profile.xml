@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.mesageboard.MainActivity" >
+    tools:context="com.tyct.thankyoutrust.ProfileActivity" >
 
     <item
         android:id="@+id/action_settings"
@@ -21,8 +21,7 @@
         android:id="@+id/action_profile"
         android:orderInCategory="300"
         android:showAsAction="ifRoom"
-        android:title="@string/profile">
-    </item>
+        android:title="@string/profile"/>
     <item
         android:id="@+id/action_about_us"
         android:orderInCategory="400"
