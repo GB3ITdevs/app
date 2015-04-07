@@ -62,6 +62,18 @@ public class Projects extends Activity
 		}
 		selectedProject = new Project();
 		
+			if (isOnline()) 
+			{
+				requestData("http://gb3it.pickworth.info:3000/projects");	
+			} else 
+			{
+				Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
+			}
+		
+		//ListView projectListView = (ListView) findViewById(R.id.projectList);
+		
+		//projectListView.set
+			
 	}
 
 	//To do: create the top menu
@@ -91,6 +103,7 @@ public class Projects extends Activity
 			goTo = new Intent(Projects.this, AboutUs.class);
 		}
 		startActivity(goTo);
+		finish();
 		return false;
 	}
 

@@ -2,6 +2,7 @@
 package com.tyct.thankyoutrust;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.tyct.thankyoutrust.model.Message;
@@ -38,15 +39,20 @@ public class MainActivity extends ListActivity {
 	
 	SharedPreferences prefs;
 	
-
 	List<Message> messageList;
 	List<Users> userList;
+	
+	// User Session Manager Class
+    SessionManager session;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
+		 // Session class instance
+        session = new SessionManager(getApplicationContext());
+		
 		// Progress Bar
 		pb = (ProgressBar) findViewById(R.id.progressBar1);
 		pb.setVisibility(View.INVISIBLE);
@@ -61,12 +67,26 @@ public class MainActivity extends ListActivity {
 		// Button to post to comments
 		Button postCommentButton = (Button) findViewById(R.id.button_Post_Comments);
 		postCommentButton.setOnClickListener(new postCommentHandler());
-
+		
+		// Check user login (this is the important point)
+        // If User is not logged in , This will redirect user to LoginActivity
+        // and finish current activity from activity stack.
+        if(session.checkLogin())
+            finish();
+         
+        // get user data from session
+        HashMap<String, String> userStored = session.getUserDetails();
+        
+        // get email
+        String userEmail = userStored.get("email");
+        
+        // get user id
+        int userId = Integer.parseInt(userStored.get("id"));
+        Toast.makeText(this, userEmail + ", usid: " + userId, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) 
-	{
+	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
@@ -127,9 +147,7 @@ public class MainActivity extends ListActivity {
 					.show();
 		}
 	}
-	
-	
-
+		
 	// Connect to database
 	protected boolean isOnline() {
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -230,7 +248,7 @@ public class MainActivity extends ListActivity {
 		public void onClick(View v) {
 			// Get Text from editText field
 			EditText commentData = (EditText) findViewById(R.id.text_Comments);
-			// put Text into string form
+			// Put Text into string form
 			String commentString = commentData.getText().toString();
 
 			// Info ID (hard coded for now, but will need to get logged in user

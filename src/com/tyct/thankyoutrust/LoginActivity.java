@@ -44,21 +44,17 @@ import com.tyct.thankyoutrust.parsers.UsersJSONParser;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
-	
-	List<MyTask> tasks;
-	
+		
+	List<MyTask> tasks;	
 	List<Users> userList;
-
-	SharedPreferences prefs;
-	Editor editor;
-	int loggedInInfoId;
 	
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	//private static final String[] DUMMY_CREDENTIALS = new String[] {
-	//		"foo@example.com:hello", "bar@example.com:world" };
+	// User Session Manager Class
+    SessionManager session;
+
+    SharedPreferences sharedPrefs;
+	Editor prefsEditor;
+	int loggedInUserId;
+
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
@@ -71,10 +67,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	private View mLoginFormView;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) 
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		
+		// User Session Manager
+        session = new SessionManager(getApplicationContext());
 
 		// Set up the login form.
 		mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -93,9 +91,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 						return false;
 					}
 				});
-		
-		prefs = getSharedPreferences("UserDetails", MODE_PRIVATE);
-		editor = prefs.edit();
 
 		// Sign in button handler
 		Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
@@ -377,15 +372,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 			
 			for (Users user : userList) {
-				if (user.getEmail().equals(mEmail)) 
-				{
-					loggedInInfoId = user.getInfoID();
+				if (user.getEmail().equals(mEmail)) {
 					// Account exists, return true if the password matches.
+					loggedInUserId = user.getInfoID();
 					return user.getPassword().equals(mPassword);
 				}
 			}
-
-			// TODO: register the new account here.
 			
 			return true;
 		}
@@ -395,15 +387,13 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			mAuthTask = null;
 			showProgress(false);
 
-			if (success) 
-			{
-				editor.putInt("UserInfoId", loggedInInfoId);
-				editor.putString("userEmail", mEmail);
-				editor.commit();
+			if (success) {
 				//Toast.makeText(LoginActivity.this, "Successful login", Toast.LENGTH_SHORT).show();
-				//finish();
-				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-				startActivity(intent);
+				
+				session.createUserLoginSession(loggedInUserId, mEmail);
+				Intent i = new Intent(LoginActivity.this, MainActivity.class);
+				startActivity(i);
+				finish();
 			} else {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));

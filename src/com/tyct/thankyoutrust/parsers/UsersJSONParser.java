@@ -62,7 +62,7 @@ public class UsersJSONParser {
 			e.printStackTrace();
 		}
 
-		json = "{\"user\":" + jsonUser.toString() + "}";
+		json = "{\"person_info\":" + jsonUser.toString() + "}";
 
 		return json;
 
