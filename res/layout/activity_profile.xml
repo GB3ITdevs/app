@@ -19,7 +19,8 @@
             android:id="@+id/imageViewProfile"
             android:layout_width="72dp"
             android:layout_height="72dp"
-            android:src="@drawable/profile_place_holder" />
+            android:src="@drawable/profile_place_holder"
+            android:contentDescription="@string/message_name_placeholder"/>
 
         <LinearLayout
             android:id="@+id/details"
@@ -49,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:text="@string/prompt_suburb" />
+                android:text="@string/location" />
         </LinearLayout>
     </LinearLayout>
 
@@ -129,6 +130,29 @@
                 android:ems="10"
                 android:hint="@string/prompt_postcode"
                 android:inputType="number" />
+
+            <EditText
+                android:id="@+id/editTextProfPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:ems="10"
+                android:hint="@string/prompt_password"
+                android:inputType="textPassword" />
+
+
+            <EditText
+                android:id="@+id/editTextProfConfirmPw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:ems="10"
+                android:hint="@string/prompt_password_reenter"
+                android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/buttonUpdateProfile"

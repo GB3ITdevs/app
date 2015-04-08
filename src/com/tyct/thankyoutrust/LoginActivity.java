@@ -11,8 +11,6 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -51,8 +49,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	// User Session Manager Class
     SessionManager session;
 
-    SharedPreferences sharedPrefs;
-	Editor prefsEditor;
 	int loggedInUserId;
 
 	/**

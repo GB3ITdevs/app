@@ -58,7 +58,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		//String to hold the users display Name
 		String displayName = "";
 		
-		//for users in the userlist where user info id equals message get info id
+		//for users in the userlist where user info id equals message get name
 		for(Users user : userList)
 		{
 			if(user.getInfoID()==message.getInfoID())

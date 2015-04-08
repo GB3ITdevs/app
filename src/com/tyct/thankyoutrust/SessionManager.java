@@ -1,6 +1,9 @@
 package com.tyct.thankyoutrust;
 
 import java.util.HashMap;
+import java.util.List;
+
+import com.tyct.thankyoutrust.model.Users;
 
 import android.content.Context;
 import android.content.Intent;
@@ -31,17 +34,17 @@ public class SessionManager {
 
 	// Email address
 	public static final String KEY_EMAIL = "email";
-	
+
 	// First and last names
 	public static final String KEY_NAME = "fName";
 	public static final String KEY_SURNAME = "lName";
-	
+
 	// City
 	public static final String KEY_CITY = "city";
-	
+
 	// Suburb
 	public static final String KEY_SUB = "suburb";
-	
+
 	// Postcode
 	public static final String KEY_PCODE = "postcode";
 
@@ -52,19 +55,39 @@ public class SessionManager {
 		editor = pref.edit();
 	}
 
-	// Create login session
+	/**
+	 * Create login session
+	 * */
 	public void createUserLoginSession(int id, String email) {
 		// Storing login value as TRUE
 		editor.putBoolean(IS_USER_LOGIN, true);
-		String ID = Integer.toString(id);
-		
+
 		// Storing id in pref
+		String ID = Integer.toString(id);
 		editor.putString(KEY_ID, ID);
 		// Storing email in pref
 		editor.putString(KEY_EMAIL, email);
-
+		
+		// use id to get additional user info to store in pref
+//		for (Users user : userList) {
+//			if (user.getInfoID() == id) {
+//				// get last name from user list
+//				editor.putString(KEY_SURNAME, user.getLastName());			
+//				// get first name from user list
+//				editor.putString(KEY_NAME, user.getFirstName());
+//			}
+//		}
+		
 		// commit changes
 		editor.commit();
+	}
+
+	/**
+	 * Update user details
+	 * */
+	public void updateUserDetails(String fName, String lName, String email,
+			String city, String suburb, String postcode, String password) {
+
 	}
 
 	/**
