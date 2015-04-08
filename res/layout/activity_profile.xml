@@ -12,7 +12,8 @@
     <LinearLayout
         android:id="@+id/llProfileTop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_vertical_margin" >
 
         <ImageView
             android:id="@+id/imageViewProfile"
@@ -31,24 +32,24 @@
                 android:id="@+id/textViewProfName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="right|center"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:text="TextView" />
+                android:text="@string/name" />
 
             <TextView
                 android:id="@+id/textViewProfEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="TextView" />
+                android:layout_gravity="right|center"
+                android:text="@string/prompt_email" />
 
             <TextView
                 android:id="@+id/textViewProfLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="right|center"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:text="TextView" />
+                android:text="@string/prompt_suburb" />
         </LinearLayout>
     </LinearLayout>
 
@@ -60,7 +61,7 @@
         <LinearLayout
             android:id="@+id/llProfile"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <EditText
@@ -135,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/activity_vertical_margin"
-                android:text="Button" />
+                android:text="@string/update_details" />
 
         </LinearLayout>
     </ScrollView>

@@ -31,5 +31,8 @@
     <string name="prompt_suburb">Suburb</string>
     <string name="prompt_postcode">Postcode</string>
     <string name="profile">Profile</string>
+    <string name="update_details">Update Details</string>
+    <string name="name">Name</string>
+    <string name="location">Location</string>
 
 </resources>

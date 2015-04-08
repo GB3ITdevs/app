@@ -37,8 +37,6 @@ public class MainActivity extends ListActivity {
 	List<PostTask> posttasks;
 	Message messageEntity;
 	
-	SharedPreferences prefs;
-	
 	List<Message> messageList;
 	List<Users> userList;
 	
@@ -61,8 +59,6 @@ public class MainActivity extends ListActivity {
 
 		display();
 		userDisplay();
-		
-		prefs = getSharedPreferences("UserDetails", MODE_PRIVATE);
 
 		// Button to post to comments
 		Button postCommentButton = (Button) findViewById(R.id.button_Post_Comments);
@@ -255,9 +251,11 @@ public class MainActivity extends ListActivity {
 			// Put Text into string form
 			String commentString = commentData.getText().toString();
 
-			// Info ID (hard coded for now, but will need to get logged in user
-			// id)
-			int userID = prefs.getInt("UserInfoId", 0);
+			// get user data from session
+	        HashMap<String, String> userStored = session.getUserDetails();	        
+	        
+	        // get info id
+	        int userID = Integer.parseInt(userStored.get("id"));
 
 			// Postal Code info (hard coded for now, but will need to get logged
 			// in person postalcode)
