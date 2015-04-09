@@ -1,7 +1,5 @@
 package com.tyct.thankyoutrust;
 
-import com.tyct.thankyoutrust.model.Project;
-
 import java.util.List;
 
 import android.app.Fragment;
@@ -14,6 +12,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.tyct.thankyoutrust.model.Project;
+
 public class ProjectListFragment extends Fragment
 {
 	//Declare the class fields
@@ -23,6 +23,26 @@ public class ProjectListFragment extends Fragment
 		String[] projectNames;
 		Projects ma;
 		ListView projectListView;
+		private Callbacks mCallbacks = sCallbacks;		
+		
+		
+		public interface Callbacks 
+		{
+			/**
+			 * Callback for when an item has been selected.
+			 */
+			public void onItemSelected(String id);
+		}
+
+		private static Callbacks sCallbacks = new Callbacks() 
+		{
+			@Override
+			public void onItemSelected(String id) 
+			{
+			}
+		};
+		
+
 		
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -32,6 +52,7 @@ public class ProjectListFragment extends Fragment
 			ma = (Projects) getActivity();
 			
 			projectNames = ma.getProjects();
+			//projectList = ma.getProjectList();
 			
 			projectListView = (ListView) v.findViewById(R.id.projectListView);
 			
@@ -49,15 +70,15 @@ public class ProjectListFragment extends Fragment
 		{
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) 
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
 			{
 				String clickedItem = (String) projectListView.getItemAtPosition(position).toString();
+				//Project selectedProject = projectList.get(position);
 				ma.changeProjectDetails(clickedItem);
+				
+				//mCallbacks.onItemSelected(clickedItem);
 				
 			}
 			
-		}
-	
-		
+		}		
 }

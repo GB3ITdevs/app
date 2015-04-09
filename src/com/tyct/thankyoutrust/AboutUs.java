@@ -9,9 +9,11 @@ import android.view.MenuItem;
 public class AboutUs extends Activity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_about_us);
+		setContentView(R.layout.activity_about_us);			
+		
 	}
 
 	@Override
@@ -19,6 +21,7 @@ public class AboutUs extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.about_us, menu);
 		return true;
+
 	}
 
 	@Override

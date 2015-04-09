@@ -20,10 +20,14 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.tyct.thankyoutrust.model.PhoneNumber;
 import com.tyct.thankyoutrust.model.Project;
+import com.tyct.thankyoutrust.model.ProjectWebsite;
+import com.tyct.thankyoutrust.parsers.PhoneNumberJSONParser;
+import com.tyct.thankyoutrust.parsers.ProjectWebsiteJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
 
-public class Projects extends Activity 
+public class Projects extends Activity implements ProjectListFragment.Callbacks
 {
 	List<MyTask> tasks;
 	List<Project> projectList;
@@ -32,12 +36,23 @@ public class Projects extends Activity
 	Project selectedProject;
 	
 	SharedPreferences prefs;
+
+			//***********Testing the models and the json parsers************************************************************************************
+
+			PhoneNumber newPhone = new PhoneNumber();
+			ProjectWebsite newProjectSite = new ProjectWebsite();
+
+			
+			
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_projects);
+		
+		//***********Testing the models and the json parsers************************************************************************************
+		//SetupModels();
 		
 		//Create a new list of tasks
 		tasks = new ArrayList<>();
@@ -115,20 +130,16 @@ public class Projects extends Activity
 			}
 		}
 		
-		//Create new Fragments
-		Fragment projectDetailsFrag = new ProjectDetailsFragment();
+		Intent detailIntent = new Intent(this, ProjectDetailsActivity.class);
+		detailIntent.putExtra("currProjectName", selectedProject.getProjectName());
+		detailIntent.putExtra("currProjectBlurb", selectedProject.getProjectBlurb());
+		detailIntent.putExtra("currApplicantName", selectedProject.getApplicantName());
+		detailIntent.putExtra("currUseOfFunds", selectedProject.getUseOfFunds());
+		detailIntent.putExtra("currFundsRequested", selectedProject.getFundsRequested());
+		detailIntent.putExtra("currPostalCode", selectedProject.getPostalCode());
+		detailIntent.putExtra("currProjectID", selectedProject.getProjectID());
+		startActivity(detailIntent);
 		
-		//Create a fragment manager
-		FragmentManager fm = getFragmentManager();
-		
-		//Create a new fragment transaction
-		FragmentTransaction ft = fm.beginTransaction();
-		
-		//Replace the list container with the new details fragment
-		ft.replace(R.id.fragment_container2, projectDetailsFrag);
-		
-		//Commit the transaction changes
-		ft.commit();
 	}
 	
 	//Method to setup the project name list and display the project list fragment
@@ -158,6 +169,13 @@ public class Projects extends Activity
 		
 		//Commit the transaction changes
 		ft.commit();	
+	}
+	
+	//Method to retrieve the array of projects for use in the fragments
+	public List<Project> getProjectList()
+	{
+		
+		return projectList;
 	}
 	
 	//Method to retrieve the array of project names for use in the fragments
@@ -191,6 +209,32 @@ public class Projects extends Activity
 		}
 	}
 	
+	@Override
+	public void onItemSelected(String id) 
+	{
+		Intent detailIntent = new Intent(this, ProjectDetailsActivity.class);
+		detailIntent.putExtra(ProjectDetailsFragment.currProjectName, selectedProject.getProjectName());
+		detailIntent.putExtra(ProjectDetailsFragment.currProjectBlurb, selectedProject.getProjectBlurb());
+		detailIntent.putExtra(ProjectDetailsFragment.currApplicantName, selectedProject.getApplicantName());
+		detailIntent.putExtra(ProjectDetailsFragment.currUseOfFunds, selectedProject.getUseOfFunds());
+		detailIntent.putExtra(ProjectDetailsFragment.currFundsRequested, selectedProject.getFundsRequested());
+		detailIntent.putExtra(ProjectDetailsFragment.currPostalCode, selectedProject.getPostalCode());
+		detailIntent.putExtra(ProjectDetailsFragment.currProjectID, selectedProject.getProjectID());
+		startActivity(detailIntent);
+	}	
+	
+	//Test method to create the new models******************************************************************************************************
+	public void SetupModels()
+	{
+
+		newPhone.setInfoID(9);
+		newPhone.setPhoneNumber("0001122");
+		
+		newProjectSite.setSiteAddress("project website model test");
+		newProjectSite.setProjectID(8);
+		
+	}
+	
 	//Inner class for performing network activity
 	private class MyTask extends AsyncTask<String, String, String> 
 	{
@@ -199,7 +243,7 @@ public class Projects extends Activity
 		@Override
 		protected void onPreExecute() 
 		{
-			//If the task has been started set the progess bar to visible
+			//If the task has been started set the progress bar to visible
 			if (tasks.size() == 0) 
 			{
 				pb.setVisibility(View.VISIBLE);
@@ -211,6 +255,16 @@ public class Projects extends Activity
 		@Override
 		protected String doInBackground(String... params) 
 		{
+			//Testing the models and parsers**************************************************************************************************	
+			String JSONresult = ProjectWebsiteJSONParser.POST(newProjectSite);
+			String uri = "http://gb3it.pickworth.info:3000/projects/7/project_websites";
+			HttpManager.postData(uri, JSONresult);	
+			
+			JSONresult = PhoneNumberJSONParser.POST(newPhone);
+			uri = "http://gb3it.pickworth.info:3000/contact_infos/7/phone_numbers";
+			HttpManager.postData(uri, JSONresult);
+
+			
 			//Create a new string from the http managers get data method and return it
 			String content = HttpManager.getData(params[0]);
 			return content;
@@ -240,5 +294,7 @@ public class Projects extends Activity
 		}
 		
 	}
+
+
 
 }

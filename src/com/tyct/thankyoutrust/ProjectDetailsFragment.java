@@ -26,7 +26,7 @@ public class ProjectDetailsFragment extends Fragment
 {
 	//Declare the class fields
 		Project projectDisplayed;
-		Projects ma;
+		ProjectDetailsActivity ma;
 		List<PostTask> posttasks;
 		List<MyTask> tasks;
 		List<ProjectRating> projectRatingList;
@@ -36,9 +36,34 @@ public class ProjectDetailsFragment extends Fragment
 		
 		SharedPreferences prefs;
 		
+		public static String currProjectName;
+		public static String currProjectID;
+		public static String currPostalCode;
+		public static String currApplicantName;
+		public static String currProjectBlurb;
+		public static String currFundsRequested;
+		public static String currUseOfFunds;
+		
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
+			
+			
+			
+			projectDisplayed = new Project();
+			
+			
+//		      if (getArguments() != null) 
+//		      { 
+//		          projectDisplayed.setProjectName(getArguments().getString(currProjectName));
+//		          //projectDisplayed.setProjectID(Integer.parseInt(getArguments().getString(currProjectID)));
+//		          projectDisplayed.setProjectBlurb(getArguments().getString(currProjectBlurb));
+//		          projectDisplayed.setApplicantName(getArguments().getString(currApplicantName));
+//		          projectDisplayed.setFundsRequested(Integer.parseInt(getArguments().getString(currFundsRequested)));
+//		          projectDisplayed.setPostalCode(Integer.parseInt(getArguments().getString(currPostalCode)));
+//		          projectDisplayed.setUseOfFunds(getArguments().getString(currUseOfFunds));
+//		      }
+			
 			View v = inflater.inflate(R.layout.fragment_project_details,container,false);
 			//Initialize the layout vies
 			TextView tvProjectTitle = (TextView) v.findViewById(R.id.projectName);
@@ -50,7 +75,7 @@ public class ProjectDetailsFragment extends Fragment
 			ratingBar = (RatingBar) v.findViewById(R.id.projectRatingBar);
 			
 			//Retrieve the project selected from the activity
-			ma = (Projects) getActivity();
+			ma = (ProjectDetailsActivity) getActivity();
 			projectDisplayed = ma.getSelectProject();
 			OnRatingBarChangeListener ratingChangeListener = new ratingChange();
 			
@@ -63,10 +88,10 @@ public class ProjectDetailsFragment extends Fragment
 			tvProjectBlurb.setText(projectDisplayed.getProjectBlurb());
 			ratingBar.setOnRatingBarChangeListener(ratingChangeListener);
 			
-			prefs = ma.prefs;
+			//prefs = ma.prefs;
 			
 			//Get the logged in user info id from the shared preferences
-			infoID = prefs.getInt("UserInfoId", 0);
+			//infoID = prefs.getInt("UserInfoId", 0);
 			//infoID = 1;
 			
 			//Check if the project has already been rated and if so make it unavailable to rate
