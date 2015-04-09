@@ -50,7 +50,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:gravity="right"
                 android:text="@string/location" />
+
         </LinearLayout>
     </LinearLayout>
 

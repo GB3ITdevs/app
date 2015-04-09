@@ -105,81 +105,58 @@ public class ProfileActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			boolean notEmpty = false;
-			
+			boolean empty = true;
+
 			List<EditText> fields = new ArrayList<>();
-			
+
 			// Get Text from each editText field and convert to string
 			EditText eFName = (EditText) findViewById(R.id.editTextProfFName);
 			fields.add(eFName);
-			
-			String firstName = eFName.getText().toString();
-			if (TextUtils.isEmpty(firstName.trim())) {
-				notEmpty = false;
-			}
 
 			EditText eLName = (EditText) findViewById(R.id.editTextProfLName);
 			fields.add(eLName);
-			String lastName = eLName.getText().toString();
-			if (TextUtils.isEmpty(lastName.trim())) {
-				notEmpty = false;
-			}
 
 			EditText eEmail = (EditText) findViewById(R.id.editTextProfEmail);
 			fields.add(eEmail);
-			String email = eEmail.getText().toString();
-			if (TextUtils.isEmpty(email.trim())) {
-				notEmpty = false;
-			}
 
 			EditText eCity = (EditText) findViewById(R.id.editTextProfCity);
 			fields.add(eCity);
-			String city = eCity.getText().toString();
-			if (TextUtils.isEmpty(city.trim())) {
-				notEmpty = false;
-			}
 
 			EditText eSuburb = (EditText) findViewById(R.id.editTextProfSuburb);
 			fields.add(eSuburb);
-			String suburb = eSuburb.getText().toString();
-			if (TextUtils.isEmpty(suburb.trim())) {
-				notEmpty = false;
-			}
 
 			EditText ePostcode = (EditText) findViewById(R.id.editTextProfPostcode);
 			fields.add(ePostcode);
-			String postcode = ePostcode.getText().toString();
-			if (TextUtils.isEmpty(postcode.trim())) {
-				notEmpty = false;
-			}
-			
+
 			for (EditText field : fields) {
-				if (TextUtils.isEmpty(field.getText().toString().trim())) {
-					notEmpty = true;
+				if (!TextUtils.isEmpty(field.getText().toString().trim())) {
+					empty = false;
 				}
 			}
-			
-//			private boolean validate(EditText[] fields){
-//		        for(int i=0; i<fields.length; i++){
-//		            EditText currentField=fields[i];
-//		            if(currentField.getText().toString().length()<=0){
-//		                return false;
-//		            }
-//		        }
-//		        return true;
-//		}
-//
-//		boolean fieldsOK=validate(new EditText[]{ev_last_name, ev_first_name, ev_email});
+
+			// private boolean validate(EditText[] fields){
+			// for(int i=0; i<fields.length; i++){
+			// EditText currentField=fields[i];
+			// if(currentField.getText().toString().length()<=0){
+			// return false;
+			// }
+			// }
+			// return true;
+			// }
+			//
+			// boolean fieldsOK=validate(new EditText[]{ev_last_name,
+			// ev_first_name, ev_email});
 
 			// If statement, checks to make sure that user has entered anything
 			// into the edit text fields
-			if (notEmpty = false) {
+			if (empty == true) {
 				// If Edit Text is empty it will show a toast
 				Toast.makeText(ProfileActivity.this,
 						eFName.getText() + "All fields empty",
 						Toast.LENGTH_LONG).show();
 			} else {
-
+				Toast.makeText(ProfileActivity.this, "noice1m8",
+						Toast.LENGTH_LONG).show();
 			}
 		}
 	}
