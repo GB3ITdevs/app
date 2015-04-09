@@ -22,4 +22,9 @@
         android:title="@string/about_us"
         android:orderInCategory="300"
         android:showAsAction="ifRoom"/>
+      
+         <item android:id="@+id/admin"
+        android:title="@string/admin"
+        android:orderInCategory="300"
+        android:showAsAction="ifRoom"/>
 </menu>

@@ -88,6 +88,10 @@ public class MainActivity extends ListActivity {
 		{
 			goTo = new Intent(MainActivity.this, AboutUs.class);
 		}
+		if (item.getItemId() == R.id.admin) 
+		{
+			goTo = new Intent(MainActivity.this, AdminHomePage.class);
+		}
 		startActivity(goTo);
 		return false;
 	}
