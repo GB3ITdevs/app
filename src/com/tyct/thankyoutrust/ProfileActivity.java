@@ -2,8 +2,6 @@ package com.tyct.thankyoutrust;
 
 import java.util.HashMap;
 
-import com.tyct.thankyoutrust.model.Users;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +16,9 @@ public class ProfileActivity extends Activity {
 	// Session Manager Class
 	SessionManager session;
 
+	// Stored session data
+	HashMap<String, String> userStored;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,9 +27,19 @@ public class ProfileActivity extends Activity {
 		// Session class instance
 		session = new SessionManager(getApplicationContext());
 
+		// get user data from session
+		userStored = session.getUserDetails();
+
 		Button update = (Button) findViewById(R.id.buttonUpdateProfile);
 
 		populateFields();
+
+		EditText eFName = (EditText) findViewById(R.id.editTextProfFName);
+		EditText eLName = (EditText) findViewById(R.id.editTextProfLName);
+		EditText eEmail = (EditText) findViewById(R.id.editTextProfEmail);
+		EditText eCity = (EditText) findViewById(R.id.editTextProfCity);
+		EditText eSuburb = (EditText) findViewById(R.id.editTextProfSuburb);
+		EditText ePostcode = (EditText) findViewById(R.id.editTextProfPostcode);
 	}
 
 	@Override
@@ -64,31 +75,27 @@ public class ProfileActivity extends Activity {
 		TextView pEmail = (TextView) findViewById(R.id.textViewProfEmail);
 		TextView pLocation = (TextView) findViewById(R.id.textViewProfLocation);
 
-		EditText eFName = (EditText) findViewById(R.id.editTextProfFName);
-		EditText eLName = (EditText) findViewById(R.id.editTextProfLName);
-		EditText eEmail = (EditText) findViewById(R.id.editTextProfEmail);
-		EditText eCity = (EditText) findViewById(R.id.editTextProfCity);
-		EditText eSuburb = (EditText) findViewById(R.id.editTextProfSuburb);
-		EditText ePostcode = (EditText) findViewById(R.id.editTextProfPostcode);
-
-		// get user data from session
-		HashMap<String, String> userStored = session.getUserDetails();
-
 		// Display name
-		String userName = userStored.get("fName");
-		// If the user's name exists in db
-		if (userName != null) {
-			// Get user's surname
+		if (userStored.get("fName") != null) {
+			String userName = userStored.get("fName");
 			String surname = userStored.get("lName");
-			// Concatenate user's names into a single string
+			// Concatenate names into a single string
 			pName.setText(userName + " " + surname);
 		}
 
 		// Display email address
-		String userEmail = userStored.get("email");
-		pEmail.setText(userEmail);
+		if (userStored.get("email") != null) {
+			String userEmail = userStored.get("email");
+			pEmail.setText(userEmail);
+		}
 
-		// get user id
-		int userId = Integer.parseInt(userStored.get("id"));
+		// Display location
+		if (userStored.get("suburb") != null) {
+			String suburb = userStored.get("suburb");
+			String city = userStored.get("city");
+			String postcode = userStored.get("postcode");
+			// Concatenate names into a single string
+			pLocation.setText(suburb + ", " + city + "\n" + postcode);
+		}
 	}
 }

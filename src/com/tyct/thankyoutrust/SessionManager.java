@@ -1,9 +1,6 @@
 package com.tyct.thankyoutrust;
 
 import java.util.HashMap;
-import java.util.List;
-
-import com.tyct.thankyoutrust.model.Users;
 
 import android.content.Context;
 import android.content.Intent;
@@ -58,7 +55,8 @@ public class SessionManager {
 	/**
 	 * Create login session
 	 * */
-	public void createUserLoginSession(int id, String email) {
+	public void createUserLoginSession(int id, String email, String name,
+			String surname, String suburb, String city, String postcode) {
 		// Storing login value as TRUE
 		editor.putBoolean(IS_USER_LOGIN, true);
 
@@ -67,17 +65,16 @@ public class SessionManager {
 		editor.putString(KEY_ID, ID);
 		// Storing email in pref
 		editor.putString(KEY_EMAIL, email);
-		
-		// use id to get additional user info to store in pref
-//		for (Users user : userList) {
-//			if (user.getInfoID() == id) {
-//				// get last name from user list
-//				editor.putString(KEY_SURNAME, user.getLastName());			
-//				// get first name from user list
-//				editor.putString(KEY_NAME, user.getFirstName());
-//			}
-//		}
-		
+		// Storing name in pref
+		editor.putString(KEY_NAME, name);
+		editor.putString(KEY_SURNAME, surname);
+		// Storing city in pref
+		editor.putString(KEY_CITY, city);
+		// Storing suburb in pref
+		editor.putString(KEY_SUB, suburb);
+		// Storing postcode in pref
+		editor.putString(KEY_PCODE, postcode);
+
 		// commit changes
 		editor.commit();
 	}
@@ -128,6 +125,19 @@ public class SessionManager {
 
 		// user email id
 		user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
+
+		// user name
+		user.put(KEY_NAME, pref.getString(KEY_NAME, null));
+		user.put(KEY_SURNAME, pref.getString(KEY_SURNAME, null));
+
+		// user city
+		user.put(KEY_CITY, pref.getString(KEY_CITY, null));
+
+		// user suburb
+		user.put(KEY_SUB, pref.getString(KEY_SUB, null));
+
+		// user postcode
+		user.put(KEY_PCODE, pref.getString(KEY_PCODE, null));
 
 		// return user
 		return user;
