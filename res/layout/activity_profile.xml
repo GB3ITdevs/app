@@ -55,6 +55,27 @@
 
         </LinearLayout>
     </LinearLayout>
+    
+    <Button
+        android:id="@+id/btnProfEditInfo"
+        style="@style/blue_button"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/blue_button"
+        android:text="@string/edit_info" />
+
+    <Button
+        android:id="@+id/btnProfEditLocation"
+        style="@style/blue_button"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/blue_button"
+        android:text="@string/edit_location" />
+
+    <Button
+        android:id="@+id/btnChangePassword"
+        style="@style/blue_button"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/blue_button"
+        android:text="@string/change_pw" />
 
     <ScrollView
         android:id="@+id/scrollViewProfile"
@@ -68,7 +89,7 @@
             android:orientation="vertical" >
 
             <EditText
-                android:id="@+id/editTextProfFName"
+                android:id="@+id/editTextEditFName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_vertical_margin"
@@ -79,7 +100,7 @@
                 android:inputType="textPersonName" />
 
             <EditText
-                android:id="@+id/editTextProfLName"
+                android:id="@+id/editTextEditLName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_vertical_margin"
@@ -90,7 +111,7 @@
                 android:inputType="textPersonName" />
 
             <EditText
-                android:id="@+id/editTextProfEmail"
+                android:id="@+id/editTextEditEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_vertical_margin"
@@ -134,7 +155,7 @@
                 android:inputType="number" />
 
             <EditText
-                android:id="@+id/editTextProfPassword"
+                android:id="@+id/editTextInfoPw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_vertical_margin"

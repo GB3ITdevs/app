@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.tyct.thankyoutrust.model.UserID;
-
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +38,24 @@ public class ProfileActivity extends Activity {
 
 		// get user data from session
 		userStored = session.getUserDetails();
+
+		// Set Edit Info button
+		Button editInfo = (Button) findViewById(R.id.btnProfEditInfo);
+		editInfo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				infoDialog();
+			}
+		});
+
+		// Set Edit Address button
+		Button editAddr = (Button) findViewById(R.id.btnProfEditLocation);
+		editAddr.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				addressDialog();
+			}
+		});
 
 		populateFields();
 
@@ -101,6 +120,154 @@ public class ProfileActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Shows pop-up dialog for user to edit their personal details
+	 */
+	public void infoDialog() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				ProfileActivity.this);
+
+		LayoutInflater factory = LayoutInflater.from(this);
+
+		// edit_info is a Layout XML file containing text fields to display in
+		// alert dialog
+		final View textEntryView = factory.inflate(R.layout.edit_info, null);
+
+		// Get each editText field
+		final EditText eFName = (EditText) textEntryView
+				.findViewById(R.id.editTextEditFName);
+		final EditText eLName = (EditText) textEntryView
+				.findViewById(R.id.editTextEditLName);
+		final EditText eEmail = (EditText) textEntryView
+				.findViewById(R.id.editTextEditEmail);
+
+		// Display name
+		if (userStored.get("fName") != null) {
+			String userName = userStored.get("fName");
+			eFName.setText(userName);
+		}
+
+		// Display surname
+		if (userStored.get("fName") != null) {
+			String surname = userStored.get("lName");
+			eLName.setText(surname);
+		}
+
+		// Display email address
+		if (userStored.get("email") != null) {
+			String userEmail = userStored.get("email");
+			eEmail.setText(userEmail);
+		}
+
+		// set title
+		alertDialogBuilder.setTitle("Edit Personal Details");
+
+		// set dialog message
+		alertDialogBuilder
+				.setView(textEntryView)
+				// .setMessage(
+				// "Leave a field blank if you do not wish to make any changes to it")
+				.setCancelable(false)
+				.setPositiveButton("Submit Changes",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								// if this button is clicked,
+								// update details
+
+							}
+						})
+				.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								// if this button is clicked, just close
+								// the dialog box and do nothing
+								dialog.cancel();
+							}
+						});
+
+		// create alert dialog
+		AlertDialog alertDialog = alertDialogBuilder.create();
+
+		// show it
+		alertDialog.show();
+	}
+
+	/**
+	 * Shows pop-up dialog for user to edit their address details
+	 */
+	public void addressDialog() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				ProfileActivity.this);
+
+		LayoutInflater factory = LayoutInflater.from(this);
+
+		// edit_info is a Layout XML file containing text fields to display in
+		// alert dialog
+		final View textEntryView = factory.inflate(R.layout.edit_address, null);
+
+		// Get each editText field
+		final EditText eAddress = (EditText) findViewById(R.id.editTextEditAddress);
+		final EditText eSuburb = (EditText) findViewById(R.id.editTextEditSuburb);
+		final EditText eCity = (EditText) findViewById(R.id.editTextEditCity);
+		final EditText ePostcode = (EditText) findViewById(R.id.editTextEditPostcode);
+
+		// Display address (pending  addition to session manager)
+//		if (userStored.get("address") != null) {
+//			String address = userStored.get("address");
+//			eAddress.setText(address);
+//		}
+
+		// Display suburb
+		if (userStored.get("suburb") != null) {
+			String suburb = userStored.get("suburb");
+			eSuburb.setText(suburb);
+		}
+
+		// Display city
+		if (userStored.get("city") != null) {
+			String city = userStored.get("city");
+			eCity.setText(city);
+		}
+
+		// Display postcode
+		if (userStored.get("postcode") != null) {
+			String postcode = userStored.get("postcode");
+			ePostcode.setText(postcode);
+		}
+
+		// set title
+		alertDialogBuilder.setTitle("Edit Address Details");
+
+		// set dialog message
+		alertDialogBuilder
+				.setView(textEntryView)
+				// .setMessage(
+				// "Leave a field blank if you do not wish to make any changes to it")
+				.setCancelable(false)
+				.setPositiveButton("Submit Changes",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								// if this button is clicked,
+								// update details
+
+							}
+						})
+				.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								// if this button is clicked, just close
+								// the dialog box and do nothing
+								dialog.cancel();
+							}
+						});
+
+		// create alert dialog
+		AlertDialog alertDialog = alertDialogBuilder.create();
+
+		// show it
+		alertDialog.show();
+	}
+
 	public class UpdateBtnHandler implements OnClickListener {
 
 		@Override
@@ -109,14 +276,14 @@ public class ProfileActivity extends Activity {
 
 			List<EditText> fields = new ArrayList<>();
 
-			// Get Text from each editText field and convert to string
-			EditText eFName = (EditText) findViewById(R.id.editTextProfFName);
+			// Get each editText field
+			EditText eFName = (EditText) findViewById(R.id.editTextEditFName);
 			fields.add(eFName);
 
-			EditText eLName = (EditText) findViewById(R.id.editTextProfLName);
+			EditText eLName = (EditText) findViewById(R.id.editTextEditLName);
 			fields.add(eLName);
 
-			EditText eEmail = (EditText) findViewById(R.id.editTextProfEmail);
+			EditText eEmail = (EditText) findViewById(R.id.editTextEditEmail);
 			fields.add(eEmail);
 
 			EditText eCity = (EditText) findViewById(R.id.editTextProfCity);
@@ -128,24 +295,12 @@ public class ProfileActivity extends Activity {
 			EditText ePostcode = (EditText) findViewById(R.id.editTextProfPostcode);
 			fields.add(ePostcode);
 
+			// Check whether any fields have been filled
 			for (EditText field : fields) {
 				if (!TextUtils.isEmpty(field.getText().toString().trim())) {
 					empty = false;
 				}
 			}
-
-			// private boolean validate(EditText[] fields){
-			// for(int i=0; i<fields.length; i++){
-			// EditText currentField=fields[i];
-			// if(currentField.getText().toString().length()<=0){
-			// return false;
-			// }
-			// }
-			// return true;
-			// }
-			//
-			// boolean fieldsOK=validate(new EditText[]{ev_last_name,
-			// ev_first_name, ev_email});
 
 			// If statement, checks to make sure that user has entered anything
 			// into the edit text fields

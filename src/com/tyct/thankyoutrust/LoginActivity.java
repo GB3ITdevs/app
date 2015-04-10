@@ -429,13 +429,13 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			}
 
 			for (Users user : userList) {
-				if (user.getEmail().equals(mEmail)) {					
+				if (user.getEmail().equals(mEmail)) {
 					// if the password matches, retrieve further user info
 					if (user.getPassword().equals(mPassword)) {
 						loggedInUserId = user.getInfoID();
 						uName = user.getFirstName();
 						uSurname = user.getLastName();
-						
+
 						for (UserID usid : usidList) {
 							if (usid.getInfoID() == loggedInUserId) {
 								// get userID

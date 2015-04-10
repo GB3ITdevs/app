@@ -34,5 +34,10 @@
     <string name="update_details">Update Details</string>
     <string name="name">Name</string>
     <string name="location">Location</string>
+    <string name="edit_info">Edit Personal Info</string>
+    <string name="edit_location">Edit Address Info</string>
+    <string name="change_pw">Change Password</string>
+    <string name="enter_pw">Enter your password to save changes</string>
+    <string name="prompt_address">Address</string>
 
 </resources>

@@ -5,15 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.tyct.thankyoutrust.model.Message;
-import com.tyct.thankyoutrust.model.Users;
-import com.tyct.thankyoutrust.parsers.MessageJSONParser;
-import com.tyct.thankyoutrust.parsers.UsersJSONParser;
-
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -27,6 +21,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.tyct.thankyoutrust.model.Message;
+import com.tyct.thankyoutrust.model.Users;
+import com.tyct.thankyoutrust.parsers.MessageJSONParser;
+import com.tyct.thankyoutrust.parsers.UsersJSONParser;
 
 public class MainActivity extends ListActivity {
 
