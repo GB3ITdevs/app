@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.UserID;
 
 public class UserIDJSONParser {

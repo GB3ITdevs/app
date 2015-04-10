@@ -447,6 +447,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 						for (ContactInfo ci : contactList) {
 							if (ci.getContactID() == loggedInUserId) {
+								// get address
+								// TODO uAddress = ci.getAddress();
 								// get suburb
 								uSuburb = ci.getSuburb();
 								// get city

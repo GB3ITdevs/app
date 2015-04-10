@@ -1,15 +1,12 @@
 package com.tyct.thankyoutrust;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +15,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ProfileActivity extends Activity {
 
@@ -36,8 +32,11 @@ public class ProfileActivity extends Activity {
 		// Session class instance
 		session = new SessionManager(getApplicationContext());
 
-		// get user data from session
+		// Get user data from session
 		userStored = session.getUserDetails();
+
+		// Populate data at top of screen
+		populateFields();
 
 		// Set Edit Info button
 		Button editInfo = (Button) findViewById(R.id.btnProfEditInfo);
@@ -57,10 +56,14 @@ public class ProfileActivity extends Activity {
 			}
 		});
 
-		populateFields();
-
-		Button btnUpdate = (Button) findViewById(R.id.buttonUpdateProfile);
-		btnUpdate.setOnClickListener(new UpdateBtnHandler());
+		// Set Change Password button
+		Button editPw = (Button) findViewById(R.id.btnChangePassword);
+		editPw.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				pwDialog();
+			}
+		});
 	}
 
 	@Override
@@ -90,6 +93,7 @@ public class ProfileActivity extends Activity {
 		return false;
 	}
 
+	// Populate the fields at the top of the screen
 	private void populateFields() {
 		// Get references
 		TextView pName = (TextView) findViewById(R.id.textViewProfName);
@@ -111,13 +115,28 @@ public class ProfileActivity extends Activity {
 		}
 
 		// Display location
+		String location = "";
+		// TODO if (userStored.get("address") != null) {
+		// String address = userStored.get("address");
+		// // If exists, append to location
+		// location += address;
+		// }
 		if (userStored.get("suburb") != null) {
 			String suburb = userStored.get("suburb");
-			String city = userStored.get("city");
-			String postcode = userStored.get("postcode");
-			// Concatenate names into a single string
-			pLocation.setText(suburb + ", " + city + "\n" + postcode);
+			// If exists, append to location
+			location += suburb;
 		}
+		if (userStored.get("city") != null) {
+			// If exists, append to location
+			String city = userStored.get("city");
+			location += city;
+		}
+		if (userStored.get("postcode") != null) {
+			// If exists, append to location
+			String postcode = userStored.get("postcode");
+			location += postcode;
+		}
+		pLocation.setText(location);
 	}
 
 	/**
@@ -201,7 +220,8 @@ public class ProfileActivity extends Activity {
 
 		LayoutInflater factory = LayoutInflater.from(this);
 
-		// edit_info is a Layout XML file containing text fields to display in
+		// edit_address is a Layout XML file containing text fields to display
+		// in
 		// alert dialog
 		final View textEntryView = factory.inflate(R.layout.edit_address, null);
 
@@ -211,11 +231,11 @@ public class ProfileActivity extends Activity {
 		final EditText eCity = (EditText) findViewById(R.id.editTextEditCity);
 		final EditText ePostcode = (EditText) findViewById(R.id.editTextEditPostcode);
 
-		// Display address (pending  addition to session manager)
-//		if (userStored.get("address") != null) {
-//			String address = userStored.get("address");
-//			eAddress.setText(address);
-//		}
+		// Display address (TODO pending addition to session manager)
+		// if (userStored.get("address") != null) {
+		// String address = userStored.get("address");
+		// eAddress.setText(address);
+		// }
 
 		// Display suburb
 		if (userStored.get("suburb") != null) {
@@ -268,51 +288,60 @@ public class ProfileActivity extends Activity {
 		alertDialog.show();
 	}
 
-	public class UpdateBtnHandler implements OnClickListener {
+	/**
+	 * Shows pop-up dialog to allow user to change their password
+	 */
+	public void pwDialog() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				ProfileActivity.this);
 
-		@Override
-		public void onClick(View v) {
-			boolean empty = true;
+		LayoutInflater factory = LayoutInflater.from(this);
 
-			List<EditText> fields = new ArrayList<>();
+		// change_pw is a Layout XML file containing text fields to display in
+		// alert dialog
+		final View textEntryView = factory.inflate(R.layout.change_pw, null);
 
-			// Get each editText field
-			EditText eFName = (EditText) findViewById(R.id.editTextEditFName);
-			fields.add(eFName);
+		// Get each editText field
+		final EditText currentPw = (EditText) findViewById(R.id.editTextEditAddress);
+		final EditText newPw = (EditText) findViewById(R.id.editTextEditSuburb);
+		final EditText newPwCheck = (EditText) findViewById(R.id.editTextEditCity);
 
-			EditText eLName = (EditText) findViewById(R.id.editTextEditLName);
-			fields.add(eLName);
+		// TODO Check current password is correct
 
-			EditText eEmail = (EditText) findViewById(R.id.editTextEditEmail);
-			fields.add(eEmail);
+		// TODO check new password matches re-entered password
 
-			EditText eCity = (EditText) findViewById(R.id.editTextProfCity);
-			fields.add(eCity);
+		// TODO Check new password is valid
 
-			EditText eSuburb = (EditText) findViewById(R.id.editTextProfSuburb);
-			fields.add(eSuburb);
+		// set title
+		alertDialogBuilder.setTitle("Change Password");
 
-			EditText ePostcode = (EditText) findViewById(R.id.editTextProfPostcode);
-			fields.add(ePostcode);
+		// set dialog message
+		alertDialogBuilder
+				.setView(textEntryView)
+				// .setMessage(
+				// "Leave a field blank if you do not wish to make any changes to it")
+				.setCancelable(false)
+				.setPositiveButton("Submit Changes",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								// if this button is clicked,
+								// update password
 
-			// Check whether any fields have been filled
-			for (EditText field : fields) {
-				if (!TextUtils.isEmpty(field.getText().toString().trim())) {
-					empty = false;
-				}
-			}
+							}
+						})
+				.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								// if this button is clicked, just close
+								// the dialog box and do nothing
+								dialog.cancel();
+							}
+						});
 
-			// If statement, checks to make sure that user has entered anything
-			// into the edit text fields
-			if (empty == true) {
-				// If Edit Text is empty it will show a toast
-				Toast.makeText(ProfileActivity.this,
-						eFName.getText() + "All fields empty",
-						Toast.LENGTH_LONG).show();
-			} else {
-				Toast.makeText(ProfileActivity.this, "noice1m8",
-						Toast.LENGTH_LONG).show();
-			}
-		}
+		// create alert dialog
+		AlertDialog alertDialog = alertDialogBuilder.create();
+
+		// show it
+		alertDialog.show();
 	}
 }

@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:text="@string/name" />
+                android:text="@string/placeholderName" />
 
             <TextView
                 android:id="@+id/textViewProfEmail"
@@ -76,116 +76,5 @@
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:background="@drawable/blue_button"
         android:text="@string/change_pw" />
-
-    <ScrollView
-        android:id="@+id/scrollViewProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <LinearLayout
-            android:id="@+id/llProfile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <EditText
-                android:id="@+id/editTextEditFName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_vertical_margin"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:ems="10"
-                android:hint="@string/prompt_name"
-                android:inputType="textPersonName" />
-
-            <EditText
-                android:id="@+id/editTextEditLName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_vertical_margin"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:ems="10"
-                android:hint="@string/prompt_surname"
-                android:inputType="textPersonName" />
-
-            <EditText
-                android:id="@+id/editTextEditEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_vertical_margin"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:ems="10"
-                android:hint="@string/prompt_email"
-                android:inputType="textEmailAddress" />
-
-            <EditText
-                android:id="@+id/editTextProfCity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_vertical_margin"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:ems="10"
-                android:hint="@string/prompt_city"
-                android:inputType="textPersonName" />
-
-            <EditText
-                android:id="@+id/editTextProfSuburb"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_vertical_margin"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:ems="10"
-                android:hint="@string/prompt_suburb"
-                android:inputType="textPersonName" />
-
-            <EditText
-                android:id="@+id/editTextProfPostcode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_vertical_margin"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:ems="10"
-                android:hint="@string/prompt_postcode"
-                android:inputType="number" />
-
-            <EditText
-                android:id="@+id/editTextInfoPw"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_vertical_margin"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:ems="10"
-                android:hint="@string/prompt_password"
-                android:inputType="textPassword" />
-
-
-            <EditText
-                android:id="@+id/editTextProfConfirmPw"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_vertical_margin"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:ems="10"
-                android:hint="@string/prompt_password_reenter"
-                android:inputType="textPassword" />
-
-            <Button
-                android:id="@+id/buttonUpdateProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/activity_vertical_margin"
-                android:text="@string/update_details" />
-
-        </LinearLayout>
-    </ScrollView>
 
 </LinearLayout>
