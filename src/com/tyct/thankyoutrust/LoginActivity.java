@@ -429,32 +429,35 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			}
 
 			for (Users user : userList) {
-				if (user.getEmail().equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					loggedInUserId = user.getInfoID();
-					uName = user.getFirstName();
-					uSurname = user.getLastName();
-					//return user.getPassword().equals(mPassword);
-				}
-			}
+				if (user.getEmail().equals(mEmail)) {					
+					// if the password matches, retrieve further user info
+					if (user.getPassword().equals(mPassword)) {
+						loggedInUserId = user.getInfoID();
+						uName = user.getFirstName();
+						uSurname = user.getLastName();
+						
+						for (UserID usid : usidList) {
+							if (usid.getInfoID() == loggedInUserId) {
+								// get userID
+								userId = usid.getUserID();
+								// get contactID
+								contactId = usid.getContactID();
+							}
+						}
 
-			for (UserID usid : usidList) {
-				if (usid.getInfoID() == loggedInUserId) {
-					// get userID
-					userId = usid.getUserID();
-					// get contactID
-					contactId = usid.getContactID();
-				}
-			}
-			
-			for (ContactInfo ci : contactList) {
-				if (ci.getContactID() == loggedInUserId) {
-					// get suburb
-					uSuburb = ci.getSuburb();
-					// get city
-					uCity = ci.getCity();
-					// get postcode
-					uPostcode = Integer.toString(ci.getPostalCode());
+						for (ContactInfo ci : contactList) {
+							if (ci.getContactID() == loggedInUserId) {
+								// get suburb
+								uSuburb = ci.getSuburb();
+								// get city
+								uCity = ci.getCity();
+								// get postcode
+								uPostcode = Integer
+										.toString(ci.getPostalCode());
+							}
+						}
+					}
+					return user.getPassword().equals(mPassword);
 				}
 			}
 
@@ -467,9 +470,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			showProgress(false);
 
 			if (success) {
-				// Toast.makeText(LoginActivity.this, "Successful login",
-				// Toast.LENGTH_SHORT).show();
-
 				session.createUserLoginSession(loggedInUserId, mEmail, uName,
 						uSurname, uSuburb, uCity, uPostcode);
 				Intent i = new Intent(LoginActivity.this, MainActivity.class);
