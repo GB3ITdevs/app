@@ -64,7 +64,7 @@ public class SessionManager {
 		// Storing login value as TRUE
 		editor.putBoolean(IS_USER_LOGIN, true);
 
-		// Store id in pref
+		// Store info id in pref
 		String ID = Integer.toString(id);
 		editor.putString(KEY_ID, ID);
 		// Store email in pref
@@ -127,7 +127,7 @@ public class SessionManager {
 		// Use hashmap to store user credentials
 		HashMap<String, String> user = new HashMap<String, String>();
 
-		// user id
+		// info id
 		user.put(KEY_ID, pref.getString(KEY_ID, null));
 
 		// user email id

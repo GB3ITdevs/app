@@ -177,6 +177,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			if (user.getEmail().equals(email)) {
 				// Account exists.
 				userExists = true;
+				break;
 			}
 		}
 
@@ -442,22 +443,24 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 								userId = usid.getUserID();
 								// get contactID
 								contactId = usid.getContactID();
+								break;
 							}
 						}
-
-						for (ContactInfo ci : contactList) {
-							if (ci.getContactID() == loggedInUserId) {
-								// get address
-								// TODO uAddress = ci.getAddress();
-								// get suburb
-								uSuburb = ci.getSuburb();
-								// get city
-								uCity = ci.getCity();
-								// get postcode
-								uPostcode = Integer
-										.toString(ci.getPostalCode());
-							}
-						}
+//TODO fix this shit
+//						for (ContactInfo ci : contactList) {
+//							if (ci.getContactID() == loggedInUserId) {
+//								// get address
+//								// TODO uAddress = ci.getAddress();
+//								// get suburb
+//								uSuburb = ci.getSuburb();
+//								// get city
+//								uCity = ci.getCity();
+//								// get postcode
+//								uPostcode = Integer
+//										.toString(ci.getPostalCode());
+//								break;
+//							}
+//						}
 					}
 					return user.getPassword().equals(mPassword);
 				}

@@ -15,6 +15,7 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
@@ -374,8 +375,6 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
-
 			try {
 				// Simulate network access.
 				Thread.sleep(2000);
@@ -394,7 +393,8 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 			showProgress(false);
 
 			if (success) {
-				Toast.makeText(RegisterActivity.this, "Successful registration", Toast.LENGTH_SHORT).show();
+				Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
+				startActivity(i);
 				finish();
 			} else {
 				mPasswordView

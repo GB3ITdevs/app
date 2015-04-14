@@ -1,12 +1,19 @@
 package com.tyct.thankyoutrust;
 
 import java.util.HashMap;
+import java.util.List;
+
+import com.tyct.thankyoutrust.LoginActivity.UserLoginTask;
+import com.tyct.thankyoutrust.model.Users;
+import com.tyct.thankyoutrust.parsers.UsersJSONParser;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,14 +22,39 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ProfileActivity extends Activity {
+
+	// Async Tasks
+	List<UsersTask> tasks;
+
+	// retrieved user list
+	List<Users> userList;
 
 	// Session Manager Class
 	SessionManager session;
 
 	// Stored session data
 	HashMap<String, String> userStored;
+
+	// User info id
+	int infoId;
+
+	// Get value from each editText field
+	EditText tCurrentPw;
+	String pw;
+
+	EditText tNewPw;
+	String newPw;
+
+	EditText tNewPwCheck;
+	String newPwCheck;
+
+	/**
+	 * Keep track of the task to ensure we can cancel it if requested.
+	 */
+	private UpdatePwTask mAuthTask = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +66,11 @@ public class ProfileActivity extends Activity {
 
 		// Get user data from session
 		userStored = session.getUserDetails();
+
+		// get user info id
+		if (userStored.get("id") != null) {
+			infoId = Integer.parseInt(userStored.get("id"));
+		}
 
 		// Populate data at top of screen
 		populateFields();
@@ -221,8 +258,7 @@ public class ProfileActivity extends Activity {
 		LayoutInflater factory = LayoutInflater.from(this);
 
 		// edit_address is a Layout XML file containing text fields to display
-		// in
-		// alert dialog
+		// in alert dialog
 		final View textEntryView = factory.inflate(R.layout.edit_address, null);
 
 		// Get each editText field
@@ -299,18 +335,12 @@ public class ProfileActivity extends Activity {
 
 		// change_pw is a Layout XML file containing text fields to display in
 		// alert dialog
-		final View textEntryView = factory.inflate(R.layout.change_pw, null);
+		View textEntryView = factory.inflate(R.layout.change_pw, null);
 
 		// Get each editText field
-		final EditText currentPw = (EditText) findViewById(R.id.editTextEditAddress);
-		final EditText newPw = (EditText) findViewById(R.id.editTextEditSuburb);
-		final EditText newPwCheck = (EditText) findViewById(R.id.editTextEditCity);
-
-		// TODO Check current password is correct
-
-		// TODO check new password matches re-entered password
-
-		// TODO Check new password is valid
+		tCurrentPw = (EditText) findViewById(R.id.editTextEditAddress);
+		tNewPw = (EditText) findViewById(R.id.editTextEditSuburb);
+		tNewPwCheck = (EditText) findViewById(R.id.editTextEditCity);
 
 		// set title
 		alertDialogBuilder.setTitle("Change Password");
@@ -318,15 +348,65 @@ public class ProfileActivity extends Activity {
 		// set dialog message
 		alertDialogBuilder
 				.setView(textEntryView)
-				// .setMessage(
-				// "Leave a field blank if you do not wish to make any changes to it")
 				.setCancelable(false)
 				.setPositiveButton("Submit Changes",
 						new DialogInterface.OnClickListener() {
+							// If this button is clicked, update password
 							public void onClick(DialogInterface dialog, int id) {
-								// if this button is clicked,
-								// update password
+								// Reset errors.
+								tCurrentPw.setError(null);
+								tNewPw.setError(null);
+								tNewPwCheck.setError(null);
 
+								// Deal with input errors
+								boolean cancel = false;
+								View focusView = null;
+
+								// Get values from the EditText fields
+								pw = tCurrentPw.getText().toString();
+								newPw = tNewPw.getText().toString();
+								newPwCheck = tNewPwCheck.getText().toString();
+
+								// Check current password is correct
+								for (Users user : userList) {
+									if (user.getInfoID() == (infoId)) {
+										// Check if the current password matches stored password
+										if (user.getPassword().equals(pw)) {
+											tCurrentPw
+													.setError(getString(R.string.error_incorrect_password));
+											focusView = tCurrentPw;
+											cancel = true;
+										}
+									}
+								}
+
+								// Check new password matches re-entered password
+								if (!newPw.equals(newPwCheck)) {
+									tNewPwCheck
+											.setError(getString(R.string.error_nonmatching_password));
+									focusView = tNewPwCheck;
+									cancel = true;
+								}
+
+								// Check for a valid password, if the user entered one.
+								if (!TextUtils.isEmpty(newPw)
+										&& !isPasswordValid(newPw)) {
+									tNewPw.setError(getString(R.string.error_invalid_password));
+									focusView = tNewPw;
+									cancel = true;
+								}
+
+								if (cancel) {
+									// There was an error; don't attempt login
+									// and focus the first form field with an error.
+									focusView.requestFocus();
+								} else {
+									// Show a progress spinner, and kick off a
+									// background task to perform the user login attempt.
+									// showProgress(true);
+									mAuthTask = new UpdatePwTask(newPw);
+									mAuthTask.execute((Void) null);
+								}
 							}
 						})
 				.setNegativeButton("Cancel",
@@ -343,5 +423,74 @@ public class ProfileActivity extends Activity {
 
 		// show it
 		alertDialog.show();
+	}
+
+	private boolean isPasswordValid(String password) {
+		// TODO: Replace this with your own logic
+		return password.length() > 3;
+	}
+
+	/**
+	 * Represents an asynchronous task used to retrieve user data from person
+	 * info.
+	 */
+	private class UsersTask extends AsyncTask<String, String, String> {
+
+		@Override
+		protected void onPreExecute() {
+			tasks.add(this);
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			String content = HttpManager.getData(params[0]);
+			return content;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			userList = UsersJSONParser.parseFeed(result);
+			tasks.remove(this);
+		}
+	}
+
+	/**
+	 * Async task used to send the updated password to the database
+	 */
+	private class UpdatePwTask extends AsyncTask<Void, Void, Boolean> {
+
+		private final String mPassword;
+
+		public UpdatePwTask(String newPw) {
+			mPassword = newPw;
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			try {
+				// Simulate network access.
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				return false;
+			}
+
+			// update details here
+			// TODO pending PUT access
+			// HttpManager.putData("http://gb3it.pickworth.info:3000/person_infos",
+			// mPassword);
+			return true;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean success) {
+			mAuthTask = null;
+			// showProgress(false);
+		}
+
+		@Override
+		protected void onCancelled() {
+			mAuthTask = null;
+			// showProgress(false);
+		}
 	}
 }

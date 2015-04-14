@@ -21,7 +21,7 @@
         android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:ems="10"
-        android:hint="@string/prompt_password"
+        android:hint="@string/prompt_old_pw"
         android:inputType="textPassword" />
     
     <TextView
@@ -41,7 +41,7 @@
         android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:ems="10"
-        android:hint="@string/prompt_password"
+        android:hint="@string/prompt_new_pw"
         android:inputType="textPassword" />
     
     <TextView
@@ -61,6 +61,7 @@
         android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:ems="10"
+        android:hint="@string/prompt_new_pw"
         android:inputType="textPassword" />
 
 </LinearLayout>

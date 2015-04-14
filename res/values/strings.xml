@@ -41,5 +41,7 @@
     <string name="prompt_address">Address</string>
     <string name="current_pw">Enter your current password</string>
     <string name="new_pw">Enter new password</string>
+    <string name="prompt_old_pw">Old Password</string>
+    <string name="prompt_new_pw">New Password</string>
 
 </resources>
