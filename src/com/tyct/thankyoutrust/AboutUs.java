@@ -20,10 +20,6 @@ public class AboutUs extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.about_us, menu);
 		return true;
-<<<<<<< HEAD
-
-=======
->>>>>>> 97ea6d164d7374b14f11886781f673d7c9c867f4
 	}
 
 	@Override
