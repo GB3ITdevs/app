@@ -57,7 +57,7 @@ public class ProjectsJSONParser
 		}
 	}
 	
-	//Method to parse the Android Project object to JSON Project format in order to post
+	//Method to parse the Android Project object to JSON Project format in order to post or update
 	public static String POST(Project project)
 	{
 		//Create a new empty string

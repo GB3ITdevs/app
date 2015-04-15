@@ -10,6 +10,7 @@ import java.net.URL;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -53,36 +54,27 @@ public class HttpManager {
 	public static void postData(String uri, String jsonString) 
 	{
 		URL url;
-		//BufferedWriter reader = null;
-		//DataOutputStream output;
+
 		try 
 		{
 			url = new URL(uri);
-			//HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpPost httpPost = new HttpPost(url.toURI());
 			httpPost.setEntity(new StringEntity(jsonString));
 			
 			httpPost.setHeader("Content-Type", "application/json");
-			//httpPost.setHeader("Accept-Encoding", "application/json");
-			//httpPost.setHeader("Accept-Language", "en-US");
+
 			
 			httpClient.execute(httpPost);
-			
-			//reader = new BufferedWriter(new OutputStreamWriter(con.getOutputStream()));
-			//output = new DataOutputStream(con.getOutputStream());
-			//output.writeBytes(jsonString);
-			//reader.write(jsonString);
-			//reader.close();
-			//output.close();
 			
 		} 
 		catch (IOException e) 
 		{
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 	}
@@ -96,13 +88,42 @@ public class HttpManager {
 		try 
 		{
 			url = new URL(uri);
-			//HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpDelete httpDelete = new HttpDelete(url.toURI());
 			
 			httpDelete.setHeader("Content-Type", "application/json");
 			
 			httpClient.execute(httpDelete);
+			
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (URISyntaxException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	//Method to update an object from the database,
+	//the uri passed in must end with the resource id of the object needing to be updated
+	public static void updateData(String uri, String jsonString)
+	{
+		URL url;
+		try 
+		{
+			url = new URL(uri);
+
+			HttpClient httpClient = new DefaultHttpClient();
+			HttpPut httpPut = new HttpPut(url.toURI());
+			
+			httpPut.setEntity(new StringEntity(jsonString));
+			
+			httpPut.setHeader("Content-Type", "application/json");
+			
+			httpClient.execute(httpPut);
 			
 		} 
 		catch (IOException e) 

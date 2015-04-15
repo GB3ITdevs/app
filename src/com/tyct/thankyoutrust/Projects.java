@@ -29,8 +29,12 @@
  
  public class Projects extends Activity implements ProjectListFragment.Callbacks
  {
- 	List<MyTask> tasks;
+ 	List<GetProjectsTask> projectTasks;
+ 	List<GetProjectWebsitesTask> websiteTasks;
+ 	
  	List<Project> projectList;
+ 	List<ProjectWebsite> projectWebsiteList;
+ 	
  	String[] projectNames;
  	ProgressBar pb;
  	Project selectedProject;
@@ -55,7 +59,8 @@
  		//SetupModels();
  		
  		//Create a new list of tasks
- 		tasks = new ArrayList<>();
+ 		projectTasks = new ArrayList<>();
+ 		websiteTasks = new ArrayList<>();
  		
  		//Initialize the progress bar and set it to not be visible
  		pb = (ProgressBar) findViewById(R.id.progressBar1);
@@ -114,7 +119,7 @@
  	private void requestData(String uri) 
  	{
  		//Create the new async task
- 		MyTask task = new MyTask();
+ 		GetProjectsTask task = new GetProjectsTask();
  		//Start it using the url that has been passed into the method
  		task.execute(uri);
  	}
@@ -141,6 +146,7 @@
  		startActivity(detailIntent);
  		
  	}
+ 	
  	
  	//Method to setup the project name list and display the project list fragment
  	public void setProjectList(List<Project> projectList)
@@ -254,8 +260,8 @@
  		
  	}
  	
- 	//Inner class for performing network activity
- 	private class MyTask extends AsyncTask<String, String, String> 
+ 	//Inner class for performing network activity - getting and setting project list from the database
+ 	private class GetProjectsTask extends AsyncTask<String, String, String> 
  	{
  		
  		//Tasks pre-execute method
@@ -263,11 +269,11 @@
  		protected void onPreExecute() 
  		{
  			//If the task has been started set the progress bar to visible
- 			if (tasks.size() == 0) 
+ 			if (projectTasks.size() == 0) 
  			{
  				pb.setVisibility(View.VISIBLE);
  			}
- 			tasks.add(this);
+ 			projectTasks.add(this);
  		}
  		
  		//Tasks do in background method
@@ -306,8 +312,8 @@
 				emptyProjectListDisplay();
 			}
  			//Remove the current task and set the progress bar to be invisible again
- 			tasks.remove(this);
- 			if (tasks.size() == 0) 
+ 			projectTasks.remove(this);
+ 			if (projectTasks.size() == 0) 
  			{
  				pb.setVisibility(View.INVISIBLE);
  			}
@@ -323,5 +329,55 @@
  	}
  
  
+ 	
+ 	//Inner class for performing network activity - getting and setting project list from the database
+ 	 	private class GetProjectWebsitesTask extends AsyncTask<String, String, String> 
+ 	 	{
+ 	 		
+ 	 		//Tasks pre-execute method
+ 	 		@Override
+ 	 		protected void onPreExecute() 
+ 	 		{
+ 	 			//If the task has been started set the progress bar to visible
+ 	 			if (websiteTasks.size() == 0) 
+ 	 			{
+ 	 				pb.setVisibility(View.VISIBLE);
+ 	 			}
+ 	 			websiteTasks.add(this);
+ 	 		}
+ 	 		
+ 	 		//Tasks do in background method
+ 	 		@Override
+ 	 		protected String doInBackground(String... params) 
+ 	 		{
+ 	 			//Create a new string from the http managers get data method and return it
+ 	 			String content = HttpManager.getData(params[0]);
+ 	 			return content;
+ 	 		}
+ 	 		
+ 	 		//Tasks post-execute method
+ 	 		@Override
+ 	 		protected void onPostExecute(String result) 
+ 	 		{
+ 				//Create a new list of project websites from the JSON parser using the passed in string from the http manager
+ 				projectWebsiteList = ProjectWebsiteJSONParser.parseFeed(result);
+
+
+ 	 			//Remove the current task and set the progress bar to be invisible again
+ 	 			websiteTasks.remove(this);
+ 	 			if (websiteTasks.size() == 0) 
+ 	 			{
+ 	 				pb.setVisibility(View.INVISIBLE);
+ 	 			}
+ 	 
+ 	 		}
+ 	 		
+ 	 		@Override
+ 	 		protected void onProgressUpdate(String... values) 
+ 	 		{
+ 	 //			updateDisplay(values[0]);
+ 	 		}
+ 	 		
+ 	 	}
  
  }
