@@ -29,6 +29,7 @@
     <string name="title_activity_admin_home_page">AdminHomePage</string>
     <string name="title_activity_admin_all_users">AdminAllUsers</string>
     <string name="admin">Admin</string>
+    <string name="action_logout">Log out</string>
     <string name="title_activity_admin_all_communities">AdminAllCommunities</string>
     <string name="title_activity_admin_reports">AdminReports</string>
    

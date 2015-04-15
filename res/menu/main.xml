@@ -27,4 +27,9 @@
         android:title="@string/admin"
         android:orderInCategory="300"
         android:showAsAction="ifRoom"/>
+         
+         <item android:id="@+id/action_logout"
+        android:title="@string/action_logout"
+        android:orderInCategory="300"
+        android:showAsAction="ifRoom"/>
 </menu>
