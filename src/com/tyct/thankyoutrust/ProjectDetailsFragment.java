@@ -1,28 +1,28 @@
  package com.tyct.thankyoutrust;
  
  import java.util.ArrayList;
- import java.util.List;
+import java.util.List;
  
  import android.app.Fragment;
- import android.app.FragmentManager;
- import android.content.Context;
- import android.content.SharedPreferences;
- import android.net.ConnectivityManager;
- import android.net.NetworkInfo;
- import android.os.AsyncTask;
- import android.os.Bundle;
- import android.view.LayoutInflater;
- import android.view.View;
- import android.view.ViewGroup;
- import android.widget.RatingBar;
- import android.widget.RatingBar.OnRatingBarChangeListener;
- import android.widget.TextView;
- import android.widget.Toast;
+import android.app.FragmentManager;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RatingBar;
+import android.widget.RatingBar.OnRatingBarChangeListener;
+import android.widget.TextView;
+import android.widget.Toast;
  
- import com.tyct.thankyourtrust.dialogs.ConfirmProjectRatingDialog;
- import com.tyct.thankyoutrust.model.Project;
- import com.tyct.thankyoutrust.model.ProjectRating;
- import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
+import com.tyct.thankyoutrust.dialogs.ConfirmProjectRatingDialog;
+import com.tyct.thankyoutrust.model.Project;
+import com.tyct.thankyoutrust.model.ProjectRating;
+import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
  
  public class ProjectDetailsFragment extends Fragment
  {

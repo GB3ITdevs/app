@@ -1,4 +1,4 @@
-package com.tyct.thankyourtrust.dialogs;
+package com.tyct.thankyoutrust.dialogs;
 
 import com.tyct.thankyoutrust.ProjectDetailsActivity;
 import com.tyct.thankyoutrust.ProjectDetailsFragment;
