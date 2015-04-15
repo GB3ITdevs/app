@@ -6,7 +6,6 @@ import java.util.List;
 import com.tyct.thankyoutrust.model.AdminID;
 import com.tyct.thankyoutrust.model.Users;
 import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
-import com.tyct.thankyoutrust.parsers.MessageJSONParser;
 import com.tyct.thankyoutrust.parsers.UsersJSONParser;
 
 
@@ -35,6 +34,9 @@ import android.widget.Toast;
 public class AdminAllUsers extends Activity {
 	
 	List<Users> userList;
+	List<AdminID> adminList;
+	List<AdminTask> adminTask;
+	List<DeleteAdminTask> deleteAdminTask;
 	String[] userNames;
 	List<MyTask> tasks;
 	List<PostAdminTask> postadmintask;
@@ -43,6 +45,7 @@ public class AdminAllUsers extends Activity {
 	String selectedItem = "";
 	int[] UsersInfoId;
 	int selectedInfoId;
+	int adminid;
 	AdminID adminEntity;
 	//Array for Admin Options
 	String[] optionsArray = {"Set as admin", "Remove as admin", "Delete user", "Change community"};
@@ -54,11 +57,11 @@ public class AdminAllUsers extends Activity {
 		
 		//start async task
 		tasks = new ArrayList<>();
-		
+		adminTask = new ArrayList<>();
 		
 		//makes connection to database
 		display();
-		
+		adminInfo();
 		
 		//setup listview to and call method for clickable
 		ListView groupAct = (ListView) findViewById(R.id.lstvewuser);
@@ -147,9 +150,19 @@ public class AdminAllUsers extends Activity {
 		}
 	}
 	
+	private void requestAdminData(String uri) {
+		AdminTask task = new AdminTask();
+		task.execute(uri);
+	}
 	
-	
-	
+	public void adminInfo() {
+		if (isOnline()) {
+			requestAdminData("http://gb3it.pickworth.info:3000/administrators");
+		} else {
+			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
+					.show();
+		}
+	}
 
 	// Connect to database
 	protected boolean isOnline() {
@@ -187,12 +200,76 @@ public class AdminAllUsers extends Activity {
 				postadmintask.remove(this);
 				
 			}
+			
+			
 
 			@Override
 			protected void onProgressUpdate(String... values) {
 			}
 
 		}
+		
+		// Handles the posting side
+				private class DeleteAdminTask extends AsyncTask<String, String, String> {
+					String deleteAdmin = "http://gb3it.pickworth.info:3000/administrators/";
+					@Override
+					protected void onPreExecute() {
+						deleteAdminTask.add(this);
+					}
+
+					@Override
+					protected String doInBackground(String... params) {
+						HttpManager.deleteData(deleteAdmin+adminid);
+						String result = "Admin Deleted";
+						return result;
+					}
+
+					@Override
+					protected void onPostExecute(String result) {
+
+						// String messageResult = (result);
+
+						deleteAdminTask.remove(this);
+						
+					}
+					
+					
+
+					@Override
+					protected void onProgressUpdate(String... values) {
+					}
+
+				}
+		
+		/**
+    	 * Represents an asynchronous task used to retrieve contact data from
+    	 * contact info.
+    	 */
+    	private class AdminTask extends AsyncTask<String, String, String> {
+
+    		@Override
+    		protected void onPreExecute() {
+    			adminTask.add(this);
+    		}
+
+    		@Override
+    		protected String doInBackground(String... params) {
+    			String content = HttpManager.getData(params[0]);
+    			return content;
+    		}
+
+    		@Override
+    		protected void onPostExecute(String result) {
+    			adminList = AdminIDJSONParser.parseFeed(result);
+    			adminTask.remove(this);
+    		}
+
+    		@Override
+    		protected void onProgressUpdate(String... values) {
+    			// updateDisplay(values[0]);
+    		}
+
+    	}
 	private class MyTask extends AsyncTask<String, String, String> {
 
 		@Override
@@ -271,15 +348,12 @@ public class AdminAllUsers extends Activity {
     	//if selected item is same as optionArray[0] (Set As admin) then add as an admin
 		if (selectedItem == optionsArray[0]) 
 		{
-			addAdmin(selectedInfoId);
-			//Toast.makeText(AdminAllUsers.this, optionsArray[0] + " " +selectedItem, Toast.LENGTH_LONG).show();
-			
+			addAdmin(selectedInfoId);			
 		}
 		//if selected item is same as optionArray[1] (Remove As admin) then delete admin status
 		if (selectedItem == optionsArray[1]) 
 		{
-			Toast.makeText(AdminAllUsers.this, optionsArray[1] + " " + selectedItem, Toast.LENGTH_LONG).show();
-			
+			deleteAdmin();	
 		}
 		//if selected item is same as optionArray[2] (delete user) then delete user
 		if (selectedItem == optionsArray[2]) 
@@ -299,6 +373,28 @@ public class AdminAllUsers extends Activity {
     {
     
     	Toast.makeText(AdminAllUsers.this, optionsArray[2] + " " + selectedItem, Toast.LENGTH_LONG).show();
+    }
+    
+    //method to delete a user
+    public void deleteAdmin()
+    {
+    	
+    	adminTask = new ArrayList<>();
+    	
+    	
+    	for(AdminID adm : adminList)
+		{
+    		if (selectedInfoId == adm.getInfoID())
+    		{
+    			 adminid = adm.getAdminID();
+    				deleteAdminTask = new ArrayList<>();
+        			DeleteAdminTask task = new DeleteAdminTask();
+        			task.execute();
+    			//Toast.makeText(AdminAllUsers.this, adm.getInfoID() + " " + selectedInfoId +" are all there" + " " + adminid, Toast.LENGTH_LONG).show();
+    		}
+			
+		}
+    	//Toast.makeText(AdminAllUsers.this, optionsArray[1] + " " + selectedItem, Toast.LENGTH_LONG).show();
     }
     
     //method to delete a user
