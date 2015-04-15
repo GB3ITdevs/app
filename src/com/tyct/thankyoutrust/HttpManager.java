@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -84,4 +85,32 @@ public class HttpManager {
 			e.printStackTrace();
 		}
 	}
+	
+	//Method to delete an object from the database,
+		//the uri passed in must end with the resource id of the object
+		public static void deleteData(String uri)
+		{
+			URL url;
+			
+			try 
+			{
+				url = new URL(uri);
+				//HttpURLConnection con = (HttpURLConnection) url.openConnection();
+				HttpClient httpClient = new DefaultHttpClient();
+				HttpDelete httpDelete = new HttpDelete(url.toURI());
+				
+				httpDelete.setHeader("Content-Type", "application/json");
+				
+				httpClient.execute(httpDelete);
+				
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			} 
+			catch (URISyntaxException e) 
+			{
+				e.printStackTrace();
+			}
+		}
 }

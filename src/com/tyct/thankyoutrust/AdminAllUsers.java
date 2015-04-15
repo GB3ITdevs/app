@@ -3,7 +3,10 @@ package com.tyct.thankyoutrust;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tyct.thankyoutrust.model.AdminID;
 import com.tyct.thankyoutrust.model.Users;
+import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
+import com.tyct.thankyoutrust.parsers.MessageJSONParser;
 import com.tyct.thankyoutrust.parsers.UsersJSONParser;
 
 
@@ -34,10 +37,13 @@ public class AdminAllUsers extends Activity {
 	List<Users> userList;
 	String[] userNames;
 	List<MyTask> tasks;
+	List<PostAdminTask> postadmintask;
 	DialogFragment userOptions;
 	OptionsDialog dialog;
 	String selectedItem = "";
 	int[] UsersInfoId;
+	int selectedInfoId;
+	AdminID adminEntity;
 	//Array for Admin Options
 	String[] optionsArray = {"Set as admin", "Remove as admin", "Delete user", "Change community"};
 	
@@ -49,8 +55,10 @@ public class AdminAllUsers extends Activity {
 		//start async task
 		tasks = new ArrayList<>();
 		
+		
 		//makes connection to database
 		display();
+		
 		
 		//setup listview to and call method for clickable
 		ListView groupAct = (ListView) findViewById(R.id.lstvewuser);
@@ -102,6 +110,8 @@ public class AdminAllUsers extends Activity {
 		MyTask task = new MyTask();
 		task.execute(uri);
 	}
+	
+
 
 	//Method to setup the List View to display all users 
 	public void setUserList(List<Users> userList)
@@ -151,14 +161,44 @@ public class AdminAllUsers extends Activity {
 			return false;
 		}
 	}
-
 	
+	// Handles the posting side
+		private class PostAdminTask extends AsyncTask<String, String, String> {
+			String adminEntityString = AdminIDJSONParser.POST(adminEntity);
+
+			@Override
+			protected void onPreExecute() {
+				postadmintask.add(this);
+			}
+
+			@Override
+			protected String doInBackground(String... params) {
+				HttpManager.postData("http://gb3it.pickworth.info:3000/administrators",
+						adminEntityString);
+				String result = "Admin Posted";
+				return result;
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+
+				// String messageResult = (result);
+
+				postadmintask.remove(this);
+				
+			}
+
+			@Override
+			protected void onProgressUpdate(String... values) {
+			}
+
+		}
 	private class MyTask extends AsyncTask<String, String, String> {
 
 		@Override
 		protected void onPreExecute() {
 			// updateDisplay("Starting task");
-
+			
 		}
 
 		@Override
@@ -186,10 +226,6 @@ public class AdminAllUsers extends Activity {
 
 	}
 	
-	public void getSelectedUserId(String selectedUser)
-	{
-		
-	}
 	
 	//Handles the ListView clicks
 	public class ListViewClickHandler implements OnItemClickListener
@@ -218,7 +254,7 @@ public class AdminAllUsers extends Activity {
     	
     	if(result == true)
     	{
-    		Toast.makeText(AdminAllUsers.this, "Submitted you choice " + selectedItem, Toast.LENGTH_LONG).show();
+    		//Toast.makeText(AdminAllUsers.this, "Submitted you choice " + selectedItem, Toast.LENGTH_LONG).show();
     		setOptionIntents();
     	}
     	
@@ -235,7 +271,8 @@ public class AdminAllUsers extends Activity {
     	//if selected item is same as optionArray[0] (Set As admin) then add as an admin
 		if (selectedItem == optionsArray[0]) 
 		{
-			Toast.makeText(AdminAllUsers.this, optionsArray[0] + " " +selectedItem, Toast.LENGTH_LONG).show();
+			addAdmin(selectedInfoId);
+			//Toast.makeText(AdminAllUsers.this, optionsArray[0] + " " +selectedItem, Toast.LENGTH_LONG).show();
 			
 		}
 		//if selected item is same as optionArray[1] (Remove As admin) then delete admin status
@@ -260,13 +297,27 @@ public class AdminAllUsers extends Activity {
     //method to delete a user
     public void deleteUser()
     {
+    
     	Toast.makeText(AdminAllUsers.this, optionsArray[2] + " " + selectedItem, Toast.LENGTH_LONG).show();
+    }
+    
+    //method to delete a user
+    public void addAdmin(int infoId)
+    {
+    	//adminInfo();
+    	adminEntity = new AdminID();
+    	adminEntity.setInfoID(infoId);
+
+    	postadmintask = new ArrayList<>();
+		PostAdminTask task = new PostAdminTask();
+		task.execute();
+    	//Toast.makeText(AdminAllUsers.this, optionsArray[0] + " " + selectedItem + "  selected info ID "+ infoId, Toast.LENGTH_LONG).show();
     }
 
 	public class OptionsDialog extends android.app.DialogFragment  {
     	//selected user
     	String selectedUser;
-    	int selectedInfoId;
+    	
     	
 
     public OptionsDialog() {}
@@ -337,7 +388,7 @@ public class AdminAllUsers extends Activity {
     		
     	}
     	
-    	 
+    	
 
     }
 }
