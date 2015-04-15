@@ -37,6 +37,7 @@ public class AdminAllUsers extends Activity {
 	DialogFragment userOptions;
 	OptionsDialog dialog;
 	String selectedItem = "";
+	int[] UsersInfoId;
 	//Array for Admin Options
 	String[] optionsArray = {"Set as admin", "Remove as admin", "Delete user", "Change community"};
 	
@@ -91,6 +92,12 @@ public class AdminAllUsers extends Activity {
 		return false;
 	}
 
+	public int getInfoId(int positionClicked)
+	{
+		int infoID = UsersInfoId[positionClicked];
+		return infoID;
+		
+	}
 	private void requestData(String uri) {
 		MyTask task = new MyTask();
 		task.execute(uri);
@@ -101,11 +108,13 @@ public class AdminAllUsers extends Activity {
 	{
 
 		userNames = new String[userList.size()];
+		UsersInfoId = new int[userList.size()];
 		int i = 0;
 		//Add each user name from the project list to the array of strings
 		for(Users user : userList)
 		{
 			userNames[i] = user.getFirstName() + " " + user.getLastName();
+			UsersInfoId[i]=user.getInfoID();
 			i++;
 		}
 		
@@ -190,11 +199,11 @@ public class AdminAllUsers extends Activity {
 		public void onItemClick(AdapterView<?> list, View itemview, int posistion, long id) {
 			//Gets the string of what is been clicked on.
 			String clickedItemString = (String) list.getItemAtPosition(posistion).toString();
-
+			int selectedInfoID = getInfoId(posistion);
 			//debugging
 			//Toast.makeText(AdminAllUsers.this, clickedUsersInfoId, Toast.LENGTH_LONG).show();
 			
-			dialog = new OptionsDialog(clickedItemString);
+			dialog = new OptionsDialog(clickedItemString, selectedInfoID);
 			FragmentManager fm = getFragmentManager();
 			dialog.show(fm, "confirm");
 			
@@ -215,7 +224,7 @@ public class AdminAllUsers extends Activity {
     	
     	if (result == false)
     	{
-    		Toast.makeText(AdminAllUsers.this, "Cancelled", Toast.LENGTH_LONG).show();
+    		//Toast.makeText(AdminAllUsers.this, "Cancelled", Toast.LENGTH_LONG).show();
     	}
     	
     }
@@ -257,15 +266,18 @@ public class AdminAllUsers extends Activity {
 	public class OptionsDialog extends android.app.DialogFragment  {
     	//selected user
     	String selectedUser;
+    	int selectedInfoId;
     	
 
     public OptionsDialog() {}
-    public OptionsDialog(String user) {
+    public OptionsDialog(String user, int infoId) {
     	selectedUser = user;
+    	selectedInfoId = infoId ;
     }
     	
     	public Dialog onCreateDialog(Bundle savedInstanceState)
     	{
+    		
     		Builder builder = new AlertDialog.Builder(getActivity());
     		//Set Title
     		builder.setTitle("Select Options for "+ selectedUser);
