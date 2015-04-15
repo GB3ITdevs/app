@@ -158,14 +158,14 @@ public class SessionManager {
 	 * */
 	public void logoutUser() {
 
-		// Clearing all user data from Shared Preferences
+		// Clear all user data from Shared Preferences
 		editor.clear();
 		editor.commit();
 
 		// After logout redirect user to Welcome Screen
 		Intent i = new Intent(_context, WelcomeScreen.class);
 
-		// Closing all the Activities
+		// Close all the Activities
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 		// Add new Flag to start new Activity

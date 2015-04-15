@@ -21,12 +21,16 @@
         android:id="@+id/action_profile"
         android:orderInCategory="300"
         android:showAsAction="ifRoom"
-        android:title="@string/profile">
-    </item>
+        android:title="@string/profile"/>
     <item
         android:id="@+id/action_about_us"
         android:orderInCategory="400"
         android:showAsAction="ifRoom"
         android:title="@string/about_us"/>
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="600"
+        android:showAsAction="never"
+        android:title="@string/logout"/>
 
 </menu>

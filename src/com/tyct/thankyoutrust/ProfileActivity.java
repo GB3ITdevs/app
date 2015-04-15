@@ -113,21 +113,31 @@ public class ProfileActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent goTo = new Intent();
-		if (item.getItemId() == R.id.action_projects) {
+		switch(item.getItemId()) {
+		case R.id.action_projects:
 			goTo = new Intent(ProfileActivity.this, Projects.class);
-
-		}
-		if (item.getItemId() == R.id.action_home) {
+			startActivity(goTo);
+			return true;
+		case R.id.action_home:
 			goTo = new Intent(ProfileActivity.this, MainActivity.class);
-		}
-		if (item.getItemId() == R.id.action_profile) {
+			startActivity(goTo);
+			return true;
+		case R.id.action_profile:
 			goTo = new Intent(ProfileActivity.this, ProfileActivity.class);
-		}
-		if (item.getItemId() == R.id.action_about_us) {
+			startActivity(goTo);
+			finish();
+			return true;
+		case R.id.action_about_us:
 			goTo = new Intent(ProfileActivity.this, AboutUs.class);
-		}
-		startActivity(goTo);
-		return false;
+			startActivity(goTo);
+			return true;
+		case R.id.action_logout:
+			session.logoutUser();
+			finish();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+	}
 	}
 
 	// Populate the fields at the top of the screen
@@ -196,6 +206,8 @@ public class ProfileActivity extends Activity {
 				.findViewById(R.id.editTextEditLName);
 		final EditText eEmail = (EditText) textEntryView
 				.findViewById(R.id.editTextEditEmail);
+		final EditText eiPassw = (EditText) textEntryView
+				.findViewById(R.id.editTextInfoPw);
 
 		// Display name
 		if (userStored.get("fName") != null) {
@@ -226,10 +238,13 @@ public class ProfileActivity extends Activity {
 				.setCancelable(false)
 				.setPositiveButton("Submit Changes",
 						new DialogInterface.OnClickListener() {
+							// if this button is clicked, update details
 							public void onClick(DialogInterface dialog, int id) {
-								// if this button is clicked,
-								// update details
-
+								// Get values from EditText fields
+								String fName = eFName.getText().toString();
+								String lName = eLName.getText().toString();
+								String email = eEmail.getText().toString();
+								String passw = eiPassw.getText().toString();
 							}
 						})
 				.setNegativeButton("Cancel",
@@ -266,6 +281,7 @@ public class ProfileActivity extends Activity {
 		final EditText eSuburb = (EditText) findViewById(R.id.editTextEditSuburb);
 		final EditText eCity = (EditText) findViewById(R.id.editTextEditCity);
 		final EditText ePostcode = (EditText) findViewById(R.id.editTextEditPostcode);
+		final EditText eaPassw = (EditText) findViewById(R.id.editTextLocPw);
 
 		// Display address (TODO pending addition to session manager)
 		// if (userStored.get("address") != null) {
@@ -302,10 +318,14 @@ public class ProfileActivity extends Activity {
 				.setCancelable(false)
 				.setPositiveButton("Submit Changes",
 						new DialogInterface.OnClickListener() {
+							// if this button is clicked, update details
 							public void onClick(DialogInterface dialog, int id) {
-								// if this button is clicked,
-								// update details
-
+								// Get values form EditText fields
+								String addr = eAddress.getText().toString();
+								String suburb = eSuburb.getText().toString();
+								String city = eCity.getText().toString();
+								String postcode = ePostcode.getText().toString();
+								String passw = eaPassw.getText().toString();
 							}
 						})
 				.setNegativeButton("Cancel",

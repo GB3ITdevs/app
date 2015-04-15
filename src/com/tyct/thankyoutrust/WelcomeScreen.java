@@ -10,11 +10,22 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class WelcomeScreen extends Activity {
+	// User Session Manager Class
+	SessionManager session;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_welcome_screen);
+
+		// Session class instance
+		session = new SessionManager(getApplicationContext());
+		// If a user is currently logged in, go straight to message board
+		if (session.isUserLoggedIn()) {
+			Intent intent = new Intent(WelcomeScreen.this, MainActivity.class);
+			startActivity(intent);
+			finish();
+		}
 
 		// Login button
 		Button buttonLogin = (Button) findViewById(R.id.btnLogin);

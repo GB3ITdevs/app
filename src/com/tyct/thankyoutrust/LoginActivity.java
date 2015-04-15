@@ -240,7 +240,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 										.toString();
 								registration.putExtra("email", email);
 								startActivity(registration);
-								// LoginActivity.this.finish();
+								LoginActivity.this.finish();
 							}
 						})
 				.setNegativeButton("No", new DialogInterface.OnClickListener() {

@@ -90,25 +90,31 @@ public class MainActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) 
 	{
 		Intent goTo = new Intent();
-		if (item.getItemId() == R.id.action_projects) 
-		{
-			goTo = new Intent(MainActivity.this, Projects.class);
-			
+		switch(item.getItemId()) {
+			case R.id.action_projects:
+				goTo = new Intent(MainActivity.this, Projects.class);
+				startActivity(goTo);
+				return true;
+			case R.id.action_home:
+				goTo = new Intent(MainActivity.this, MainActivity.class);
+				startActivity(goTo);
+				finish();
+				return true;
+			case R.id.action_profile:
+				goTo = new Intent(MainActivity.this, ProfileActivity.class);
+				startActivity(goTo);
+				return true;
+			case R.id.action_about_us:
+				goTo = new Intent(MainActivity.this, AboutUs.class);
+				startActivity(goTo);
+				return true;
+			case R.id.action_logout:
+				session.logoutUser();
+				finish();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
-		if (item.getItemId() == R.id.action_home) 
-		{
-			goTo = new Intent(MainActivity.this, MainActivity.class);
-		}
-		if (item.getItemId() == R.id.action_profile) 
-		{
-			goTo = new Intent(MainActivity.this, ProfileActivity.class);
-		}
-		if (item.getItemId() == R.id.action_about_us) 
-		{
-			goTo = new Intent(MainActivity.this, AboutUs.class);
-		}
-		startActivity(goTo);
-		return false;
 	}
 
 	private void requestData(String uri) {
