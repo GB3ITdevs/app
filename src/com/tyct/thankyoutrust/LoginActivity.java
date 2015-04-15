@@ -37,28 +37,41 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tyct.thankyoutrust.model.ContactInfo;
+import com.tyct.thankyoutrust.model.UserID;
 import com.tyct.thankyoutrust.model.Users;
+import com.tyct.thankyoutrust.parsers.ContactInfoJSONParser;
+import com.tyct.thankyoutrust.parsers.UserIDJSONParser;
 import com.tyct.thankyoutrust.parsers.UsersJSONParser;
 
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
-	
-	List<MyTask> tasks;
-	
-	List<Users> userList;
 
-	SharedPreferences prefs;
-	Editor editor;
-	int loggedInInfoId;
-	
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	//private static final String[] DUMMY_CREDENTIALS = new String[] {
-	//		"foo@example.com:hello", "bar@example.com:world" };
+	// Async Tasks
+	List<UsersTask> tasks;
+	List<ContactTask> contactTask;
+	List<UsidTask> usidTask;
+
+	// retrieved data lists
+	List<Users> userList;
+	List<UserID> usidList;
+	List<ContactInfo> contactList;
+
+	// User Session Manager Class
+	SessionManager session;
+
+	// User data
+	int loggedInUserId;
+	int contactId;
+	int userId;
+	String uName;
+	String uSurname;
+	String uCity;
+	String uSuburb;
+	String uPostcode;
+
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
@@ -71,10 +84,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	private View mLoginFormView;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) 
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+
+		// User Session Manager
+		session = new SessionManager(getApplicationContext());
 
 		// Set up the login form.
 		mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -93,9 +108,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 						return false;
 					}
 				});
-		
-		prefs = getSharedPreferences("UserDetails", MODE_PRIVATE);
-		editor = prefs.edit();
 
 		// Sign in button handler
 		Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
@@ -108,19 +120,14 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 		mLoginFormView = findViewById(R.id.email_login_form);
 		mProgressView = findViewById(R.id.login_progress);
-		
+
 		tasks = new ArrayList<>();
-		
-		if (isOnline()) {
-			requestData("http://gb3it.pickworth.info:3000/person_infos");
-		} else {
-			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
-		}
-	}
-	
-	private void requestData(String uri) {
-		MyTask task = new MyTask();
-		task.execute(uri);
+		contactTask = new ArrayList<>();
+		usidTask = new ArrayList<>();
+
+		personInfo();
+		userInfo();
+		contactInfo();
 	}
 
 	private void populateAutoComplete() {
@@ -166,7 +173,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			focusView = mEmailView;
 			cancel = true;
 		}
-		
+
 		// Check if user entered email address exists in database.
 		for (Users user : userList) {
 			if (user.getEmail().equals(email)) {
@@ -174,7 +181,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 				userExists = true;
 			}
 		}
-		
+
 		if (!userExists) {
 			registrationDialog();
 			mEmailView.setError(getString(R.string.error_invalid_email));
@@ -185,7 +192,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
-			Toast.makeText(this, "Unsuccessful login", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Unsuccessful login", Toast.LENGTH_SHORT)
+					.show();
 			focusView.requestFocus();
 		} else {
 			// Show a progress spinner, and kick off a background task to
@@ -205,44 +213,50 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		// TODO: Replace this with your own logic
 		return password.length() > 3;
 	}
-	
+
 	/**
 	 * Shows pop-up dialog to confirm user wishes to register an account
 	 */
-	public void registrationDialog () {
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LoginActivity.this);
- 
-			// set title
-			alertDialogBuilder.setTitle("No account is currently registered to this email address");
- 
-			// set dialog message
-			alertDialogBuilder
+	public void registrationDialog() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				LoginActivity.this);
+
+		// set title
+		alertDialogBuilder
+				.setTitle("No account is currently registered to this email address");
+
+		// set dialog message
+		alertDialogBuilder
 				.setMessage("Do you want to register a new account?")
 				.setCancelable(false)
-				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,int id) {
-						// if this button is clicked,
-						// go to registration activity
-						Intent registration = new Intent(LoginActivity.this, RegisterActivity.class);
-						String email = (String) mEmailView.getText().toString();
-						registration.putExtra("email", email);
-						startActivity(registration);
-						//LoginActivity.this.finish();
-					}
-				  })
-				.setNegativeButton("No",new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,int id) {
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								// if this button is clicked,
+								// go to registration activity
+								Intent registration = new Intent(
+										LoginActivity.this,
+										RegisterActivity.class);
+								String email = (String) mEmailView.getText()
+										.toString();
+								registration.putExtra("email", email);
+								startActivity(registration);
+								// LoginActivity.this.finish();
+							}
+						})
+				.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
 						// if this button is clicked, just close
 						// the dialog box and do nothing
 						dialog.cancel();
 					}
 				});
- 
-				// create alert dialog
-				AlertDialog alertDialog = alertDialogBuilder.create();
- 
-				// show it
-				alertDialog.show();
+
+		// create alert dialog
+		AlertDialog alertDialog = alertDialogBuilder.create();
+
+		// show it
+		alertDialog.show();
 	}
 
 	/**
@@ -339,7 +353,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 		mEmailView.setAdapter(adapter);
 	}
-	
+
 	protected boolean isOnline() {
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -350,9 +364,51 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		}
 	}
 
+	private void requestData(String uri) {
+		UsersTask task = new UsersTask();
+		task.execute(uri);
+	}
+
+	private void requestUserData(String uri) {
+		UsidTask task = new UsidTask();
+		task.execute(uri);
+	}
+
+	private void requestContactData(String uri) {
+		ContactTask task = new ContactTask();
+		task.execute(uri);
+	}
+
+	public void personInfo() {
+		if (isOnline()) {
+			requestData("http://gb3it.pickworth.info:3000/person_infos");
+		} else {
+			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
+					.show();
+		}
+	}
+
+	public void userInfo() {
+		if (isOnline()) {
+			requestUserData("http://gb3it.pickworth.info:3000/users");
+		} else {
+			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
+					.show();
+		}
+	}
+
+	public void contactInfo() {
+		if (isOnline()) {
+			requestContactData("http://gb3it.pickworth.info:3000/contact_infos");
+		} else {
+			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
+					.show();
+		}
+	}
+
 	/**
-	 * Represents an asynchronous login/register task used to authenticate
-	 * the user.
+	 * Represents an asynchronous login/register task used to authenticate the
+	 * user.
 	 */
 	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -366,7 +422,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
 
 			try {
 				// Simulate network access.
@@ -375,18 +430,39 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 				return false;
 			}
 
-			
 			for (Users user : userList) {
-				if (user.getEmail().equals(mEmail)) 
-				{
-					loggedInInfoId = user.getInfoID();
-					// Account exists, return true if the password matches.
+				if (user.getEmail().equals(mEmail)) {					
+					// if the password matches, retrieve further user info
+					if (user.getPassword().equals(mPassword)) {
+						loggedInUserId = user.getInfoID();
+						uName = user.getFirstName();
+						uSurname = user.getLastName();
+						
+						for (UserID usid : usidList) {
+							if (usid.getInfoID() == loggedInUserId) {
+								// get userID
+								userId = usid.getUserID();
+								// get contactID
+								contactId = usid.getContactID();
+							}
+						}
+
+//						for (ContactInfo ci : contactList) {
+//							if (ci.getContactID() == loggedInUserId) {
+//								// get suburb
+//								uSuburb = ci.getSuburb();
+//								// get city
+//								uCity = ci.getCity();
+//								// get postcode
+//								uPostcode = Integer
+//										.toString(ci.getPostalCode());
+//							}
+//						}
+					}
 					return user.getPassword().equals(mPassword);
 				}
 			}
 
-			// TODO: register the new account here.
-			
 			return true;
 		}
 
@@ -395,15 +471,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			mAuthTask = null;
 			showProgress(false);
 
-			if (success) 
-			{
-				editor.putInt("UserInfoId", loggedInInfoId);
-				editor.putString("userEmail", mEmail);
-				editor.commit();
-				//Toast.makeText(LoginActivity.this, "Successful login", Toast.LENGTH_SHORT).show();
-				//finish();
-				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-				startActivity(intent);
+			if (success) {
+				session.createUserLoginSession(loggedInUserId, mEmail, uName,
+						uSurname, uSuburb, uCity, uPostcode);
+				Intent i = new Intent(LoginActivity.this, MainActivity.class);
+				startActivity(i);
+				finish();
 			} else {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));
@@ -417,35 +490,93 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			showProgress(false);
 		}
 	}
-	
+
 	/**
-	 * Represents an asynchronous task used to retrieve user data
-	 * from database.
+	 * Represents an asynchronous task used to retrieve user data from person
+	 * info.
 	 */
-	private class MyTask extends AsyncTask<String, String, String> {
+	private class UsersTask extends AsyncTask<String, String, String> {
 
 		@Override
 		protected void onPreExecute() {
 			tasks.add(this);
 		}
-		
+
 		@Override
-		protected String doInBackground(String... params) {			
+		protected String doInBackground(String... params) {
 			String content = HttpManager.getData(params[0]);
 			return content;
 		}
-		
+
 		@Override
-		protected void onPostExecute(String result) {			
+		protected void onPostExecute(String result) {
 			userList = UsersJSONParser.parseFeed(result);
 			tasks.remove(this);
-
 		}
-		
+
 		@Override
 		protected void onProgressUpdate(String... values) {
-//			updateDisplay(values[0]);
+			// updateDisplay(values[0]);
 		}
-		
+
+	}
+
+	/**
+	 * Represents an asynchronous task used to retrieve contact data from
+	 * contact info.
+	 */
+	private class ContactTask extends AsyncTask<String, String, String> {
+
+		@Override
+		protected void onPreExecute() {
+			contactTask.add(this);
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			String content = HttpManager.getData(params[0]);
+			return content;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			contactList = ContactInfoJSONParser.parseFeed(result);
+			contactTask.remove(this);
+		}
+
+		@Override
+		protected void onProgressUpdate(String... values) {
+			// updateDisplay(values[0]);
+		}
+
+	}
+
+	/**
+	 * Represents an asynchronous task used to retrieve user id data from users
+	 */
+	private class UsidTask extends AsyncTask<String, String, String> {
+
+		@Override
+		protected void onPreExecute() {
+			usidTask.add(this);
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			String content = HttpManager.getData(params[0]);
+			return content;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			usidList = UserIDJSONParser.parseFeed(result);
+			usidTask.remove(this);
+		}
+
+		@Override
+		protected void onProgressUpdate(String... values) {
+			// updateDisplay(values[0]);
+		}
+
 	}
 }

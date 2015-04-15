@@ -171,6 +171,25 @@ public class Projects extends Activity implements ProjectListFragment.Callbacks
 		ft.commit();	
 	}
 	
+	//Method to show the empty project list fragment when there are no projects to display
+	public void emptyProjectListDisplay()
+	{
+		//Create new Fragments
+		Fragment emptyProjectListFrag = new EmptyProjectListFragment();
+		
+		//Create a fragment manager
+		FragmentManager fm = getFragmentManager();
+		
+		//Create a new fragment transaction
+		FragmentTransaction ft = fm.beginTransaction();
+		
+		//Replace the empty container with the fragment
+		ft.replace(R.id.fragment_container1, emptyProjectListFrag);
+		
+		//Commit the transaction changes
+		ft.commit();	
+	}
+	
 	//Method to retrieve the array of projects for use in the fragments
 	public List<Project> getProjectList()
 	{
@@ -255,6 +274,7 @@ public class Projects extends Activity implements ProjectListFragment.Callbacks
 		@Override
 		protected String doInBackground(String... params) 
 		{
+			/*
 			//Testing the models and parsers**************************************************************************************************	
 			String JSONresult = ProjectWebsiteJSONParser.POST(newProjectSite);
 			String uri = "http://gb3it.pickworth.info:3000/projects/7/project_websites";
@@ -263,7 +283,7 @@ public class Projects extends Activity implements ProjectListFragment.Callbacks
 			JSONresult = PhoneNumberJSONParser.POST(newPhone);
 			uri = "http://gb3it.pickworth.info:3000/contact_infos/7/phone_numbers";
 			HttpManager.postData(uri, JSONresult);
-
+			*/
 			
 			//Create a new string from the http managers get data method and return it
 			String content = HttpManager.getData(params[0]);
@@ -274,10 +294,17 @@ public class Projects extends Activity implements ProjectListFragment.Callbacks
 		@Override
 		protected void onPostExecute(String result) 
 		{
-			//Create a new list of projects from the JSON parser using the passed in string from the http manager
-			projectList = ProjectsJSONParser.parseFeed(result);
-			//Populate the list fragment using the set project list method
-			setProjectList(projectList);
+			if(!result.isEmpty())
+			{
+				//Create a new list of projects from the JSON parser using the passed in string from the http manager
+				projectList = ProjectsJSONParser.parseFeed(result);
+				//Populate the list fragment using the set project list method
+				setProjectList(projectList);
+			}
+			else
+			{
+				emptyProjectListDisplay();
+			}
 			//Remove the current task and set the progress bar to be invisible again
 			tasks.remove(this);
 			if (tasks.size() == 0) 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -18,6 +19,7 @@ import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tyct.thankyourtrust.dialogs.ConfirmProjectRatingDialog;
 import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.ProjectRating;
 import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
@@ -35,6 +37,8 @@ public class ProjectDetailsFragment extends Fragment
 		RatingBar ratingBar;
 		
 		SharedPreferences prefs;
+		
+		ConfirmProjectRatingDialog confirmDialog;
 		
 		public static String currProjectName;
 		public static String currProjectID;
@@ -88,11 +92,11 @@ public class ProjectDetailsFragment extends Fragment
 			tvProjectBlurb.setText(projectDisplayed.getProjectBlurb());
 			ratingBar.setOnRatingBarChangeListener(ratingChangeListener);
 			
-			//prefs = ma.prefs;
+			prefs = ma.prefs;
 			
 			//Get the logged in user info id from the shared preferences
-			//infoID = prefs.getInt("UserInfoId", 0);
-			//infoID = 1;
+			infoID = prefs.getInt("UserInfoId", 0);
+
 			
 			//Check if the project has already been rated and if so make it unavailable to rate
 			checkForExistingRating();
@@ -144,7 +148,10 @@ public class ProjectDetailsFragment extends Fragment
 		}
 		
 		
-		
+		public void setProjectRating()
+		{
+			ma.setProjectRating(projectRating.getRating());
+		}
 		
 		//Inner Classes**********************************************************************************************
 		
@@ -162,22 +169,37 @@ public class ProjectDetailsFragment extends Fragment
 					
 					int roundedRating = (int) rating;
 					
-					//Currently hard-coding the info id until persistent login is completed*******************************
 					projectRating.setInfoID(infoID);
 					
 					projectRating.setProjectID(projectDisplayed.getProjectID());
 					projectRating.setRating(roundedRating);
 					
-					if (isOnline()) 
+					setProjectRating();
+					
+					confirmDialog = new ConfirmProjectRatingDialog();
+					FragmentManager fm = getFragmentManager();
+					confirmDialog.show(fm, "confirm");
+					
+					if (ma.getDialogResult() == true)
 					{
-						posttasks = new ArrayList<>();
-						PostTask task = new PostTask();
-						task.execute();
-					} 
-					else 
-					{
-						Toast.makeText(ma, "Network isn't available", Toast.LENGTH_LONG).show();
+											
+						if (isOnline()) 
+						{
+							posttasks = new ArrayList<>();
+							PostTask task = new PostTask();
+							task.execute();
+						} 
+						else 
+						{
+							Toast.makeText(ma, "Network isn't available.", Toast.LENGTH_LONG).show();
+						}
 					}
+					else
+					{
+						
+						Toast.makeText(ma, "Please choose your new rating.", Toast.LENGTH_LONG).show();
+					}
+					
 				}
 			}
 			
@@ -218,6 +240,7 @@ public class ProjectDetailsFragment extends Fragment
 //				if (posttasks.size() == 0) {
 //					pb.setVisibility(View.INVISIBLE);
 //				}
+				ratingBar.setIsIndicator(true);
 			}
 
 			@Override

@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -22,13 +23,22 @@ public class ProjectDetailsActivity extends Activity
 	public static String currFundsRequested;
 	public static String currPostalCode;
 	public static String currProjectID;
+	
+	int projectRating;
+	
 	Project projectDisplayed;
+	
+	SharedPreferences prefs;
+	
+	boolean dialogResult;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_single_project);
+		
+		prefs = getSharedPreferences("UserDetails", MODE_PRIVATE);
 		
 		projectDisplayed = new Project();
 		Intent intent = getIntent();
@@ -50,14 +60,7 @@ public class ProjectDetailsActivity extends Activity
         projectDisplayed.setPostalCode(currPostalCode);
         projectDisplayed.setUseOfFunds(currUseOfFunds);
 		
-//		
-//		argument.putString(ProjectDetailsFragment.currProjectName, currProjectName);
-//		//argument.putString(ProjectDetailsFragment.currProjectID, currProjectID);
-//		argument.putString(ProjectDetailsFragment.currPostalCode, currPostalCode);
-//		argument.putString(ProjectDetailsFragment.currApplicantName, currApplicantName);
-//		argument.putString(ProjectDetailsFragment.currProjectBlurb, currProjectBlurb);
-//		argument.putString(ProjectDetailsFragment.currFundsRequested, currFundsRequested);
-//		argument.putString(ProjectDetailsFragment.currUseOfFunds, currUseOfFunds);
+        
 		
 		//Create new Fragments
 		Fragment projectDetailsFrag = new ProjectDetailsFragment();
@@ -118,6 +121,26 @@ public class ProjectDetailsActivity extends Activity
 		}
 		startActivity(goTo);
 		return false;
+	}
+	
+	public void setProjectRating(int returnedProjectRating)
+	{
+		projectRating = returnedProjectRating;
+	}
+	
+	public int getProjectRating()
+	{
+		return projectRating;
+	}
+	
+	public void setDialogResults(boolean returnedDialogResult)
+	{
+		dialogResult = returnedDialogResult;
+	}
+	
+	public boolean getDialogResult()
+	{
+		return dialogResult;
 	}
 	
 	

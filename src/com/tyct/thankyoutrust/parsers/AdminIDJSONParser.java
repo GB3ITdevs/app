@@ -28,15 +28,14 @@ public class AdminIDJSONParser
 				//Create a new JSON object from the array item
 				JSONObject obj = ar.getJSONObject(i);
 				
-				//Create a new Project object
+				//Create a new adminID object
 				AdminID adminID = new AdminID();
 				
 				//Set each JSON adminID field to the appropriate adminID object field
-				adminID.setAdminID(obj.getInt("userID"));
+				adminID.setAdminID(obj.getInt("adminID"));
 				adminID.setAdminID(obj.getInt("infoID"));
-				adminID.setAdminID(obj.getInt("contactID"));
 			
-				//Add the admin ID object to the list of admin IDs
+				//Add the adminID object to the list of adminIDs
 				adminIDList.add(adminID);
 			}
 		//Return the list of adminID objects
