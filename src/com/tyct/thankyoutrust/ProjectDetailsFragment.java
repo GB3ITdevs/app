@@ -18,7 +18,6 @@ import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.tyct.thankyourtrust.dialogs.ConfirmProjectRatingDialog;
 import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.ProjectRating;
@@ -26,7 +25,8 @@ import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
 
 public class ProjectDetailsFragment extends Fragment
 {
-	//Declare the class fields
+	public static String currProjectName;
+		//Declare the class fields
 		Project projectDisplayed;
 		ProjectDetailsActivity ma;
 		List<PostTask> posttasks;
@@ -40,14 +40,6 @@ public class ProjectDetailsFragment extends Fragment
 		
 		ConfirmProjectRatingDialog confirmDialog;
 		
-		public static String currProjectName;
-		public static String currProjectID;
-		public static String currPostalCode;
-		public static String currApplicantName;
-		public static String currProjectBlurb;
-		public static String currFundsRequested;
-		public static String currUseOfFunds;
-		
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
@@ -55,18 +47,6 @@ public class ProjectDetailsFragment extends Fragment
 			
 			
 			projectDisplayed = new Project();
-			
-			
-//		      if (getArguments() != null) 
-//		      { 
-//		          projectDisplayed.setProjectName(getArguments().getString(currProjectName));
-//		          //projectDisplayed.setProjectID(Integer.parseInt(getArguments().getString(currProjectID)));
-//		          projectDisplayed.setProjectBlurb(getArguments().getString(currProjectBlurb));
-//		          projectDisplayed.setApplicantName(getArguments().getString(currApplicantName));
-//		          projectDisplayed.setFundsRequested(Integer.parseInt(getArguments().getString(currFundsRequested)));
-//		          projectDisplayed.setPostalCode(Integer.parseInt(getArguments().getString(currPostalCode)));
-//		          projectDisplayed.setUseOfFunds(getArguments().getString(currUseOfFunds));
-//		      }
 			
 			View v = inflater.inflate(R.layout.fragment_project_details,container,false);
 			//Initialize the layout vies

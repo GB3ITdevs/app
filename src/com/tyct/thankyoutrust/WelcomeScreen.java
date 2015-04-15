@@ -1,6 +1,5 @@
 package com.tyct.thankyoutrust;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,26 +8,36 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class WelcomeScreen extends Activity {
+	// User Session Manager Class
+	SessionManager session;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_welcome_screen);
-		
-		//Login button
-				Button buttonLogin = (Button) findViewById(R.id.btnLogin);
-				buttonLogin.setOnClickListener(new loginButton()); 
-				
-				//Register button
-				Button buttonRegister = (Button) findViewById(R.id.btnRegister);
-				buttonRegister.setOnClickListener(new RegisterButton()); 
-						
-				//About us button
-				Button buttonAboutUs = (Button) findViewById(R.id.btnAboutUs);
-				buttonAboutUs.setOnClickListener(new AboutUsButton()); 
+
+		// Session class instance
+		session = new SessionManager(getApplicationContext());
+		// If a user is currently logged in, go straight to message board
+		if (session.isUserLoggedIn()) {
+			Intent intent = new Intent(WelcomeScreen.this, MainActivity.class);
+			startActivity(intent);
+			finish();
+		}
+
+		// Login button
+		Button buttonLogin = (Button) findViewById(R.id.btnLogin);
+		buttonLogin.setOnClickListener(new loginButton());
+
+		// Register button
+		Button buttonRegister = (Button) findViewById(R.id.btnRegister);
+		buttonRegister.setOnClickListener(new RegisterButton());
+
+		// About us button
+		Button buttonAboutUs = (Button) findViewById(R.id.btnAboutUs);
+		buttonAboutUs.setOnClickListener(new AboutUsButton());
 	}
 
 	@Override
@@ -49,35 +58,33 @@ public class WelcomeScreen extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	//Method for Login Button
-	public class loginButton implements OnClickListener
-	{
+
+	// Method for Login Button
+	public class loginButton implements OnClickListener {
 
 		@Override
 		public void onClick(View v) {
-			
-		Intent intent = new Intent(WelcomeScreen.this, LoginActivity.class);
-		startActivity(intent);
+
+			Intent intent = new Intent(WelcomeScreen.this, LoginActivity.class);
+			startActivity(intent);
 		}
-		
+
 	}
-	
-	//Method for Registration page
-	public class RegisterButton implements OnClickListener
-	{
+
+	// Method for Registration page
+	public class RegisterButton implements OnClickListener {
 
 		@Override
 		public void onClick(View v) {
-			//Temp Toast until we decided what happens with this button
-			Toast.makeText(WelcomeScreen.this, "Registration Page that Mike took upon himself to make it one with the Login. Boo Mike!", Toast.LENGTH_LONG).show();
+			Intent intent = new Intent(WelcomeScreen.this,
+					RegisterActivity.class);
+			startActivity(intent);
 		}
-		
+
 	}
-	
-	//Method to got to About Us page
-	public class AboutUsButton implements OnClickListener
-	{
+
+	// Method to got to About Us page
+	public class AboutUsButton implements OnClickListener {
 
 		@Override
 		public void onClick(View v) {
@@ -85,6 +92,6 @@ public class WelcomeScreen extends Activity {
 			startActivity(intent);
 
 		}
-		
+
 	}
 }

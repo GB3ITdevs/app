@@ -36,6 +36,9 @@ public class SessionManager {
 	public static final String KEY_NAME = "fName";
 	public static final String KEY_SURNAME = "lName";
 
+	// Address
+	public static final String KEY_ADDR = "address";
+
 	// City
 	public static final String KEY_CITY = "city";
 
@@ -56,23 +59,26 @@ public class SessionManager {
 	 * Create login session
 	 * */
 	public void createUserLoginSession(int id, String email, String name,
-			String surname, String suburb, String city, String postcode) {
+			String surname, String suburb, String city,
+			String postcode) {
 		// Storing login value as TRUE
 		editor.putBoolean(IS_USER_LOGIN, true);
 
-		// Storing id in pref
+		// Store info id in pref
 		String ID = Integer.toString(id);
 		editor.putString(KEY_ID, ID);
-		// Storing email in pref
+		// Store email in pref
 		editor.putString(KEY_EMAIL, email);
-		// Storing name in pref
+		// Store name in pref
 		editor.putString(KEY_NAME, name);
 		editor.putString(KEY_SURNAME, surname);
-		// Storing city in pref
+		// Store address in pref
+		//TODO editor.putString(KEY_ADDR, address);
+		// Store city in pref
 		editor.putString(KEY_CITY, city);
-		// Storing suburb in pref
+		// Store suburb in pref
 		editor.putString(KEY_SUB, suburb);
-		// Storing postcode in pref
+		// Store postcode in pref
 		editor.putString(KEY_PCODE, postcode);
 
 		// commit changes
@@ -83,7 +89,8 @@ public class SessionManager {
 	 * Update user details
 	 * */
 	public void updateUserDetails(String fName, String lName, String email,
-			String city, String suburb, String postcode, String password) {
+			String city, String address, String suburb, String postcode,
+			String password) {
 
 	}
 
@@ -120,7 +127,7 @@ public class SessionManager {
 		// Use hashmap to store user credentials
 		HashMap<String, String> user = new HashMap<String, String>();
 
-		// user id
+		// info id
 		user.put(KEY_ID, pref.getString(KEY_ID, null));
 
 		// user email id
@@ -129,6 +136,9 @@ public class SessionManager {
 		// user name
 		user.put(KEY_NAME, pref.getString(KEY_NAME, null));
 		user.put(KEY_SURNAME, pref.getString(KEY_SURNAME, null));
+
+		// user address
+		//TODO user.put(KEY_ADDR, pref.getString(KEY_ADDR, null));
 
 		// user city
 		user.put(KEY_CITY, pref.getString(KEY_CITY, null));
@@ -148,14 +158,14 @@ public class SessionManager {
 	 * */
 	public void logoutUser() {
 
-		// Clearing all user data from Shared Preferences
+		// Clear all user data from Shared Preferences
 		editor.clear();
 		editor.commit();
 
 		// After logout redirect user to Welcome Screen
 		Intent i = new Intent(_context, WelcomeScreen.class);
 
-		// Closing all the Activities
+		// Close all the Activities
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 		// Add new Flag to start new Activity

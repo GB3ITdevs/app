@@ -27,8 +27,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -44,7 +42,8 @@ import android.widget.Toast;
  */
 public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor> {
 
-	List<MyTask> tasks;
+	List<PostTask> tasks;
+	Users newUser;
 	
 	List<Users> userList;
 
@@ -121,7 +120,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 	}
 	
 	private void requestData(String uri) {
-		MyTask task = new MyTask();
+		PostTask task = new PostTask();
 		task.execute(uri);
 	}
 
@@ -140,12 +139,18 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 		}
 
 		// Reset errors.
+		mNameView.setError(null);
+		mSurnameView.setError(null);
 		mEmailView.setError(null);
 		mPasswordView.setError(null);
+		mPasswordCheckView.setError(null);
 
-		// Store values at the time of the login attempt.
+		// Store values at the time of the registration attempt.
+		String fName = mNameView.getText().toString();
+		String lName = mSurnameView.getText().toString();
 		String email = mEmailView.getText().toString();
 		String password = mPasswordView.getText().toString();
+		String pwCheck = mPasswordCheckView.getText().toString();
 
 		boolean cancel = false; // Deals with input errors
 		boolean userExists = false;
@@ -155,6 +160,13 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 		if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
 			mPasswordView.setError(getString(R.string.error_invalid_password));
 			focusView = mPasswordView;
+			cancel = true;
+		}
+		
+		// Check entered password matches retyped password
+		if (!password.equals(pwCheck)) {
+			mPasswordCheckView.setError(getString(R.string.error_nonmatching_password));
+			focusView = mPasswordCheckView;
 			cancel = true;
 		}
 
@@ -177,11 +189,11 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 			}
 		}
 		
-		if (!userExists) {			
+		if (userExists) {			
 			mEmailView.setError(getString(R.string.error_invalid_email));
 			focusView = mEmailView;
 			cancel = true;
-		}
+		}				
 
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
@@ -189,10 +201,17 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 			Toast.makeText(this, "Unsuccessful login", Toast.LENGTH_SHORT).show();
 			focusView.requestFocus();
 		} else {
+			//Create new User Object, passing the data into sets
+			newUser = new Users();
+			newUser.setFirstName(fName);
+			newUser.setLastName(lName);
+			newUser.setEmail(email);
+			newUser.setPassword(password);
+			
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			showProgress(true);
-			mAuthTask = new UserRegisterTask(email, password);
+			mAuthTask = new UserRegisterTask();
 			mAuthTask.execute((Void) null);
 		}
 	}
@@ -214,7 +233,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(RegisterActivity.this);
  
 			// set title
-			alertDialogBuilder.setTitle("Do you want to register this account?");
+			alertDialogBuilder.setTitle("Are you sure you want to register this account?");
  
 			// set dialog message
 			alertDialogBuilder
@@ -347,23 +366,15 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 	}
 
 	/**
-	 * Represents an asynchronous login/register task used to authenticate
+	 * Represents an asynchronous register task used to authenticate
 	 * the user.
 	 */
 	public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
-		private final String mEmail;
-		private final String mPassword;
-
-		UserRegisterTask(String email, String password) {
-			mEmail = email;
-			mPassword = password;
-		}
+		String newUserString = UsersJSONParser.POSTUsers(newUser);
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
-
 			try {
 				// Simulate network access.
 				Thread.sleep(2000);
@@ -371,16 +382,8 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 				return false;
 			}
 
-			
-			for (Users user : userList) {
-				if (user.getEmail().equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return user.getPassword().equals(mPassword);
-				}
-			}
-
-			// TODO: register the new account here.
-			
+			// register the new account here.
+			HttpManager.postData("http://gb3it.pickworth.info:3000/person_infos", newUserString);
 			return true;
 		}
 
@@ -390,8 +393,9 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 			showProgress(false);
 
 			if (success) {
-				Toast.makeText(RegisterActivity.this, "Successful registration", Toast.LENGTH_SHORT).show();
-				//finish();
+				Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
+				startActivity(i);
+				finish();
 			} else {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));
@@ -407,11 +411,11 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 	}
 	
 	/**
-	 * Represents an asynchronous task used to send user data
-	 * to database.
+	 * Represents an asynchronous task used to retrieve user data
+	 * from database.
 	 */
-	private class MyTask extends AsyncTask<String, String, String> {
-
+	private class PostTask extends AsyncTask<String, String, String> 
+	{
 		@Override
 		protected void onPreExecute() {
 			tasks.add(this);
@@ -429,11 +433,5 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 			tasks.remove(this);
 
 		}
-		
-		@Override
-		protected void onProgressUpdate(String... values) {
-//			updateDisplay(values[0]);
-		}
-		
 	}
 }

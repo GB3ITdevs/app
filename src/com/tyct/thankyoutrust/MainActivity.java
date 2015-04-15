@@ -2,17 +2,12 @@
 package com.tyct.thankyoutrust;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import com.tyct.thankyoutrust.model.Message;
-import com.tyct.thankyoutrust.model.Users;
-import com.tyct.thankyoutrust.parsers.MessageJSONParser;
-import com.tyct.thankyoutrust.parsers.UsersJSONParser;
 
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -27,6 +22,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tyct.thankyoutrust.model.Message;
+import com.tyct.thankyoutrust.model.Users;
+import com.tyct.thankyoutrust.parsers.MessageJSONParser;
+import com.tyct.thankyoutrust.parsers.UsersJSONParser;
+
 public class MainActivity extends ListActivity {
 
 	TextView output;
@@ -36,17 +36,20 @@ public class MainActivity extends ListActivity {
 	List<PostTask> posttasks;
 	Message messageEntity;
 	
-	SharedPreferences prefs;
-	
-
 	List<Message> messageList;
 	List<Users> userList;
+	
+	// User Session Manager Class
+    SessionManager session;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
+		 // Session class instance
+        session = new SessionManager(getApplicationContext());
+		
 		// Progress Bar
 		pb = (ProgressBar) findViewById(R.id.progressBar1);
 		pb.setVisibility(View.INVISIBLE);
@@ -55,18 +58,30 @@ public class MainActivity extends ListActivity {
 
 		display();
 		userDisplay();
-		
-		prefs = getSharedPreferences("UserDetails", MODE_PRIVATE);
 
 		// Button to post to comments
 		Button postCommentButton = (Button) findViewById(R.id.button_Post_Comments);
 		postCommentButton.setOnClickListener(new postCommentHandler());
-
+		
+		// Check user login (this is the important point)
+        // If User is not logged in , This will redirect user to LoginActivity
+        // and finish current activity from activity stack.
+        if(session.checkLogin())
+            finish();
+         
+        // get user data from session
+        HashMap<String, String> userStored = session.getUserDetails();
+        
+        // get email
+        String userEmail = userStored.get("email");
+        
+        // get user id
+        int userId = Integer.parseInt(userStored.get("id"));
+        Toast.makeText(this, userEmail + ", usid: " + userId, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) 
-	{
+	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
@@ -75,21 +90,31 @@ public class MainActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) 
 	{
 		Intent goTo = new Intent();
-		if (item.getItemId() == R.id.action_projects) 
-		{
-			goTo = new Intent(MainActivity.this, Projects.class);
-			
+		switch(item.getItemId()) {
+			case R.id.action_projects:
+				goTo = new Intent(MainActivity.this, Projects.class);
+				startActivity(goTo);
+				return true;
+			case R.id.action_home:
+				goTo = new Intent(MainActivity.this, MainActivity.class);
+				startActivity(goTo);
+				finish();
+				return true;
+			case R.id.action_profile:
+				goTo = new Intent(MainActivity.this, ProfileActivity.class);
+				startActivity(goTo);
+				return true;
+			case R.id.action_about_us:
+				goTo = new Intent(MainActivity.this, AboutUs.class);
+				startActivity(goTo);
+				return true;
+			case R.id.action_logout:
+				session.logoutUser();
+				finish();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
-		if (item.getItemId() == R.id.action_home) 
-		{
-			goTo = new Intent(MainActivity.this, MainActivity.class);
-		}
-		if (item.getItemId() == R.id.action_about_us) 
-		{
-			goTo = new Intent(MainActivity.this, AboutUs.class);
-		}
-		startActivity(goTo);
-		return false;
 	}
 
 	private void requestData(String uri) {
@@ -127,9 +152,7 @@ public class MainActivity extends ListActivity {
 					.show();
 		}
 	}
-	
-	
-
+		
 	// Connect to database
 	protected boolean isOnline() {
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -230,12 +253,14 @@ public class MainActivity extends ListActivity {
 		public void onClick(View v) {
 			// Get Text from editText field
 			EditText commentData = (EditText) findViewById(R.id.text_Comments);
-			// put Text into string form
+			// Put Text into string form
 			String commentString = commentData.getText().toString();
 
-			// Info ID (hard coded for now, but will need to get logged in user
-			// id)
-			int userID = prefs.getInt("UserInfoId", 0);
+			// get user data from session
+	        HashMap<String, String> userStored = session.getUserDetails();	        
+	        
+	        // get info id
+	        int userID = Integer.parseInt(userStored.get("id"));
 
 			// Postal Code info (hard coded for now, but will need to get logged
 			// in person postalcode)

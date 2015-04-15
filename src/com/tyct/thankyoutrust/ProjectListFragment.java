@@ -1,5 +1,7 @@
 package com.tyct.thankyoutrust;
 
+import com.tyct.thankyoutrust.model.Project;
+
 import java.util.List;
 
 import android.app.Fragment;
@@ -23,6 +25,7 @@ public class ProjectListFragment extends Fragment
 		String[] projectNames;
 		Projects ma;
 		ListView projectListView;
+		
 		private Callbacks mCallbacks = sCallbacks;		
 		
 		
@@ -42,8 +45,6 @@ public class ProjectListFragment extends Fragment
 			}
 		};
 		
-
-		
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
@@ -52,7 +53,6 @@ public class ProjectListFragment extends Fragment
 			ma = (Projects) getActivity();
 			
 			projectNames = ma.getProjects();
-			//projectList = ma.getProjectList();
 			
 			projectListView = (ListView) v.findViewById(R.id.projectListView);
 			
@@ -80,5 +80,4 @@ public class ProjectListFragment extends Fragment
 				
 			}
 			
-		}		
 }

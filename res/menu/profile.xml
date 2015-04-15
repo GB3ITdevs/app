@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.mesageboard.MainActivity" >
+    tools:context="com.tyct.thankyoutrust.ProfileActivity" >
 
     <item
         android:id="@+id/action_settings"

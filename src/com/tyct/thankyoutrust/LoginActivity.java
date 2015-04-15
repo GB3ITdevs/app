@@ -11,8 +11,6 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -179,6 +177,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			if (user.getEmail().equals(email)) {
 				// Account exists.
 				userExists = true;
+				break;
 			}
 		}
 
@@ -241,7 +240,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 										.toString();
 								registration.putExtra("email", email);
 								startActivity(registration);
-								// LoginActivity.this.finish();
+								LoginActivity.this.finish();
 							}
 						})
 				.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -431,24 +430,27 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			}
 
 			for (Users user : userList) {
-				if (user.getEmail().equals(mEmail)) {					
+				if (user.getEmail().equals(mEmail)) {
 					// if the password matches, retrieve further user info
 					if (user.getPassword().equals(mPassword)) {
 						loggedInUserId = user.getInfoID();
 						uName = user.getFirstName();
 						uSurname = user.getLastName();
-						
+
 						for (UserID usid : usidList) {
 							if (usid.getInfoID() == loggedInUserId) {
 								// get userID
 								userId = usid.getUserID();
 								// get contactID
 								contactId = usid.getContactID();
+								break;
 							}
 						}
-
+//TODO fix this shit
 //						for (ContactInfo ci : contactList) {
 //							if (ci.getContactID() == loggedInUserId) {
+//								// get address
+//								// TODO uAddress = ci.getAddress();
 //								// get suburb
 //								uSuburb = ci.getSuburb();
 //								// get city
@@ -456,6 +458,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 //								// get postcode
 //								uPostcode = Integer
 //										.toString(ci.getPostalCode());
+//								break;
 //							}
 //						}
 					}

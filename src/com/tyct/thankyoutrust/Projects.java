@@ -77,6 +77,18 @@ public class Projects extends Activity implements ProjectListFragment.Callbacks
 		}
 		selectedProject = new Project();
 		
+			if (isOnline()) 
+			{
+				requestData("http://gb3it.pickworth.info:3000/projects");	
+			} else 
+			{
+				Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
+			}
+		
+		//ListView projectListView = (ListView) findViewById(R.id.projectList);
+		
+		//projectListView.set
+			
 	}
 
 	//To do: create the top menu
@@ -106,6 +118,7 @@ public class Projects extends Activity implements ProjectListFragment.Callbacks
 			goTo = new Intent(Projects.this, AboutUs.class);
 		}
 		startActivity(goTo);
+		finish();
 		return false;
 	}
 
@@ -131,13 +144,13 @@ public class Projects extends Activity implements ProjectListFragment.Callbacks
 		}
 		
 		Intent detailIntent = new Intent(this, ProjectDetailsActivity.class);
-		detailIntent.putExtra("currProjectName", selectedProject.getProjectName());
-		detailIntent.putExtra("currProjectBlurb", selectedProject.getProjectBlurb());
-		detailIntent.putExtra("currApplicantName", selectedProject.getApplicantName());
-		detailIntent.putExtra("currUseOfFunds", selectedProject.getUseOfFunds());
-		detailIntent.putExtra("currFundsRequested", selectedProject.getFundsRequested());
-		detailIntent.putExtra("currPostalCode", selectedProject.getPostalCode());
-		detailIntent.putExtra("currProjectID", selectedProject.getProjectID());
+//		detailIntent.putExtra("currProjectName", selectedProject.getProjectName());
+//		detailIntent.putExtra("currProjectBlurb", selectedProject.getProjectBlurb());
+//		detailIntent.putExtra("currApplicantName", selectedProject.getApplicantName());
+//		detailIntent.putExtra("currUseOfFunds", selectedProject.getUseOfFunds());
+//		detailIntent.putExtra("currFundsRequested", selectedProject.getFundsRequested());
+//		detailIntent.putExtra("currPostalCode", selectedProject.getPostalCode());
+//		detailIntent.putExtra("currProjectID", selectedProject.getProjectID());
 		startActivity(detailIntent);
 		
 	}
@@ -232,13 +245,13 @@ public class Projects extends Activity implements ProjectListFragment.Callbacks
 	public void onItemSelected(String id) 
 	{
 		Intent detailIntent = new Intent(this, ProjectDetailsActivity.class);
-		detailIntent.putExtra(ProjectDetailsFragment.currProjectName, selectedProject.getProjectName());
-		detailIntent.putExtra(ProjectDetailsFragment.currProjectBlurb, selectedProject.getProjectBlurb());
-		detailIntent.putExtra(ProjectDetailsFragment.currApplicantName, selectedProject.getApplicantName());
-		detailIntent.putExtra(ProjectDetailsFragment.currUseOfFunds, selectedProject.getUseOfFunds());
-		detailIntent.putExtra(ProjectDetailsFragment.currFundsRequested, selectedProject.getFundsRequested());
-		detailIntent.putExtra(ProjectDetailsFragment.currPostalCode, selectedProject.getPostalCode());
-		detailIntent.putExtra(ProjectDetailsFragment.currProjectID, selectedProject.getProjectID());
+//		detailIntent.putExtra(ProjectDetailsFragment.currProjectName, selectedProject.getProjectName());
+//		detailIntent.putExtra(ProjectDetailsFragment.currProjectBlurb, selectedProject.getProjectBlurb());
+//		detailIntent.putExtra(ProjectDetailsFragment.currApplicantName, selectedProject.getApplicantName());
+//		detailIntent.putExtra(ProjectDetailsFragment.currUseOfFunds, selectedProject.getUseOfFunds());
+//		detailIntent.putExtra(ProjectDetailsFragment.currFundsRequested, selectedProject.getFundsRequested());
+//		detailIntent.putExtra(ProjectDetailsFragment.currPostalCode, selectedProject.getPostalCode());
+//		detailIntent.putExtra(ProjectDetailsFragment.currProjectID, selectedProject.getProjectID());
 		startActivity(detailIntent);
 	}	
 	

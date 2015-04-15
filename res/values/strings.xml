@@ -17,6 +17,7 @@
     <string name="title_activity_single_project">SingleProject</string>
     <string name="title_activity_welcome_screen">WelcomeScreen</string>
     <string name="login">Login</string>
+    <string name="logout">Log Out</string>
     <string name="register">Register</string>
     <string name="about_us">About Us</string>
     <string name="title_activity_about_us">AboutUs</string>
@@ -27,5 +28,22 @@
     <string name="useOfFundsTitles">Use Of Funds:</string>
     <string name="projects">Projects</string>
     <string name="title_activity_project_details">ProjectDetailsActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="prompt_city">City</string>
+    <string name="prompt_suburb">Suburb</string>
+    <string name="prompt_postcode">Postcode</string>
+    <string name="profile">Profile</string>
+    <string name="update_details">Update Details</string>
+    <string name="name">Name</string>
+    <string name="location">Address Unknown</string>
+    <string name="edit_info">Edit Personal Info</string>
+    <string name="edit_location">Edit Address Info</string>
+    <string name="change_pw">Change Password</string>
+    <string name="enter_pw">Enter your password to save changes</string>
+    <string name="prompt_address">Address</string>
+    <string name="current_pw">Enter your current password</string>
+    <string name="new_pw">Enter new password</string>
+    <string name="prompt_old_pw">Old Password</string>
+    <string name="prompt_new_pw">New Password</string>
 
 </resources>
