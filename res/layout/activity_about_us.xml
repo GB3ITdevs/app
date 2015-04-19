@@ -11,14 +11,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-<<<<<<< HEAD
         android:text="It could be planting fruit trees on your grass berm. Hosting a community dinner. Creating public art. Establishing your town’s inaugural pet parade. Recording and sharing the stories of the kaumatua in your community. Building an adult playground in the local park, or a new jump in the skate park. Whatever it is you want to do, we want to help.
 The Thankyou Charitable Trust had three grant rounds in 2014 and have at least four rounds lined up for 2015. Grants are between $100 and $1000 for projects that contribute to community wellbeing, resilience or sustainability. Stay tuned, get in touch, or like our Facebook page to find out when a grant round is in your neighbourhood.
 Thankyou Charitable Trust receives funding from Thankyou Payroll, an innovative social business that’s all about creating positive outcomes for communities, businesses and the government. Thankyou Payroll leverages a government subsidy to provide excellent payroll services to charities and businesses at no cost, all while donating 25 cents per person, per pay to the Thankyou Charitable Trust.
 
 Thankyou very much!" />
-=======
-        android:text="Have you got an awesome idea for making a positive difference in your community? Need some funding?" />
->>>>>>> BlairDev
 
 </RelativeLayout>
