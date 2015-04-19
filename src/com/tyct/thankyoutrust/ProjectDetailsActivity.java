@@ -106,7 +106,8 @@ public class ProjectDetailsActivity extends Activity
 		}
 		
 		Intent goTo = new Intent();
-		if (id == R.id.action_projects) 
+		
+		if (id == R.id.action_back) 
 		{
 			goTo = new Intent(ProjectDetailsActivity.this, Projects.class);
 			

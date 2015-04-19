@@ -39,7 +39,8 @@
  	ProgressBar pb;
  	Project selectedProject;
  	
- 	SharedPreferences prefs;
+	// Session Manager Class
+	SessionManager session;
  
  			//***********Testing the models and the json parsers************************************************************************************
  
@@ -66,7 +67,8 @@
  		pb = (ProgressBar) findViewById(R.id.progressBar1);
  		pb.setVisibility(View.INVISIBLE);
  		
- 		prefs = getSharedPreferences("UserDetails", MODE_PRIVATE);
+		// Session class instance
+		session = new SessionManager(getApplicationContext());
  		
  		//If the phone is online retrieve the projects info from the url
  		if (isOnline()) 
@@ -96,22 +98,32 @@
  	@Override
  	public boolean onOptionsItemSelected(MenuItem item) 
  	{
- 		Intent goTo = new Intent();
- 		if (item.getItemId() == R.id.action_projects) 
- 		{
- 			goTo = new Intent(Projects.this, Projects.class);
- 			
- 		}
- 		if (item.getItemId() == R.id.action_home) 
- 		{
- 			goTo = new Intent(Projects.this, MainActivity.class);
- 		}
- 		if (item.getItemId() == R.id.action_about_us) 
- 		{
- 			goTo = new Intent(Projects.this, AboutUs.class);
- 		}
- 		startActivity(goTo);
- 		return false;
+		Intent goTo = new Intent();
+		switch(item.getItemId()) {
+			case R.id.action_projects:
+				goTo = new Intent(this, Projects.class);
+				startActivity(goTo);
+				return true;
+			case R.id.action_home:
+				goTo = new Intent(this, MainActivity.class);
+				startActivity(goTo);
+				finish();
+				return true;
+			case R.id.action_profile:
+				goTo = new Intent(this, ProfileActivity.class);
+				startActivity(goTo);
+				return true;
+			case R.id.action_about_us:
+				goTo = new Intent(this, AboutUs.class);
+				startActivity(goTo);
+				return true;
+			case R.id.action_logout:
+				session.logoutUser();
+				finish();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
  	}
  
  	
