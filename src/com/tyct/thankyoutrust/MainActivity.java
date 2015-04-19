@@ -277,7 +277,7 @@ public class MainActivity extends ListActivity {
 				// If Edit Text is not empty it will Post to the new message to
 				// the database
 				
-				//Just a toast letting us know that message was posted, DO NOT LEAVE THIS TOAST HERE
+				//Debugging, DO NOT LEAVE THIS TOAST HERE
 				Toast.makeText(MainActivity.this,
 						"Posted",
 						Toast.LENGTH_LONG).show();

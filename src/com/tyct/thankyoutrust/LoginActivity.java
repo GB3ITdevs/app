@@ -471,12 +471,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 //						//Admin 
 //						//If infor id is in admin page make string a 1, otherwise a 0
 						uAdmin = "0";
-//						for (AdminID adm : adminList) {
-//							if(adm.getInfoID()==loggedInUserId){
-//								uAdmin ="1";
-//							}
-//							
-//						}
+						for (AdminID adm : adminList) {
+							if(adm.getInfoID()==loggedInUserId){
+								uAdmin ="1";
+							}
+							
+						}
 						
 //TODO fix this shit
 //						for (ContactInfo ci : contactList) {
