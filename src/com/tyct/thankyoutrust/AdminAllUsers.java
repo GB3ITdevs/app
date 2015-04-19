@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tyct.thankyoutrust.model.AdminID;
+import com.tyct.thankyoutrust.model.ProjectRating;
+import com.tyct.thankyoutrust.model.UserID;
 import com.tyct.thankyoutrust.model.Users;
 import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
+import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
+import com.tyct.thankyoutrust.parsers.UserIDJSONParser;
 import com.tyct.thankyoutrust.parsers.UsersJSONParser;
 
 
@@ -35,20 +39,31 @@ public class AdminAllUsers extends Activity {
 	
 	List<Users> userList;
 	List<AdminID> adminList;
+	List<UserID> userIdList;
+	List<ProjectRating> prList;
+	
 	List<AdminTask> adminTask;
 	List<DeleteAdminTask> deleteAdminTask;
-	String[] userNames;
 	List<MyTask> tasks;
 	List<PostAdminTask> postadmintask;
+	List<DeleteUserTask> deleteusertask;
+	List<UserIdTask> useridtask;
+	List<ProjectRatingTask> prtask;
+	
 	DialogFragment userOptions;
 	OptionsDialog dialog;
+	
+	String[] userNames;
 	String selectedItem = "";
 	int[] UsersInfoId;
 	int selectedInfoId;
 	int adminid;
+	int selectedUserId;
+	int selectedContactId;
 	AdminID adminEntity;
+	int[] projectRatingIdDeleteList;
 	//Array for Admin Options
-	String[] optionsArray = {"Set as admin", "Remove as admin", "Delete user", "Change community"};
+	String[] optionsArray = {"Set as admin", "Remove as admin", "Delete user"};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,15 +73,18 @@ public class AdminAllUsers extends Activity {
 		//start async task
 		tasks = new ArrayList<>();
 		adminTask = new ArrayList<>();
+		useridtask = new ArrayList<>();
+		prtask = new ArrayList<>();
 		
 		//makes connection to database
 		display();
 		adminInfo();
+		userIdInfo();
+		projectRatingInfo();
 		
 		//setup listview to and call method for clickable
 		ListView groupAct = (ListView) findViewById(R.id.lstvewuser);
 		groupAct.setOnItemClickListener(new ListViewClickHandler());
-
 	}
 
 	//Top menu
@@ -95,25 +113,22 @@ public class AdminAllUsers extends Activity {
 		{
 			goTo = new Intent(AdminAllUsers.this, AboutUs.class);
 		}
-		if (item.getItemId() == R.id.admin) //admin page
-		{
-			goTo = new Intent(AdminAllUsers.this, AdminHomePage.class);
-		}
+//		if (item.getItemId() == R.id.admin) //admin page
+//		{
+//			goTo = new Intent(AdminAllUsers.this, AdminHomePage.class);
+//		}
 		startActivity(goTo);
 		return false;
 	}
 
+	//Gets the clicked users infoId
 	public int getInfoId(int positionClicked)
 	{
 		int infoID = UsersInfoId[positionClicked];
 		return infoID;
 		
 	}
-	private void requestData(String uri) {
-		MyTask task = new MyTask();
-		task.execute(uri);
-	}
-	
+
 
 
 	//Method to setup the List View to display all users 
@@ -139,6 +154,27 @@ public class AdminAllUsers extends Activity {
 		userNameListView.setAdapter(adminOptionsAdapter);
 	}
 	
+	private void requestData(String uri) {
+		MyTask task = new MyTask();
+		task.execute(uri);
+	}
+	
+	private void requestAdminData(String uri) {
+		AdminTask task = new AdminTask();
+		task.execute(uri);
+	}
+	
+	private void requestUserIdData(String uri) {
+		UserIdTask task = new UserIdTask();
+		task.execute(uri);
+	}
+	
+	private void requestProjectRatingData(String uri) {
+		ProjectRatingTask task = new ProjectRatingTask();
+		task.execute(uri);
+	}
+	
+	
 
 	//Method that checks if phone is online
 	public void display(){
@@ -150,14 +186,27 @@ public class AdminAllUsers extends Activity {
 		}
 	}
 	
-	private void requestAdminData(String uri) {
-		AdminTask task = new AdminTask();
-		task.execute(uri);
-	}
-	
 	public void adminInfo() {
 		if (isOnline()) {
 			requestAdminData("http://gb3it.pickworth.info:3000/administrators");
+		} else {
+			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
+					.show();
+		}
+	}
+	
+	public void userIdInfo() {
+		if (isOnline()) {
+			requestUserIdData("http://gb3it.pickworth.info:3000/users");
+		} else {
+			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
+					.show();
+		}
+	}
+
+	public void projectRatingInfo() {
+		if (isOnline()) {
+			requestProjectRatingData("http://gb3it.pickworth.info:3000/ratings");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -200,9 +249,6 @@ public class AdminAllUsers extends Activity {
 				postadmintask.remove(this);
 				
 			}
-			
-			
-
 			@Override
 			protected void onProgressUpdate(String... values) {
 			}
@@ -242,8 +288,8 @@ public class AdminAllUsers extends Activity {
 				}
 		
 		/**
-    	 * Represents an asynchronous task used to retrieve contact data from
-    	 * contact info.
+    	 * 
+    	 * 
     	 */
     	private class AdminTask extends AsyncTask<String, String, String> {
 
@@ -270,6 +316,71 @@ public class AdminAllUsers extends Activity {
     		}
 
     	}
+    	
+    	/**
+    	 * 
+    	 * 
+    	 */
+    	private class ProjectRatingTask extends AsyncTask<String, String, String> {
+
+    		@Override
+    		protected void onPreExecute() {
+    			prtask.add(this);
+    		}
+
+    		@Override
+    		protected String doInBackground(String... params) {
+    			String content = HttpManager.getData(params[0]);
+    			return content;
+    		}
+
+    		@Override
+    		protected void onPostExecute(String result) {
+    			prList = ProjectRatingsJSONParser.parseFeed(result);
+    			prtask.remove(this);
+    		}
+
+    		@Override
+    		protected void onProgressUpdate(String... values) {
+    			// updateDisplay(values[0]);
+    		}
+
+    	}
+    	
+		/**
+    	 * 
+    	 * 
+    	 */
+    	private class UserIdTask extends AsyncTask<String, String, String> {
+
+    		@Override
+    		protected void onPreExecute() {
+    			useridtask.add(this);
+    		}
+
+    		@Override
+    		protected String doInBackground(String... params) {
+    			String content = HttpManager.getData(params[0]);
+    			return content;
+    		}
+
+    		@Override
+    		protected void onPostExecute(String result) {
+    			userIdList = UserIDJSONParser.parseFeed(result);
+    			useridtask.remove(this);
+    		}
+
+    		@Override
+    		protected void onProgressUpdate(String... values) {
+    			// updateDisplay(values[0]);
+    		}
+
+    	}
+    	
+    	/**
+    	 * 
+    	 * 
+    	 */
 	private class MyTask extends AsyncTask<String, String, String> {
 
 		@Override
@@ -302,6 +413,59 @@ public class AdminAllUsers extends Activity {
 		}
 
 	}
+	
+	// Handles the posting side
+			private class DeleteUserTask extends AsyncTask<String, String, String> {
+				//user/person_infos string
+				String personInfosUriString = "http://gb3it.pickworth.info:3000/person_infos/";
+				
+				//ratings string
+				String ratingUriString = "http://gb3it.pickworth.info:3000/ratings/";
+				
+				//user Id string
+				String userIdUriString = "http://gb3it.pickworth.info:3000/users/";
+				
+				//comments string
+				String contactInfosUriString = "http://gb3it.pickworth.info:3000/contact_infos/";
+
+				int num =0;
+				@Override
+				protected void onPreExecute() {
+					deleteusertask.add(this);
+				}
+
+				@Override
+				protected String doInBackground(String... params) {
+					HttpManager.deleteData(personInfosUriString + selectedInfoId);
+					HttpManager.deleteData(userIdUriString + selectedUserId);
+					HttpManager.deleteData(contactInfosUriString + selectedContactId);
+
+//					
+//					 for (int i=0; i<projectRatingIdDeleteList.length; i++)
+//					   { 
+//					    	num = projectRatingIdDeleteList[i];
+//					    	//HttpManager.deleteData(ratingUriString + num);
+//							Toast.makeText(AdminAllUsers.this, "rating id = " + num, Toast.LENGTH_LONG).show();
+//					    }
+//	
+					String result = "User Deleted";
+					return result;
+				}
+
+				@Override
+				protected void onPostExecute(String result) {
+
+					// String messageResult = (result);
+
+					deleteusertask.remove(this);
+					
+				}
+
+				@Override
+				protected void onProgressUpdate(String... values) {
+				}
+
+			}
 	
 	
 	//Handles the ListView clicks
@@ -367,13 +531,50 @@ public class AdminAllUsers extends Activity {
 			Toast.makeText(AdminAllUsers.this, optionsArray[3] + " " + selectedItem, Toast.LENGTH_LONG).show();
 		}
     }
+    
+    public void selectRatingsToDelete()
+    {
+    	prtask = new ArrayList<>();
+    	projectRatingIdDeleteList = new int[prList.size()];
+		int i =0;
+		//Add each user name from the project list to the array of strings
+    	for (ProjectRating pr : prList)
+    	{
+			if (pr.getInfoID() == selectedInfoId) 
+			{
+				
+					projectRatingIdDeleteList[i] = pr.getRatingID();
+					i++;
+				
+			}
+		}
+    }
   
     //method to delete a user
     public void deleteUser()
     {
-    
-    	Toast.makeText(AdminAllUsers.this, optionsArray[2] + " " + selectedItem, Toast.LENGTH_LONG).show();
+    	useridtask = new ArrayList<>();
+    	
+    	selectedContactId =0;
+    	selectedUserId = 0;
+    	for (UserID usid : userIdList) {
+			if (usid.getInfoID() == selectedInfoId) {
+				// get userID
+				selectedUserId = usid.getUserID();
+				// get contactID
+				selectedContactId = usid.getContactID();
+			}
+		}
+    	
+    	//selectRatingsToDelete();
+
+		
+    	deleteusertask = new ArrayList<>();
+		DeleteUserTask task = new DeleteUserTask();
+		task.execute();
+    	//Toast.makeText(AdminAllUsers.this,"Ratings to delete" + projectRatingIdDeleteList, Toast.LENGTH_LONG).show();
     }
+    
     
     //method to delete a user
     public void deleteAdmin()
@@ -386,7 +587,7 @@ public class AdminAllUsers extends Activity {
 		{
     		if (selectedInfoId == adm.getInfoID())
     		{
-    			 adminid = adm.getAdminID();
+    			 	adminid = adm.getAdminID();
     				deleteAdminTask = new ArrayList<>();
         			DeleteAdminTask task = new DeleteAdminTask();
         			task.execute();
@@ -410,11 +611,21 @@ public class AdminAllUsers extends Activity {
     	//Toast.makeText(AdminAllUsers.this, optionsArray[0] + " " + selectedItem + "  selected info ID "+ infoId, Toast.LENGTH_LONG).show();
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 	public class OptionsDialog extends android.app.DialogFragment  {
     	//selected user
     	String selectedUser;
-    	
-    	
 
     public OptionsDialog() {}
     public OptionsDialog(String user, int infoId) {
@@ -429,14 +640,14 @@ public class AdminAllUsers extends Activity {
     		//Set Title
     		builder.setTitle("Select Options for "+ selectedUser);
     		//Set single choice options (radio buttons)
-    		builder.setSingleChoiceItems(optionsArray,  -1, new OnMultiChoiceClickListener());
+    		builder.setSingleChoiceItems(optionsArray,  0, new OnMultiChoiceClickListener());
     		//set Submit Button
     		builder.setPositiveButton("Submit", new positiveListener());
     		//set Cancel Button
     		builder.setNegativeButton("Cancel", new negativeListener());
     		
     		Dialog dialog = builder.create();
-    		
+  		
     		return dialog;
     		
     	}
