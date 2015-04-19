@@ -69,6 +69,42 @@
             android:name=".ProjectDetailsActivity"
             android:label="@string/title_activity_project_details" >
         </activity>
+        <activity
+            android:name=".AdminHomePage"
+            android:label="@string/title_activity_admin_home_page"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tyct.thankyoutrust.MainActivity" />
+        </activity>
+        <activity
+            android:name=".AdminAllUsers"
+            android:label="@string/title_activity_admin_all_users"
+            android:parentActivityName=".AdminHomePage" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tyct.thankyoutrust.AdminHomePage" />
+        </activity>
+        <activity
+            android:name=".AdminAllCommunities"
+            android:label="@string/title_activity_admin_all_communities"
+            android:parentActivityName=".AdminHomePage" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tyct.thankyoutrust.AdminHomePage" />
+        </activity>
+        <activity
+            android:name=".AdminReports"
+            android:label="@string/title_activity_admin_reports"
+            android:parentActivityName=".AdminHomePage" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tyct.thankyoutrust.AdminHomePage" />
+        </activity>
+        <activity
+            android:name=".ConfirmDialog"
+            android:label="@string/title_activity_confirm_dialog" >
+        </activity>
     </application>
 
 </manifest>

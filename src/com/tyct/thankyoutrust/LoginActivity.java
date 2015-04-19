@@ -37,7 +37,9 @@ import java.util.List;
 
 import com.tyct.thankyoutrust.model.ContactInfo;
 import com.tyct.thankyoutrust.model.UserID;
+import com.tyct.thankyoutrust.model.AdminID;
 import com.tyct.thankyoutrust.model.Users;
+import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
 import com.tyct.thankyoutrust.parsers.ContactInfoJSONParser;
 import com.tyct.thankyoutrust.parsers.UserIDJSONParser;
 import com.tyct.thankyoutrust.parsers.UsersJSONParser;
@@ -51,11 +53,13 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	List<UsersTask> tasks;
 	List<ContactTask> contactTask;
 	List<UsidTask> usidTask;
+	List<AdminTask> adminTask;
 
 	// retrieved data lists
 	List<Users> userList;
 	List<UserID> usidList;
 	List<ContactInfo> contactList;
+	List<AdminID> adminList;
 
 	// User Session Manager Class
 	SessionManager session;
@@ -69,6 +73,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	String uCity;
 	String uSuburb;
 	String uPostcode;
+	String uAdmin;
 
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -122,10 +127,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		tasks = new ArrayList<>();
 		contactTask = new ArrayList<>();
 		usidTask = new ArrayList<>();
+		adminTask = new ArrayList<>();
 
 		personInfo();
 		userInfo();
 		contactInfo();
+		adminInfo();
 	}
 
 	private void populateAutoComplete() {
@@ -377,6 +384,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		ContactTask task = new ContactTask();
 		task.execute(uri);
 	}
+	
+	private void requestAdminData(String uri) {
+		AdminTask task = new AdminTask();
+		task.execute(uri);
+	}
 
 	public void personInfo() {
 		if (isOnline()) {
@@ -399,6 +411,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	public void contactInfo() {
 		if (isOnline()) {
 			requestContactData("http://gb3it.pickworth.info:3000/contact_infos");
+		} else {
+			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
+					.show();
+		}
+	}
+	
+	public void adminInfo() {
+		if (isOnline()) {
+			requestAdminData("http://gb3it.pickworth.info:3000/administrators");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -446,6 +467,17 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 								break;
 							}
 						}
+						
+						//Admin 
+						//If infor id is in admin page make string a 1, otherwise a 0
+						uAdmin = "0";
+						for (AdminID adm : adminList) {
+							if(adm.getInfoID()==loggedInUserId){
+								uAdmin ="1";
+							}
+							
+						}
+						
 //TODO fix this shit
 //						for (ContactInfo ci : contactList) {
 //							if (ci.getContactID() == loggedInUserId) {
@@ -476,7 +508,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 			if (success) {
 				session.createUserLoginSession(loggedInUserId, mEmail, uName,
-						uSurname, uSuburb, uCity, uPostcode);
+						uSurname, uSuburb, uCity, uPostcode, uAdmin);
 				Intent i = new Intent(LoginActivity.this, MainActivity.class);
 				startActivity(i);
 				finish();
@@ -574,6 +606,36 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		protected void onPostExecute(String result) {
 			usidList = UserIDJSONParser.parseFeed(result);
 			usidTask.remove(this);
+		}
+
+		@Override
+		protected void onProgressUpdate(String... values) {
+			// updateDisplay(values[0]);
+		}
+
+	}
+	
+	/**
+	 * Represents an asynchronous task used to retrieve admin data from
+	 * contact info.
+	 */
+	private class AdminTask extends AsyncTask<String, String, String> {
+
+		@Override
+		protected void onPreExecute() {
+			adminTask.add(this);
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			String content = HttpManager.getData(params[0]);
+			return content;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			adminList = AdminIDJSONParser.parseFeed(result);
+			adminTask.remove(this);
 		}
 
 		@Override

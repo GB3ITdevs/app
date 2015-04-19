@@ -3,6 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_margin="@dimen/activity_horizontal_margin"
+<<<<<<< HEAD
     android:gravity="center_horizontal|center"
     android:orientation="vertical" >
 
@@ -26,5 +27,27 @@
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:background="@drawable/blue_button"
         android:text="@string/about_us" />
+=======
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <Button
+        android:background="@drawable/blue_button"
+        android:id="@+id/btnLogin"
+        android:text="@string/login" 
+        style="@style/blue_button"/>
+
+    <Button
+        android:background="@drawable/blue_button"
+        android:id="@+id/btnRegister"
+        android:text="@string/register"
+        style="@style/blue_button" />
+
+    <Button
+        android:background="@drawable/blue_button"
+        android:id="@+id/btnAboutUs"
+        android:text="@string/about_us"
+        style="@style/blue_button" />
+>>>>>>> BlairDev
     
 </LinearLayout>

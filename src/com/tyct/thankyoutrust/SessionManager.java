@@ -47,6 +47,9 @@ public class SessionManager {
 
 	// Postcode
 	public static final String KEY_PCODE = "postcode";
+	
+	// Admin
+	public static final String KEY_ADMIN = "admin";
 
 	// Constructor
 	public SessionManager(Context context) {
@@ -60,7 +63,7 @@ public class SessionManager {
 	 * */
 	public void createUserLoginSession(int id, String email, String name,
 			String surname, String suburb, String city,
-			String postcode) {
+			String postcode, String admin) {
 		// Storing login value as TRUE
 		editor.putBoolean(IS_USER_LOGIN, true);
 
@@ -80,7 +83,9 @@ public class SessionManager {
 		editor.putString(KEY_SUB, suburb);
 		// Store postcode in pref
 		editor.putString(KEY_PCODE, postcode);
-
+		// Store padmin in pref
+		editor.putString(KEY_ADMIN, admin);
+		
 		// commit changes
 		editor.commit();
 	}
@@ -148,6 +153,9 @@ public class SessionManager {
 
 		// user postcode
 		user.put(KEY_PCODE, pref.getString(KEY_PCODE, null));
+		
+		// user admin
+		user.put(KEY_ADMIN, pref.getString(KEY_ADMIN, null));
 
 		// return user
 		return user;

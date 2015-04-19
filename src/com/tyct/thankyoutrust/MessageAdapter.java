@@ -1,6 +1,9 @@
 package com.tyct.thankyoutrust;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -34,7 +37,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 	    return super.getItem(getCount() - 1 - position);
 	}
 	
-	@SuppressLint("ViewHolder")
+	@SuppressLint({ "ViewHolder", "SimpleDateFormat" })
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -51,9 +54,22 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		TextView tvComment = (TextView) view.findViewById(R.id.tvComment);
 		tvComment.setText(message.getComment());
 		
-		//Text View that displays messages
+		String dateString = message.getDate();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
+		
+		Date date = null;
+		try {
+			date = sdf.parse(dateString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		SimpleDateFormat sdf1 = new SimpleDateFormat("EEE dd, MMM ''yy");
+		dateString = sdf1.format(date);
+		
 		TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
-		tvDate.setText(message.getDate());
+		tvDate.setText(dateString);
 		
 		//String to hold the users display Name
 		String displayName = "";
