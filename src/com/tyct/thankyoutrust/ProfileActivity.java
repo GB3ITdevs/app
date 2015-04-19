@@ -1,16 +1,19 @@
 package com.tyct.thankyoutrust;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.tyct.thankyoutrust.LoginActivity.UserLoginTask;
 import com.tyct.thankyoutrust.model.Users;
 import com.tyct.thankyoutrust.parsers.UsersJSONParser;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -101,6 +104,9 @@ public class ProfileActivity extends Activity {
 				pwDialog();
 			}
 		});
+
+		tasks = new ArrayList<>();
+		personInfo();
 	}
 
 	@Override
@@ -113,7 +119,7 @@ public class ProfileActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent goTo = new Intent();
-		switch(item.getItemId()) {
+		switch (item.getItemId()) {
 		case R.id.action_projects:
 			goTo = new Intent(ProfileActivity.this, Projects.class);
 			startActivity(goTo);
@@ -137,7 +143,31 @@ public class ProfileActivity extends Activity {
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
+		}
 	}
+
+	protected boolean isOnline() {
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private void requestData(String uri) {
+		UsersTask task = new UsersTask();
+		task.execute(uri);
+	}
+
+	public void personInfo() {
+		if (isOnline()) {
+			requestData("http://gb3it.pickworth.info:3000/person_infos");
+		} else {
+			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
+					.show();
+		}
 	}
 
 	// Populate the fields at the top of the screen
@@ -324,7 +354,8 @@ public class ProfileActivity extends Activity {
 								String addr = eAddress.getText().toString();
 								String suburb = eSuburb.getText().toString();
 								String city = eCity.getText().toString();
-								String postcode = ePostcode.getText().toString();
+								String postcode = ePostcode.getText()
+										.toString();
 								String passw = eaPassw.getText().toString();
 							}
 						})
@@ -347,9 +378,7 @@ public class ProfileActivity extends Activity {
 	/**
 	 * Shows pop-up dialog to allow user to change their password
 	 */
-	public void pwDialog() {
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-				ProfileActivity.this);
+	protected void pwDialog() {
 
 		LayoutInflater factory = LayoutInflater.from(this);
 
@@ -358,9 +387,13 @@ public class ProfileActivity extends Activity {
 		View textEntryView = factory.inflate(R.layout.change_pw, null);
 
 		// Get each editText field
-		tCurrentPw = (EditText) findViewById(R.id.editTextEditAddress);
-		tNewPw = (EditText) findViewById(R.id.editTextEditSuburb);
-		tNewPwCheck = (EditText) findViewById(R.id.editTextEditCity);
+		tCurrentPw = (EditText) textEntryView.findViewById(R.id.editTextPw);
+		tNewPw = (EditText) textEntryView.findViewById(R.id.editTextNewPw);
+		tNewPwCheck = (EditText) textEntryView
+				.findViewById(R.id.editTextCheckNewP);
+
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				ProfileActivity.this);
 
 		// set title
 		alertDialogBuilder.setTitle("Change Password");
@@ -369,77 +402,83 @@ public class ProfileActivity extends Activity {
 		alertDialogBuilder
 				.setView(textEntryView)
 				.setCancelable(false)
-				.setPositiveButton("Submit Changes",
-						new DialogInterface.OnClickListener() {
-							// If this button is clicked, update password
-							public void onClick(DialogInterface dialog, int id) {
-								// Reset errors.
-								tCurrentPw.setError(null);
-								tNewPw.setError(null);
-								tNewPwCheck.setError(null);
-
-								// Deal with input errors
-								boolean cancel = false;
-								View focusView = null;
-
-								// Get values from the EditText fields
-								pw = tCurrentPw.getText().toString();
-								newPw = tNewPw.getText().toString();
-								newPwCheck = tNewPwCheck.getText().toString();
-
-								// Check current password is correct
-								for (Users user : userList) {
-									if (user.getInfoID() == (infoId)) {
-										// Check if the current password matches stored password
-										if (user.getPassword().equals(pw)) {
-											tCurrentPw
-													.setError(getString(R.string.error_incorrect_password));
-											focusView = tCurrentPw;
-											cancel = true;
-										}
-									}
-								}
-
-								// Check new password matches re-entered password
-								if (!newPw.equals(newPwCheck)) {
-									tNewPwCheck
-											.setError(getString(R.string.error_nonmatching_password));
-									focusView = tNewPwCheck;
-									cancel = true;
-								}
-
-								// Check for a valid password, if the user entered one.
-								if (!TextUtils.isEmpty(newPw)
-										&& !isPasswordValid(newPw)) {
-									tNewPw.setError(getString(R.string.error_invalid_password));
-									focusView = tNewPw;
-									cancel = true;
-								}
-
-								if (cancel) {
-									// There was an error; don't attempt login
-									// and focus the first form field with an error.
-									focusView.requestFocus();
-								} else {
-									// Show a progress spinner, and kick off a
-									// background task to perform the user login attempt.
-									// showProgress(true);
-									mAuthTask = new UpdatePwTask(newPw);
-									mAuthTask.execute((Void) null);
-								}
-							}
-						})
-				.setNegativeButton("Cancel",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								// if this button is clicked, just close
-								// the dialog box and do nothing
-								dialog.cancel();
-							}
-						});
+				.setPositiveButton("Submit Changes", null)
+				.setNegativeButton("Cancel", null);
 
 		// create alert dialog
-		AlertDialog alertDialog = alertDialogBuilder.create();
+		final AlertDialog alertDialog = alertDialogBuilder.create();
+
+		alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+			@Override
+			public void onShow(DialogInterface dialog) {
+				Button positive = alertDialog
+						.getButton(AlertDialog.BUTTON_POSITIVE);
+				positive.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// Reset errors.
+						tCurrentPw.setError(null);
+						tNewPw.setError(null);
+						tNewPwCheck.setError(null);
+
+						// Deal with input errors
+						boolean cancel = false;
+						View focusView = null;
+
+						// Get values from the EditText fields
+						pw = tCurrentPw.getText().toString();
+						newPw = tNewPw.getText().toString();
+						newPwCheck = tNewPwCheck.getText().toString();
+
+						// Check current password is correct
+						for (Users user : userList) {
+							if (user.getInfoID() == (infoId)) {
+								// Check if the current password matches stored
+								// password
+								if (!user.getPassword().equals(pw)) {
+									tCurrentPw
+											.setError(getString(R.string.error_incorrect_password));
+									focusView = tCurrentPw;
+									cancel = true;
+								}
+								break;
+							}
+						}
+
+						// Check new password matches re-entered password
+						if (!newPw.equals(newPwCheck)) {
+							tNewPwCheck
+									.setError(getString(R.string.error_nonmatching_password));
+							focusView = tNewPwCheck;
+							cancel = true;
+						}
+
+						// Check for a valid password, if the user entered one.
+						if (!TextUtils.isEmpty(newPw)
+								&& !isPasswordValid(newPw)) {
+							tNewPw.setError(getString(R.string.error_invalid_password));
+							focusView = tNewPw;
+							cancel = true;
+						}
+
+						if (cancel) {
+							// There was an error; don't attempt login
+							// and focus the first form field with an error.
+							focusView.requestFocus();
+						} else {
+							// Show a progress spinner, and kick off a
+							// background task to perform the user login
+							// attempt.
+							mAuthTask = new UpdatePwTask(newPw);
+							mAuthTask.execute((Void) null);
+							alertDialog.dismiss();
+						}
+					}
+				});
+			}
+		});
 
 		// show it
 		alertDialog.show();
