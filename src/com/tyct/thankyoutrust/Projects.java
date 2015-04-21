@@ -1,31 +1,31 @@
  package com.tyct.thankyoutrust;
  
  import java.util.ArrayList;
- import java.util.List;
+import java.util.List;
  
  import android.app.Activity;
- import android.app.Fragment;
- import android.app.FragmentManager;
- import android.app.FragmentTransaction;
- import android.content.Context;
- import android.content.Intent;
- import android.content.SharedPreferences;
- import android.net.ConnectivityManager;
- import android.net.NetworkInfo;
- import android.os.AsyncTask;
- import android.os.Bundle;
- import android.view.Menu;
- import android.view.MenuItem;
- import android.view.View;
- import android.widget.ProgressBar;
- import android.widget.Toast;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
  
  import com.tyct.thankyoutrust.model.PhoneNumber;
- import com.tyct.thankyoutrust.model.Project;
- import com.tyct.thankyoutrust.model.ProjectWebsite;
- import com.tyct.thankyoutrust.parsers.PhoneNumberJSONParser;
- import com.tyct.thankyoutrust.parsers.ProjectWebsiteJSONParser;
- import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
+import com.tyct.thankyoutrust.model.Project;
+import com.tyct.thankyoutrust.model.ProjectWebsite;
+import com.tyct.thankyoutrust.parsers.PhoneNumberJSONParser;
+import com.tyct.thankyoutrust.parsers.ProjectWebsiteJSONParser;
+import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  
  public class Projects extends Activity implements ProjectListFragment.Callbacks
  {
@@ -109,10 +109,13 @@
 				startActivity(goTo);
 				finish();
 				return true;
+			case R.id.admin:
+				goTo = new Intent(this, AdminHomePage.class);
+				startActivity(goTo);
+				return true;
 			case R.id.action_profile:
 				goTo = new Intent(this, ProfileActivity.class);
 				startActivity(goTo);
-				return true;
 			case R.id.action_about_us:
 				goTo = new Intent(this, AboutUs.class);
 				startActivity(goTo);

@@ -36,6 +36,9 @@ import android.widget.Toast;
 
 public class AdminAllUsers extends Activity {
 
+	// Session Manager Class
+	SessionManager session;
+
 	List<Users> userList;
 	List<AdminID> adminList;
 	List<UserID> userIdList;
@@ -69,6 +72,9 @@ public class AdminAllUsers extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_admin_all_users);
 
+		// Session class instance
+		session = new SessionManager(getApplicationContext());
+
 		// start async task
 		tasks = new ArrayList<>();
 		adminTask = new ArrayList<>();
@@ -89,7 +95,7 @@ public class AdminAllUsers extends Activity {
 	// Top menu
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.admin_home_page, menu);
 		return true;
 	}
 
@@ -97,25 +103,31 @@ public class AdminAllUsers extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent goTo = new Intent();
-		if (item.getItemId() == R.id.action_projects) // Project page
-		{
+		switch (item.getItemId()) {
+		case R.id.action_projects:
 			goTo = new Intent(AdminAllUsers.this, Projects.class);
-
-		}
-		if (item.getItemId() == R.id.action_home) // home page
-		{
+			startActivity(goTo);
+			return true;
+		case R.id.action_home:
 			goTo = new Intent(AdminAllUsers.this, MainActivity.class);
-		}
-		if (item.getItemId() == R.id.action_about_us) // about us page
-		{
+			startActivity(goTo);
+			finish();
+			return true;
+		case R.id.action_profile:
+			goTo = new Intent(AdminAllUsers.this, ProfileActivity.class);
+			startActivity(goTo);
+			return true;
+		case R.id.action_about_us:
 			goTo = new Intent(AdminAllUsers.this, AboutUs.class);
+			startActivity(goTo);
+			return true;
+		case R.id.action_logout:
+			session.logoutUser();
+			finish();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		if (item.getItemId() == R.id.admin) // admin page
-		{
-			goTo = new Intent(AdminAllUsers.this, AdminHomePage.class);
-		}
-		startActivity(goTo);
-		return false;
 	}
 
 	// Gets the clicked users infoId
@@ -268,10 +280,8 @@ public class AdminAllUsers extends Activity {
 		protected void onPostExecute(String result) {
 
 			// String messageResult = (result);
-			
-			
+
 			deleteAdminTask.remove(this);
-			
 
 		}
 
@@ -444,7 +454,7 @@ public class AdminAllUsers extends Activity {
 			// }
 
 			String result = "User Deleted";
-			
+
 			return result;
 		}
 
@@ -452,9 +462,9 @@ public class AdminAllUsers extends Activity {
 		protected void onPostExecute(String result) {
 
 			// String messageResult = (result);
-		
+
 			deleteusertask.remove(this);
-		
+
 			startActivity(new Intent(AdminAllUsers.this, AdminAllUsers.class));
 			finish();
 		}
@@ -556,12 +566,10 @@ public class AdminAllUsers extends Activity {
 
 		selectRatingsToDelete();
 
-	
-
 		deleteusertask = new ArrayList<>();
 		DeleteUserTask task = new DeleteUserTask();
 		task.execute();
-		
+
 	}
 
 	// method to delete an administrator
@@ -577,7 +585,8 @@ public class AdminAllUsers extends Activity {
 				task.execute();
 			}
 		}
-		Toast.makeText(AdminAllUsers.this, "Admin deleted", Toast.LENGTH_LONG).show();
+		Toast.makeText(AdminAllUsers.this, "Admin deleted", Toast.LENGTH_LONG)
+				.show();
 	}
 
 	// method to add an admin

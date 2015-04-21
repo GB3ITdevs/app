@@ -55,18 +55,18 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		tvComment.setText(message.getComment());
 		
 		String dateString = message.getDate();
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
-		
-		Date date = null;
-		try {
-			date = sdf.parse(dateString);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		SimpleDateFormat sdf1 = new SimpleDateFormat("EEE dd, MMM ''yy");
-		dateString = sdf1.format(date);
+//		
+//		SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");
+//		
+//		Date date = null;
+//		try {
+//			date = sdf.parse(dateString);
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		SimpleDateFormat sdf1 = new SimpleDateFormat("EEE dd, MMM ''yy");
+//		dateString = sdf1.format(date);
 		
 		TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
 		tvDate.setText(dateString);
