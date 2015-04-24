@@ -16,6 +16,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,39 +45,19 @@ public class ProfileActivity extends Activity {
 	// User info id
 	int infoId;
 
-	// Get value from each editText field
-	EditText tCurrentPw;
-	String pw;
-
-	EditText tNewPw;
-	String newPw;
-
-	EditText tNewPwCheck;
-	String newPwCheck;
-
 	/**
-	 * Keep track of the task to ensure we can cancel it if requested.
+	 * Keep track of the tasks to ensure we can cancel it if requested.
 	 */
-	private UpdatePwTask mAuthTask = null;
+	private UpdatePwTask mPwTask = null;
+	private UpdatePersonInfo mPersonTask = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
-
-		// Session class instance
-		session = new SessionManager(getApplicationContext());
-
-		// Get user data from session
-		userStored = session.getUserDetails();
-
-		// get user info id
-		if (userStored.get("id") != null) {
-			infoId = Integer.parseInt(userStored.get("id"));
-		}
-
-		// Populate data at top of screen
-		populateFields();
+		
+		// set session manager
+		updateSession();
 
 		// Set Edit Info button
 		Button editInfo = (Button) findViewById(R.id.btnProfEditInfo);
@@ -261,33 +242,76 @@ public class ProfileActivity extends Activity {
 		alertDialogBuilder.setTitle("Edit Personal Details");
 
 		// set dialog message
-		alertDialogBuilder
-				.setView(textEntryView)
-				// .setMessage(
-				// "Leave a field blank if you do not wish to make any changes to it")
-				.setCancelable(false)
-				.setPositiveButton("Submit Changes",
-						new DialogInterface.OnClickListener() {
-							// if this button is clicked, update details
-							public void onClick(DialogInterface dialog, int id) {
-								// Get values from EditText fields
-								String fName = eFName.getText().toString();
-								String lName = eLName.getText().toString();
-								String email = eEmail.getText().toString();
-								String passw = eiPassw.getText().toString();
-							}
-						})
-				.setNegativeButton("Cancel",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								// if this button is clicked, just close
-								// the dialog box and do nothing
-								dialog.cancel();
-							}
-						});
+		alertDialogBuilder.setView(textEntryView).setCancelable(false)
+				.setPositiveButton("Save Changes", null)
+				.setNegativeButton("Cancel", null);
 
 		// create alert dialog
-		AlertDialog alertDialog = alertDialogBuilder.create();
+		final AlertDialog alertDialog = alertDialogBuilder.create();
+
+		alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+			@Override
+			public void onShow(DialogInterface dialog) {
+				Button positive = alertDialog
+						.getButton(AlertDialog.BUTTON_POSITIVE);
+				positive.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// Reset errors.
+						eFName.setError(null);
+						eLName.setError(null);
+						eEmail.setError(null);
+						eiPassw.setError(null);
+
+						// Deal with input errors
+						boolean cancel = false;
+						View focusView = null;
+
+						// Get values from the EditText fields
+						String fName = eFName.getText().toString();
+						String lName = eLName.getText().toString();
+						String email = eEmail.getText().toString();
+						String pw = eiPassw.getText().toString();
+
+						// Check current password is correct
+						for (Users user : userList) {
+							if (user.getInfoID() == (infoId)) {
+								// Check if the current password matches stored
+								// password
+								if (!user.getPassword().equals(pw)) {
+									eiPassw.setError(getString(R.string.error_incorrect_password));
+									focusView = eiPassw;
+									cancel = true;
+								}
+								break;
+							}
+						}
+
+						// Check for a valid email
+						if (!isEmailValid(email)) {
+							eiPassw.setError(getString(R.string.error_invalid_email));
+							focusView = eiPassw;
+							cancel = true;
+						}
+
+						if (cancel) {
+							// There was an error; don't attempt update
+							// and focus the first form field with an error.
+							focusView.requestFocus();
+						} else {
+							// Show a progress spinner, and kick off a
+							// background task to update user password
+							mPersonTask = new UpdatePersonInfo(fName, lName,
+									email);
+							mPersonTask.execute((Void) null);
+							alertDialog.dismiss();
+						}
+					}
+				});
+			}
+		});
 
 		// show it
 		alertDialog.show();
@@ -387,9 +411,11 @@ public class ProfileActivity extends Activity {
 		View textEntryView = factory.inflate(R.layout.change_pw, null);
 
 		// Get each editText field
-		tCurrentPw = (EditText) textEntryView.findViewById(R.id.editTextPw);
-		tNewPw = (EditText) textEntryView.findViewById(R.id.editTextNewPw);
-		tNewPwCheck = (EditText) textEntryView
+		final EditText tCurrentPw = (EditText) textEntryView
+				.findViewById(R.id.editTextPw);
+		final EditText tNewPw = (EditText) textEntryView
+				.findViewById(R.id.editTextNewPw);
+		final EditText tNewPwCheck = (EditText) textEntryView
 				.findViewById(R.id.editTextCheckNewP);
 
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
@@ -399,9 +425,7 @@ public class ProfileActivity extends Activity {
 		alertDialogBuilder.setTitle("Change Password");
 
 		// set dialog message
-		alertDialogBuilder
-				.setView(textEntryView)
-				.setCancelable(false)
+		alertDialogBuilder.setView(textEntryView).setCancelable(false)
 				.setPositiveButton("Submit Changes", null)
 				.setNegativeButton("Cancel", null);
 
@@ -428,9 +452,9 @@ public class ProfileActivity extends Activity {
 						View focusView = null;
 
 						// Get values from the EditText fields
-						pw = tCurrentPw.getText().toString();
-						newPw = tNewPw.getText().toString();
-						newPwCheck = tNewPwCheck.getText().toString();
+						String pw = tCurrentPw.getText().toString();
+						String newPw = tNewPw.getText().toString();
+						String newPwCheck = tNewPwCheck.getText().toString();
 
 						// Check current password is correct
 						for (Users user : userList) {
@@ -464,15 +488,14 @@ public class ProfileActivity extends Activity {
 						}
 
 						if (cancel) {
-							// There was an error; don't attempt login
+							// There was an error; don't attempt update
 							// and focus the first form field with an error.
 							focusView.requestFocus();
 						} else {
 							// Show a progress spinner, and kick off a
-							// background task to perform the user login
-							// attempt.
-							mAuthTask = new UpdatePwTask(newPw);
-							mAuthTask.execute((Void) null);
+							// background task to update user password
+							mPwTask = new UpdatePwTask(newPw);
+							mPwTask.execute((Void) null);
 							alertDialog.dismiss();
 						}
 					}
@@ -484,9 +507,30 @@ public class ProfileActivity extends Activity {
 		alertDialog.show();
 	}
 
+	private boolean isEmailValid(String email) {
+		// TODO: Replace this with your own logic
+		return email.contains("@");
+	}
+
 	private boolean isPasswordValid(String password) {
 		// TODO: Replace this with your own logic
 		return password.length() > 3;
+	}
+
+	private void updateSession() {
+		// Session class instance
+		session = new SessionManager(getApplicationContext());
+
+		// Get user data from session
+		userStored = session.getUserDetails();
+
+		// get user info id
+		if (userStored.get("id") != null) {
+			infoId = Integer.parseInt(userStored.get("id"));
+		}
+
+		// Populate data at top of screen
+		populateFields();
 	}
 
 	/**
@@ -514,6 +558,52 @@ public class ProfileActivity extends Activity {
 	}
 
 	/**
+	 * Async task used to send the updated info to the database
+	 */
+	private class UpdatePersonInfo extends AsyncTask<Void, Void, Boolean> {
+
+		private final String mInfo;
+		private final String mFName;
+		private final String mLName;
+		private final String mEmail;
+
+		public UpdatePersonInfo(String fName, String lName, String email) {
+			mFName = fName;
+			mLName = lName;
+			mEmail = email;
+			
+			ArrayMap<String, String> user = new ArrayMap<String, String>();
+			user.put("firstName", mFName);
+			user.put("lastName", mLName);
+			user.put("email", mEmail);
+			mInfo = UsersJSONParser.PUTUsers(user);
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+
+			// update details here
+			HttpManager.updateData(
+					"http://gb3it.pickworth.info:3000/person_infos/" + infoId,
+					mInfo);
+			return true;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean success) {
+			
+			session.updateUserDetails(mFName, mLName, mEmail);
+			updateSession();
+			mPwTask = null;
+		}
+
+		@Override
+		protected void onCancelled() {
+			mPwTask = null;
+		}
+	}
+
+	/**
 	 * Async task used to send the updated password to the database
 	 */
 	private class UpdatePwTask extends AsyncTask<Void, Void, Boolean> {
@@ -521,35 +611,29 @@ public class ProfileActivity extends Activity {
 		private final String mPassword;
 
 		public UpdatePwTask(String newPw) {
-			mPassword = newPw;
+			ArrayMap<String, String> user = new ArrayMap<String, String>();
+			user.put("password", newPw);
+			mPassword = UsersJSONParser.PUTUsers(user);
 		}
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return false;
-			}
-
 			// update details here
-			// TODO pending PUT access
-			// HttpManager.putData("http://gb3it.pickworth.info:3000/person_infos",
-			// mPassword);
+			HttpManager.updateData(
+					"http://gb3it.pickworth.info:3000/person_infos/" + infoId,
+					mPassword);
 			return true;
 		}
 
 		@Override
 		protected void onPostExecute(Boolean success) {
-			mAuthTask = null;
-			// showProgress(false);
+			updateSession();
+			mPwTask = null;
 		}
 
 		@Override
 		protected void onCancelled() {
-			mAuthTask = null;
-			// showProgress(false);
+			mPwTask = null;
 		}
 	}
 }
