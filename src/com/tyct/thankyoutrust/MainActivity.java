@@ -41,6 +41,9 @@ public class MainActivity extends ListActivity {
 	
 	// User Session Manager Class
     SessionManager session;
+    
+    
+    boolean admin = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +80,29 @@ public class MainActivity extends ListActivity {
         
         // get user id
         int userId = Integer.parseInt(userStored.get("id"));
-        Toast.makeText(this, userEmail + ", usid: " + userId, Toast.LENGTH_LONG).show();
+        
+     // get admin 
+        int adminStatus = Integer.parseInt(userStored.get("admin"));
+        
+        //set admin 
+        if(adminStatus == 1)
+        {
+        	admin = true;
+        }
+        Toast.makeText(this, userEmail + ", usid: " + userId + " admin = " + admin, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		if(!admin)
+		{
+			getMenuInflater().inflate(R.menu.admin_all_users, menu);
+		}
+		
+		if(admin)
+		{
 		getMenuInflater().inflate(R.menu.main, menu);
+		}
 		return true;
 	}
 	
@@ -96,9 +116,9 @@ public class MainActivity extends ListActivity {
 				startActivity(goTo);
 				return true;
 			case R.id.action_home:
-				goTo = new Intent(MainActivity.this, MainActivity.class);
-				startActivity(goTo);
 				finish();
+				goTo = getIntent();
+				startActivity(goTo);
 				return true;
 			case R.id.admin:
 				goTo = new Intent(MainActivity.this, AdminHomePage.class);
