@@ -47,7 +47,7 @@ public class SessionManager {
 
 	// Postcode
 	public static final String KEY_PCODE = "postcode";
-	
+
 	// Admin
 	public static final String KEY_ADMIN = "admin";
 
@@ -62,8 +62,8 @@ public class SessionManager {
 	 * Create login session
 	 * */
 	public void createUserLoginSession(int id, String email, String name,
-			String surname, String suburb, String city,
-			String postcode, String admin) {
+			String surname, String suburb, String city, String postcode,
+			String admin) {
 		// Storing login value as TRUE
 		editor.putBoolean(IS_USER_LOGIN, true);
 
@@ -76,7 +76,7 @@ public class SessionManager {
 		editor.putString(KEY_NAME, name);
 		editor.putString(KEY_SURNAME, surname);
 		// Store address in pref
-		//TODO editor.putString(KEY_ADDR, address);
+		// TODO editor.putString(KEY_ADDR, address);
 		// Store city in pref
 		editor.putString(KEY_CITY, city);
 		// Store suburb in pref
@@ -85,7 +85,7 @@ public class SessionManager {
 		editor.putString(KEY_PCODE, postcode);
 		// Store padmin in pref
 		editor.putString(KEY_ADMIN, admin);
-		
+
 		// commit changes
 		editor.commit();
 	}
@@ -93,10 +93,16 @@ public class SessionManager {
 	/**
 	 * Update user details
 	 * */
-	public void updateUserDetails(String fName, String lName, String email,
-			String city, String address, String suburb, String postcode,
-			String password) {
+	public void updateUserDetails(String fName, String lName, String email) {
 
+		// Store email in pref
+		editor.putString(KEY_EMAIL, email);
+		// Store name in pref
+		editor.putString(KEY_NAME, fName);
+		editor.putString(KEY_SURNAME, lName);
+
+		// commit changes
+		editor.commit();
 	}
 
 	/**
@@ -143,7 +149,7 @@ public class SessionManager {
 		user.put(KEY_SURNAME, pref.getString(KEY_SURNAME, null));
 
 		// user address
-		//TODO user.put(KEY_ADDR, pref.getString(KEY_ADDR, null));
+		// TODO user.put(KEY_ADDR, pref.getString(KEY_ADDR, null));
 
 		// user city
 		user.put(KEY_CITY, pref.getString(KEY_CITY, null));
@@ -153,7 +159,7 @@ public class SessionManager {
 
 		// user postcode
 		user.put(KEY_PCODE, pref.getString(KEY_PCODE, null));
-		
+
 		// user admin
 		user.put(KEY_ADMIN, pref.getString(KEY_ADMIN, null));
 

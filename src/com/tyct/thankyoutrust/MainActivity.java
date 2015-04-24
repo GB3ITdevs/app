@@ -116,9 +116,9 @@ public class MainActivity extends ListActivity {
 				startActivity(goTo);
 				return true;
 			case R.id.action_home:
-				goTo = new Intent(MainActivity.this, MainActivity.class);
-				startActivity(goTo);
 				finish();
+				goTo = getIntent();
+				startActivity(goTo);
 				return true;
 			case R.id.admin:
 				goTo = new Intent(MainActivity.this, AdminHomePage.class);

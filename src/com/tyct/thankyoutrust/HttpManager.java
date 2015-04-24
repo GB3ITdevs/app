@@ -120,7 +120,6 @@ public class HttpManager {
 			HttpPut httpPut = new HttpPut(url.toURI());
 			
 			httpPut.setEntity(new StringEntity(jsonString));
-			
 			httpPut.setHeader("Content-Type", "application/json");
 			
 			httpClient.execute(httpPut);
