@@ -375,12 +375,13 @@ public class ProfileActivity extends Activity {
 							// if this button is clicked, update details
 							public void onClick(DialogInterface dialog, int id) {
 								// Get values form EditText fields
-								String addr = eAddress.getText().toString();
-								String suburb = eSuburb.getText().toString();
-								String city = eCity.getText().toString();
-								String postcode = ePostcode.getText()
-										.toString();
-								String passw = eaPassw.getText().toString();
+//		TODO						String addr = eAddress.getText().toString();
+//								String suburb = eSuburb.getText().toString();
+//								String city = eCity.getText().toString();
+//								String postcode = ePostcode.getText()
+//										.toString();
+//								String passw = eaPassw.getText().toString();
+								dialog.cancel();
 							}
 						})
 				.setNegativeButton("Cancel",
