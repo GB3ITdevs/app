@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
@@ -20,22 +23,24 @@
             android:id="@+id/postCodeTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:layout_gravity="start|center_vertical"
             android:text="@string/postalCodeTitle" />
-
-        <TextView
-            android:id="@+id/applicantNameTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:text="@string/applicantNameTitle" />
-
-        <TextView
+        
+         <TextView
             android:id="@+id/postalCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"
             android:text="TextView" />
+
+        <TextView
+            android:id="@+id/applicantNameTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal|top"
+            android:text="@string/applicantNameTitle" />
 
         <TextView
             android:id="@+id/applicantName"
@@ -48,6 +53,7 @@
             android:id="@+id/fundsRequestedTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:layout_gravity="center_horizontal|top"
             android:text="@string/fundsRequestedTitle" />
 
@@ -62,6 +68,7 @@
             android:id="@+id/useOfFundsTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:layout_gravity="center_horizontal|top"
             android:text="@string/useOfFundsTitles" />
 
@@ -73,17 +80,33 @@
             android:text="TextView" />
 
         <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="About the Project:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
             android:id="@+id/projectBlurb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"
             android:text="blurb" />
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Please indicate how strongly you would like to see this project happen:"
+            android:textSize="12sp" />
+
         <RatingBar
             android:id="@+id/projectRatingBar"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numStars="10" />
+            android:numStars="5" />
     </LinearLayout>
 
 </LinearLayout>
+</ScrollView>
