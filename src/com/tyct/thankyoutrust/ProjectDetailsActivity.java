@@ -1,5 +1,7 @@
 package com.tyct.thankyoutrust;
 
+import java.util.HashMap;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -33,6 +35,8 @@ public class ProjectDetailsActivity extends Activity {
 	SharedPreferences prefs;
 
 	boolean dialogResult;
+	
+	boolean admin = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,7 @@ public class ProjectDetailsActivity extends Activity {
 
 		// Session class instance
 		session = new SessionManager(getApplicationContext());
+		HashMap<String, String> userStored = session.getUserDetails();
 
 		prefs = getSharedPreferences("UserDetails", MODE_PRIVATE);
 
@@ -80,12 +85,30 @@ public class ProjectDetailsActivity extends Activity {
 
 		// Commit the transaction changes
 		ft.commit();
+		
+		// get admin 
+        int adminStatus = Integer.parseInt(userStored.get("admin"));
+        
+        //set admin 
+        if(adminStatus == 1)
+        {
+        	admin = true;
+        }
+		
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
+		if(!admin)
+		{
+			getMenuInflater().inflate(R.menu.admin_all_users, menu);
+		}
+		
+		if(admin)
+		{
 		getMenuInflater().inflate(R.menu.main, menu);
+		}
 		return true;
 	}
 

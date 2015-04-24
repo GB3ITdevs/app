@@ -53,6 +53,8 @@ public class ProfileActivity extends Activity {
 
 	EditText tNewPwCheck;
 	String newPwCheck;
+	
+	boolean admin = false;
 
 	/**
 	 * Keep track of the task to ensure we can cancel it if requested.
@@ -107,12 +109,29 @@ public class ProfileActivity extends Activity {
 
 		tasks = new ArrayList<>();
 		personInfo();
+		
+		// get admin 
+        int adminStatus = Integer.parseInt(userStored.get("admin"));
+        
+        //set admin 
+        if(adminStatus == 1)
+        {
+        	admin = true;
+        }
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.profile, menu);
+		if(!admin)
+		{
+			getMenuInflater().inflate(R.menu.admin_all_users, menu);
+		}
+		
+		if(admin)
+		{
+		getMenuInflater().inflate(R.menu.main, menu);
+		}
 		return true;
 	}
 

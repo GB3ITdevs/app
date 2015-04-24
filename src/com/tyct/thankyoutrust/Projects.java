@@ -1,6 +1,7 @@
  package com.tyct.thankyoutrust;
  
  import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
  
  import android.app.Activity;
@@ -41,6 +42,8 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  	
 	// Session Manager Class
 	SessionManager session;
+	
+	boolean admin = false;
  
  			//***********Testing the models and the json parsers************************************************************************************
  
@@ -69,6 +72,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		
 		// Session class instance
 		session = new SessionManager(getApplicationContext());
+		HashMap<String, String> userStored = session.getUserDetails();
  		
  		//If the phone is online retrieve the projects info from the url
  		if (isOnline()) 
@@ -84,15 +88,31 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		}
  		selectedProject = new Project();
  		
+ 		// get admin 
+        int adminStatus = Integer.parseInt(userStored.get("admin"));
+        
+        //set admin 
+        if(adminStatus == 1)
+        {
+        	admin = true;
+        }
+ 		
  	}
  
  	//To do: create the top menu
  	@Override
  	public boolean onCreateOptionsMenu(Menu menu) 
  	{
- 		//Auto-generated:
- 		getMenuInflater().inflate(R.menu.main, menu);
- 		return true;
+ 		if(!admin)
+		{
+			getMenuInflater().inflate(R.menu.admin_all_users, menu);
+		}
+		
+		if(admin)
+		{
+		getMenuInflater().inflate(R.menu.main, menu);
+		}
+		return true;
  	}
  	
  	@Override
