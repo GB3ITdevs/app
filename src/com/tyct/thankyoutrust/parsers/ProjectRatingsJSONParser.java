@@ -36,7 +36,7 @@ public class ProjectRatingsJSONParser
 					//Set each JSON Project Rating field to the appropriate Project Rating object field
 					rating.setRatingID(obj.getInt("ratingID"));
 					rating.setProjectID(obj.getInt("projectID"));
-					rating.setInfoID(obj.getInt("infoID"));
+					rating.setUserID(obj.getInt("userID"));
 					rating.setRating(obj.getInt("rating"));
 				
 					//Add the Project Rating object to the list of Project Ratings
@@ -67,7 +67,7 @@ public class ProjectRatingsJSONParser
 			try {
 					//For each field in the parsed in Project object, set it to the appropriate JSON object field
 					jsonProjectRating.accumulate("projectID", Integer.toString(rating.getProjectID()));
-					jsonProjectRating.accumulate("infoID", Integer.toString(rating.getInfoID()));
+					jsonProjectRating.accumulate("userID", Integer.toString(rating.getUserID()));
 					jsonProjectRating.accumulate("rating", Integer.toString(rating.getRating()));
 				} 
 			//If there is an exception print the stack trace

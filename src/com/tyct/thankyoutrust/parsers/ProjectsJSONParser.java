@@ -37,7 +37,7 @@ public class ProjectsJSONParser
 				project.setProjectID(obj.getInt("projectID"));
 				project.setApplicantName(obj.getString("applicantName"));
 				project.setFundsRequested(obj.getInt("fundsRequested"));
-				project.setPostalCode(obj.getInt("postalCode"));
+				project.setCommunityID(obj.getInt("communityID"));
 				project.setProjectBlurb(obj.getString("projectBlurb"));
 				project.setProjectName(obj.getString("projectName"));
 				project.setUseOfFunds(obj.getString("useOfFunds"));
@@ -74,7 +74,7 @@ public class ProjectsJSONParser
 				jsonProject.accumulate("useOfFunds", project.getUseOfFunds());
 				jsonProject.accumulate("applicantName", project.getApplicantName());
 				jsonProject.accumulate("projectName", project.getProjectName());
-				jsonProject.accumulate("postalCode", Integer.toString(project.getPostalCode()));
+				jsonProject.accumulate("communityID", Integer.toString(project.getCommunityID()));
 			} 
 		//If there is an exception print the stack trace
 		catch (JSONException e) 

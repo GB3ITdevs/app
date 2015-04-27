@@ -2,7 +2,7 @@ package com.tyct.thankyoutrust.model;
 
 public class AdminID {
 	private int adminID;
-	private int infoID;
+	private int userID;
 
 	public int getAdminID() {
 		return adminID;
@@ -12,13 +12,12 @@ public class AdminID {
 		this.adminID = adminID;
 	}
 
-	public int getInfoID() {
-		return infoID;
+	public int getUserID() {
+		return userID;
 	}
 
-	public void setInfoID(int infoID) {
-
-		this.infoID = infoID;
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 
 }

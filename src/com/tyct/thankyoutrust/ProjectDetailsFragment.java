@@ -41,7 +41,7 @@ public class ProjectDetailsFragment extends Fragment {
 
 	public static String currProjectName;
 	public static String currProjectID;
-	public static String currPostalCode;
+	public static String currCommunityID;
 	public static String currApplicantName;
 	public static String currProjectBlurb;
 	public static String currFundsRequested;
@@ -84,8 +84,7 @@ public class ProjectDetailsFragment extends Fragment {
 
 		// Set the text views to display the project information
 		tvProjectTitle.setText(projectDisplayed.getProjectName());
-		tvPostalCode
-				.setText(Integer.toString(projectDisplayed.getPostalCode()));
+		tvPostalCode.setText(Integer.toString(projectDisplayed.getCommunityID()));
 		tvApplicantName.setText(projectDisplayed.getApplicantName());
 		tvFundsRequested.setText(Integer.toString(projectDisplayed
 				.getFundsRequested()));
@@ -132,7 +131,7 @@ public class ProjectDetailsFragment extends Fragment {
 
 	public void checkRetrievedRatings() {
 		for (int i = 0; i < projectRatingList.size(); i++) {
-			if ((projectRatingList.get(i).getInfoID() == infoID)
+			if ((projectRatingList.get(i).getUserID() == infoID)
 					&& (projectRatingList.get(i).getProjectID() == projectDisplayed
 							.getProjectID())) {
 				ratingBar.setRating(projectRatingList.get(i).getRating());
@@ -161,7 +160,7 @@ public class ProjectDetailsFragment extends Fragment {
 
 				int roundedRating = (int) rating;
 
-				projectRating.setInfoID(infoID);
+				projectRating.setUserID(infoID);
 
 				projectRating.setProjectID(projectDisplayed.getProjectID());
 				projectRating.setRating(roundedRating);

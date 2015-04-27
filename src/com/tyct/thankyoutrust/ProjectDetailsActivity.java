@@ -9,7 +9,6 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -25,7 +24,7 @@ public class ProjectDetailsActivity extends Activity {
 	public static String currApplicantName;
 	public static String currUseOfFunds;
 	public static String currFundsRequested;
-	public static String currPostalCode;
+	public static String currCommunityID;
 	public static String currProjectID;
 
 	int projectRating;
@@ -55,7 +54,7 @@ public class ProjectDetailsActivity extends Activity {
 
 		String currProjectName = allData.getString("currProjectName");
 		int currProjectID = allData.getInt("currProjectID");
-		int currPostalCode = allData.getInt("currPostalCode");
+		int currCommunityID = allData.getInt("currCommunityID");
 		String currApplicantName = allData.getString("currApplicantName");
 		String currProjectBlurb = allData.getString("currProjectBlurb");
 		int currFundsRequested = allData.getInt("currFundsRequested");
@@ -66,7 +65,7 @@ public class ProjectDetailsActivity extends Activity {
 		projectDisplayed.setProjectBlurb(currProjectBlurb);
 		projectDisplayed.setApplicantName(currApplicantName);
 		projectDisplayed.setFundsRequested(currFundsRequested);
-		projectDisplayed.setPostalCode(currPostalCode);
+		projectDisplayed.setCommunityID(currCommunityID);
 		projectDisplayed.setUseOfFunds(currUseOfFunds);
 
 		// Create new Fragments

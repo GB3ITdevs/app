@@ -33,6 +33,7 @@ public class CommunityJSONParser
 				Community community = new Community();
 				
 				//Set each JSON Community field to the appropriate Community object field
+				community.setCommunityID(obj.getInt("communityID"));
 				community.setPostalCode(obj.getInt("postalCode"));
 				community.setCommunityName(obj.getString("communityName"));
 			

@@ -4,7 +4,7 @@ public class ProjectRating
 {
 	private int ratingID;
 	private int projectID;
-	private int infoID;
+	private int userID;
 	private int rating;
 
 	public int getRatingID() 
@@ -27,14 +27,14 @@ public class ProjectRating
 		this.projectID = projectID;
 	}
 	
-	public int getInfoID() 
+	public int getUserID() 
 	{
-		return infoID;
+		return userID;
 	}
 	
-	public void setInfoID(int infoID) 
+	public void setUserID(int userID) 
 	{
-		this.infoID = infoID;
+		this.userID = userID;
 	}
 	
 	public int getRating() 

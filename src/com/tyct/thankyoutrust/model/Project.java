@@ -2,7 +2,7 @@ package com.tyct.thankyoutrust.model;
 
 public class Project {
 	private int projectID;
-	private int postalCode;
+	private int communityID;
 	private String applicantName;
 	private String projectName;
 	private String projectBlurb;
@@ -16,15 +16,6 @@ public class Project {
 	
 	public void setProjectID(int projectID) {
 		this.projectID = projectID;
-	}
-	
-	
-	public int getPostalCode() {
-		return postalCode;
-	}
-	
-	public void setPostalCode(int postalCode) {
-		this.postalCode = postalCode;
 	}
 	
 	
@@ -69,5 +60,13 @@ public class Project {
 	}
 	public void setUseOfFunds(String useOfFunds) {
 		this.useOfFunds = useOfFunds;
+	}
+
+	public int getCommunityID() {
+		return communityID;
+	}
+
+	public void setCommunityID(int communityID) {
+		this.communityID = communityID;
 	}
 }

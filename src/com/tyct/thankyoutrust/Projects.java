@@ -10,7 +10,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -24,7 +23,7 @@ import android.widget.Toast;
  import com.tyct.thankyoutrust.model.PhoneNumber;
 import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.ProjectWebsite;
-import com.tyct.thankyoutrust.parsers.PhoneNumberJSONParser;
+//import com.tyct.thankyoutrust.parsers.PhoneNumberJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectWebsiteJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  
@@ -176,7 +175,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		detailIntent.putExtra("currApplicantName", selectedProject.getApplicantName());
  		detailIntent.putExtra("currUseOfFunds", selectedProject.getUseOfFunds());
  		detailIntent.putExtra("currFundsRequested", selectedProject.getFundsRequested());
- 		detailIntent.putExtra("currPostalCode", selectedProject.getPostalCode());
+ 		detailIntent.putExtra("currCommunityID", selectedProject.getCommunityID());
  		detailIntent.putExtra("currProjectID", selectedProject.getProjectID());
  		startActivity(detailIntent);
  		
@@ -278,7 +277,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		detailIntent.putExtra(ProjectDetailsFragment.currApplicantName, selectedProject.getApplicantName());
  		detailIntent.putExtra(ProjectDetailsFragment.currUseOfFunds, selectedProject.getUseOfFunds());
  		detailIntent.putExtra(ProjectDetailsFragment.currFundsRequested, selectedProject.getFundsRequested());
- 		detailIntent.putExtra(ProjectDetailsFragment.currPostalCode, selectedProject.getPostalCode());
+ 		detailIntent.putExtra(ProjectDetailsFragment.currCommunityID, selectedProject.getCommunityID());
  		detailIntent.putExtra(ProjectDetailsFragment.currProjectID, selectedProject.getProjectID());
  		startActivity(detailIntent);
  	}	
@@ -287,7 +286,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  	public void SetupModels()
  	{
  
- 		newPhone.setInfoID(9);
+ 		newPhone.setUserID(9);
  		newPhone.setPhoneNumber("0001122");
  		
  		newProjectSite.setSiteAddress("project website model test");

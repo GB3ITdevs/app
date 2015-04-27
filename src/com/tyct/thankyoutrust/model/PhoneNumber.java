@@ -3,7 +3,7 @@ package com.tyct.thankyoutrust.model;
 public class PhoneNumber 
 {
 	private int phoneID;
-	private int infoID;
+	private int userID;
 	private String phoneNumber;
 	
 	
@@ -20,14 +20,14 @@ public class PhoneNumber
 	
 	
 	
-	public int getInfoID() 
+	public int getUserID() 
 	{
-		return infoID;
+		return userID;
 	}
 	
-	public void setInfoID(int infoID) 
+	public void setUserID(int userID) 
 	{
-		this.infoID = infoID;
+		this.userID = userID;
 	}
 	
 	

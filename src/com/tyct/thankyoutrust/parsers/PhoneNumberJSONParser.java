@@ -34,7 +34,7 @@ public class PhoneNumberJSONParser
 				
 				//Set each JSON PhoneNumber field to the appropriate PhoneNumber object field
 				phoneNumber.setPhoneID(obj.getInt("phoneID"));
-				phoneNumber.setInfoID(obj.getInt("infoID"));
+				phoneNumber.setUserID(obj.getInt("userID"));
 				phoneNumber.setPhoneNumber(obj.getString("phoneNumber"));
 			
 				//Add the PhoneNumber object to the list of PhoneNumbers
@@ -65,7 +65,7 @@ public class PhoneNumberJSONParser
 			
 			try {
 					//For each field in the parsed in PhoneNumber object, set it to the appropriate JSON object field
-					jsonPhoneNumber.accumulate("infoID", Integer.toString(phoneNumber.getInfoID()));
+					jsonPhoneNumber.accumulate("userID", Integer.toString(phoneNumber.getUserID()));
 					jsonPhoneNumber.accumulate("phoneNumber", phoneNumber.getPhoneNumber());
 
 				} 
