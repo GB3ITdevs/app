@@ -124,7 +124,7 @@ public class ProfileActivity extends Activity {
 			startActivity(goTo);
 			return true;
 		case R.id.action_home:
-			goTo = new Intent(ProfileActivity.this, MainActivity.class);
+			goTo = new Intent(ProfileActivity.this, HomeActivity.class);
 			startActivity(goTo);
 			return true;
 		case R.id.action_profile:
@@ -162,7 +162,7 @@ public class ProfileActivity extends Activity {
 
 	public void personInfo() {
 		if (isOnline()) {
-			requestData("http://gb3it.pickworth.info:3000/person_infos");
+			requestData("http://gb3it.pickworth.info:3000/users");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();

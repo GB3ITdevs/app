@@ -27,7 +27,7 @@ import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.parsers.CommentJSONParser;
 import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
-public class MainActivity extends ListActivity {
+public class HomeActivity extends ListActivity {
 
 	TextView output;
 	ProgressBar pb;
@@ -109,7 +109,7 @@ public class MainActivity extends ListActivity {
 		Intent goTo = new Intent();
 		switch (item.getItemId()) {
 		case R.id.action_projects:
-			goTo = new Intent(MainActivity.this, Projects.class);
+			goTo = new Intent(HomeActivity.this, Projects.class);
 			startActivity(goTo);
 			return true;
 		case R.id.action_home:
@@ -118,15 +118,15 @@ public class MainActivity extends ListActivity {
 			startActivity(goTo);
 			return true;
 		case R.id.admin:
-			goTo = new Intent(MainActivity.this, AdminHomePage.class);
+			goTo = new Intent(HomeActivity.this, AdminHomePage.class);
 			startActivity(goTo);
 			return true;
 		case R.id.action_profile:
-			goTo = new Intent(MainActivity.this, ProfileActivity.class);
+			goTo = new Intent(HomeActivity.this, ProfileActivity.class);
 			startActivity(goTo);
 			return true;
 		case R.id.action_about_us:
-			goTo = new Intent(MainActivity.this, AboutUs.class);
+			goTo = new Intent(HomeActivity.this, AboutUs.class);
 			startActivity(goTo);
 			return true;
 		case R.id.action_logout:
@@ -150,7 +150,7 @@ public class MainActivity extends ListActivity {
 
 	protected void updateDisplay() {
 		// get list view from CommentAdapter
-		MessageAdapter adapter = new MessageAdapter(this,
+		CommentAdapter adapter = new CommentAdapter(this,
 				R.layout.item_message, commentList, userList);
 		setListAdapter(adapter);
 
@@ -167,7 +167,7 @@ public class MainActivity extends ListActivity {
 
 	public void userDisplay() {
 		if (isOnline()) {
-			requestUserData("http://gb3it.pickworth.info:3000/person_infos");
+			requestUserData("http://gb3it.pickworth.info:3000/users");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -286,7 +286,7 @@ public class MainActivity extends ListActivity {
 			// into the edit text field
 			if (commentString.equals("")) {
 				// If Edit Text is empty it will show a toast
-				Toast.makeText(MainActivity.this,
+				Toast.makeText(HomeActivity.this,
 						"You will need to write a comment to post",
 						Toast.LENGTH_LONG).show();
 			} else {
@@ -294,7 +294,7 @@ public class MainActivity extends ListActivity {
 				// the database
 
 				// TODO Debugging, DO NOT LEAVE THIS TOAST HERE
-				Toast.makeText(MainActivity.this, "Posted", Toast.LENGTH_LONG)
+				Toast.makeText(HomeActivity.this, "Posted", Toast.LENGTH_LONG)
 						.show();
 				// Create new Comment Object, then pass data into sets
 				commentEntity = new Comment();

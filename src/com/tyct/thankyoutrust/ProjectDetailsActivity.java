@@ -120,7 +120,7 @@ public class ProjectDetailsActivity extends Activity {
 			startActivity(goTo);
 			return true;
 		case R.id.action_home:
-			goTo = new Intent(this, MainActivity.class);
+			goTo = new Intent(this, HomeActivity.class);
 			startActivity(goTo);
 			finish();
 			return true;

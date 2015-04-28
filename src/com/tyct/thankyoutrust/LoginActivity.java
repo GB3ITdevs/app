@@ -369,7 +369,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 	public void personInfo() {
 		if (isOnline()) {
-			requestData("http://gb3it.pickworth.info:3000/person_infos");
+			requestData("http://gb3it.pickworth.info:3000/users");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -445,7 +445,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			if (success) {
 				session.createUserLoginSession(loggedInUserId, mEmail, uName,
 						uSurname, uSuburb, uCity, uPostcode, uAdmin);
-				Intent i = new Intent(LoginActivity.this, MainActivity.class);
+				Intent i = new Intent(LoginActivity.this, HomeActivity.class);
 				startActivity(i);
 				finish();
 			} else {

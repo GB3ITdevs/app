@@ -22,7 +22,7 @@ public class WelcomeScreen extends Activity {
 		session = new SessionManager(getApplicationContext());
 		// If a user is currently logged in, go straight to message board
 		if (session.isUserLoggedIn()) {
-			Intent intent = new Intent(WelcomeScreen.this, MainActivity.class);
+			Intent intent = new Intent(WelcomeScreen.this, HomeActivity.class);
 			startActivity(intent);
 			finish();
 		}

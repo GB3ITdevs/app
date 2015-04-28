@@ -18,12 +18,12 @@ import android.widget.TextView;
 import com.tyct.thankyoutrust.model.Comment;
 import com.tyct.thankyoutrust.model.User;
 
-public class MessageAdapter extends ArrayAdapter<Comment> {
+public class CommentAdapter extends ArrayAdapter<Comment> {
 
 	Context context;
 	List<User> userList;
 
-	public MessageAdapter(Context contextPassed, int resource, List<Comment> objects, List<User> o1) {
+	public CommentAdapter(Context contextPassed, int resource, List<Comment> objects, List<User> o1) {
 		super(contextPassed, resource, objects);
 		
 		context = contextPassed;

@@ -55,7 +55,7 @@ public class AdminAllCommunities extends Activity {
 			startActivity(goTo);
 			return true;
 		case R.id.action_home:
-			goTo = new Intent(AdminAllCommunities.this, MainActivity.class);
+			goTo = new Intent(AdminAllCommunities.this, HomeActivity.class);
 			startActivity(goTo);
 			finish();
 			return true;

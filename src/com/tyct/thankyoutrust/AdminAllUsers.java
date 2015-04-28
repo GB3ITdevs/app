@@ -103,7 +103,7 @@ public class AdminAllUsers extends Activity {
 			startActivity(goTo);
 			return true;
 		case R.id.action_home:
-			goTo = new Intent(AdminAllUsers.this, MainActivity.class);
+			goTo = new Intent(AdminAllUsers.this, HomeActivity.class);
 			startActivity(goTo);
 			finish();
 			return true;

@@ -113,7 +113,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 		tasks = new ArrayList<>();
 		
 		if (isOnline()) {
-			requestData("http://gb3it.pickworth.info:3000/person_infos");
+			requestData("http://gb3it.pickworth.info:3000/users");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
 		}
@@ -383,7 +383,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 			}
 
 			// register the new account here.
-			HttpManager.postData("http://gb3it.pickworth.info:3000/person_infos", newUserString);
+			HttpManager.postData("http://gb3it.pickworth.info:3000/users", newUserString);
 			return true;
 		}
 

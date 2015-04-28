@@ -46,7 +46,7 @@ public class AdminHomePage extends Activity {
 			startActivity(goTo);
 			return true;
 		case R.id.action_home:
-			goTo = new Intent(AdminHomePage.this, MainActivity.class);
+			goTo = new Intent(AdminHomePage.this, HomeActivity.class);
 			startActivity(goTo);
 			finish();
 			return true;
