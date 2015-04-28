@@ -5,12 +5,10 @@ import java.util.List;
 
 import com.tyct.thankyoutrust.model.AdminID;
 import com.tyct.thankyoutrust.model.ProjectRating;
-import com.tyct.thankyoutrust.model.UserID;
-import com.tyct.thankyoutrust.model.Users;
+import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
-import com.tyct.thankyoutrust.parsers.UserIDJSONParser;
-import com.tyct.thankyoutrust.parsers.UsersJSONParser;
+import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -39,9 +37,8 @@ public class AdminAllUsers extends Activity {
 	// Session Manager Class
 	SessionManager session;
 
-	List<Users> userList;
+	List<User> userList;
 	List<AdminID> adminList;
-	List<UserID> userIdList;
 	List<ProjectRating> prList;
 
 	List<AdminTask> adminTask;
@@ -49,7 +46,6 @@ public class AdminAllUsers extends Activity {
 	List<MyTask> tasks;
 	List<PostAdminTask> postadmintask;
 	List<DeleteUserTask> deleteusertask;
-	List<UserIdTask> useridtask;
 	List<ProjectRatingTask> prtask;
 
 	DialogFragment userOptions;
@@ -78,13 +74,11 @@ public class AdminAllUsers extends Activity {
 		// start async task
 		tasks = new ArrayList<>();
 		adminTask = new ArrayList<>();
-		useridtask = new ArrayList<>();
 		prtask = new ArrayList<>();
 
 		// makes connection to database
 		display();
 		adminInfo();
-		userIdInfo();
 		projectRatingInfo();
 
 		// setup listview to and call method for clickable
@@ -138,15 +132,15 @@ public class AdminAllUsers extends Activity {
 	}
 
 	// Method to setup the List View to display all users
-	public void setUserList(List<Users> userList) {
+	public void setUserList(List<User> userList) {
 
 		userNames = new String[userList.size()];
 		UsersInfoId = new int[userList.size()];
 		int i = 0;
 		// Add each user name from the project list to the array of strings
-		for (Users user : userList) {
+		for (User user : userList) {
 			userNames[i] = user.getFirstName() + " " + user.getLastName();
-			UsersInfoId[i] = user.getInfoID();
+			UsersInfoId[i] = user.getUserID();
 			i++;
 		}
 
@@ -169,11 +163,6 @@ public class AdminAllUsers extends Activity {
 		task.execute(uri);
 	}
 
-	private void requestUserIdData(String uri) {
-		UserIdTask task = new UserIdTask();
-		task.execute(uri);
-	}
-
 	private void requestProjectRatingData(String uri) {
 		ProjectRatingTask task = new ProjectRatingTask();
 		task.execute(uri);
@@ -192,15 +181,6 @@ public class AdminAllUsers extends Activity {
 	public void adminInfo() {
 		if (isOnline()) {
 			requestAdminData("http://gb3it.pickworth.info:3000/administrators");
-		} else {
-			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
-					.show();
-		}
-	}
-
-	public void userIdInfo() {
-		if (isOnline()) {
-			requestUserIdData("http://gb3it.pickworth.info:3000/users");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -351,35 +331,6 @@ public class AdminAllUsers extends Activity {
 
 	}
 
-	/**
-    	 * 
-    	 * 
-    	 */
-	private class UserIdTask extends AsyncTask<String, String, String> {
-
-		@Override
-		protected void onPreExecute() {
-			useridtask.add(this);
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			String content = HttpManager.getData(params[0]);
-			return content;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			userIdList = UserIDJSONParser.parseFeed(result);
-			useridtask.remove(this);
-		}
-
-		@Override
-		protected void onProgressUpdate(String... values) {
-			// updateDisplay(values[0]);
-		}
-
-	}
 
 	/**
     	 * 
@@ -406,7 +357,7 @@ public class AdminAllUsers extends Activity {
 		protected void onPostExecute(String result) {
 
 			// populates userlist from parser
-			userList = UsersJSONParser.parseFeed(result);
+			userList = UserJSONParser.parseFeed(result);
 			// populates the list view using the setUserList Method.
 			setUserList(userList);
 		}
@@ -540,7 +491,7 @@ public class AdminAllUsers extends Activity {
 		int i = 0;
 		// Add each user name from the project list to the array of strings
 		for (ProjectRating pr : prList) {
-			if (pr.getInfoID() == selectedInfoId) {
+			if (pr.getUserID() == selectedInfoId) {
 
 				projectRatingIdDeleteList[i] = pr.getRatingID();
 				i++;
@@ -551,18 +502,6 @@ public class AdminAllUsers extends Activity {
 
 	// method to delete a user
 	public void deleteUser() {
-		useridtask = new ArrayList<>();
-
-		selectedContactId = 0;
-		selectedUserId = 0;
-		for (UserID usid : userIdList) {
-			if (usid.getInfoID() == selectedInfoId) {
-				// get userID
-				selectedUserId = usid.getUserID();
-				// get contactID
-				selectedContactId = usid.getContactID();
-			}
-		}
 
 		selectRatingsToDelete();
 
@@ -578,7 +517,7 @@ public class AdminAllUsers extends Activity {
 		adminTask = new ArrayList<>();
 
 		for (AdminID adm : adminList) {
-			if (selectedInfoId == adm.getInfoID()) {
+			if (selectedInfoId == adm.getUserID()) {
 				adminid = adm.getAdminID();
 				deleteAdminTask = new ArrayList<>();
 				DeleteAdminTask task = new DeleteAdminTask();
@@ -595,7 +534,7 @@ public class AdminAllUsers extends Activity {
 		adminTask = new ArrayList<>();
 
 		for (AdminID adm : adminList) {
-			if (selectedInfoId == adm.getInfoID()) {
+			if (selectedInfoId == adm.getUserID()) {
 				isAdmin = true;
 				Toast.makeText(AdminAllUsers.this, "User is already an admin",
 						Toast.LENGTH_LONG).show();
@@ -605,7 +544,7 @@ public class AdminAllUsers extends Activity {
 
 		if (!isAdmin) {
 			adminEntity = new AdminID();
-			adminEntity.setInfoID(infoId);
+			adminEntity.setUserID(infoId);
 
 			postadmintask = new ArrayList<>();
 			PostAdminTask task = new PostAdminTask();

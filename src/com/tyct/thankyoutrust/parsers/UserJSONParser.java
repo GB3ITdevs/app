@@ -7,6 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
+import android.support.v4.util.ArrayMap;
+
 import com.tyct.thankyoutrust.model.User;
 
 public class UserJSONParser {
@@ -23,8 +26,7 @@ public class UserJSONParser {
 				JSONObject obj = ar.getJSONObject(i);
 				User user = new User();
 
-				
-				user.setUserID(obj.getInt("userID"));	
+				user.setUserID(obj.getInt("userID"));
 				user.setCommunityID(obj.getInt("communityID"));
 				user.setFirstName(obj.getString("firstName"));
 				user.setLastName(obj.getString("lastName"));
@@ -53,7 +55,7 @@ public class UserJSONParser {
 		JSONObject jsonUser = new JSONObject();
 
 		try {
-			
+
 			jsonUser.accumulate("communityID", user.getCommunityID());
 			jsonUser.accumulate("firstName", user.getFirstName());
 			jsonUser.accumulate("lastName", user.getLastName());
@@ -64,7 +66,7 @@ public class UserJSONParser {
 			jsonUser.accumulate("suburb", user.getSuburb());
 			jsonUser.accumulate("city", user.getCity());
 			jsonUser.accumulate("streetNumber", user.getStreetAddress());
-			
+
 		}
 
 		catch (JSONException e) {
@@ -76,5 +78,21 @@ public class UserJSONParser {
 
 		return json;
 
+	}
+
+	// Put user data to database
+	public static String PUTUser(ArrayMap<String, String> fields) {
+		String json = "";
+		JSONObject jsonUser = new JSONObject();
+		try {
+			for (int i = 0; i < fields.size(); i++) {
+				jsonUser.accumulate(fields.keyAt(i), fields.valueAt(i));
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		json = "{\"person_info\":" + jsonUser.toString() + "}";
+		return json;
 	}
 }

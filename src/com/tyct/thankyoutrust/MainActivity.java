@@ -1,4 +1,4 @@
-//Home Screen/Message Board
+//Home Screen/Comment Board
 package com.tyct.thankyoutrust;
 
 import java.util.ArrayList;
@@ -22,10 +22,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.tyct.thankyoutrust.model.Message;
-import com.tyct.thankyoutrust.model.Users;
-import com.tyct.thankyoutrust.parsers.MessageJSONParser;
-import com.tyct.thankyoutrust.parsers.UsersJSONParser;
+import com.tyct.thankyoutrust.model.Comment;
+import com.tyct.thankyoutrust.model.User;
+import com.tyct.thankyoutrust.parsers.CommentJSONParser;
+import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
 public class MainActivity extends ListActivity {
 
@@ -34,25 +34,24 @@ public class MainActivity extends ListActivity {
 	List<MyTask> tasks;
 	List<damnUserTask> userTask;
 	List<PostTask> posttasks;
-	Message messageEntity;
-	
-	List<Message> messageList;
-	List<Users> userList;
-	
+	Comment commentEntity;
+
+	List<Comment> commentList;
+	List<User> userList;
+
 	// User Session Manager Class
-    SessionManager session;
-    
-    
-    boolean admin = false;
+	SessionManager session;
+
+	boolean admin = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		 // Session class instance
-        session = new SessionManager(getApplicationContext());
-		
+
+		// Session class instance
+		session = new SessionManager(getApplicationContext());
+
 		// Progress Bar
 		pb = (ProgressBar) findViewById(R.id.progressBar1);
 		pb.setVisibility(View.INVISIBLE);
@@ -65,79 +64,77 @@ public class MainActivity extends ListActivity {
 		// Button to post to comments
 		Button postCommentButton = (Button) findViewById(R.id.button_Post_Comments);
 		postCommentButton.setOnClickListener(new postCommentHandler());
-		
+
 		// Check user login (this is the important point)
-        // If User is not logged in , This will redirect user to LoginActivity
-        // and finish current activity from activity stack.
-        if(session.checkLogin())
-            finish();
-         
-        // get user data from session
-        HashMap<String, String> userStored = session.getUserDetails();
-        
-        // get email
-        String userEmail = userStored.get("email");
-        
-        // get user id
-        int userId = Integer.parseInt(userStored.get("id"));
-        
-     // get admin 
-        int adminStatus = Integer.parseInt(userStored.get("admin"));
-        
-        //set admin 
-        if(adminStatus == 1)
-        {
-        	admin = true;
-        }
-        Toast.makeText(this, userEmail + ", usid: " + userId + " admin = " + admin, Toast.LENGTH_LONG).show();
+		// If User is not logged in , This will redirect user to LoginActivity
+		// and finish current activity from activity stack.
+		if (session.checkLogin())
+			finish();
+
+		// get user data from session
+		HashMap<String, String> userStored = session.getUserDetails();
+
+		// get email
+		String userEmail = userStored.get("email");
+
+		// get user id
+		int userId = Integer.parseInt(userStored.get("id"));
+
+		// get admin
+		int adminStatus = Integer.parseInt(userStored.get("admin"));
+
+		// set admin
+		if (adminStatus == 1) {
+			admin = true;
+		}
+		Toast.makeText(this,
+				userEmail + ", usid: " + userId + " admin = " + admin,
+				Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if(!admin)
-		{
+		if (!admin) {
 			getMenuInflater().inflate(R.menu.admin_all_users, menu);
 		}
-		
-		if(admin)
-		{
-		getMenuInflater().inflate(R.menu.main, menu);
+
+		if (admin) {
+			getMenuInflater().inflate(R.menu.main, menu);
 		}
 		return true;
 	}
-	
+
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
-	{
+	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent goTo = new Intent();
-		switch(item.getItemId()) {
-			case R.id.action_projects:
-				goTo = new Intent(MainActivity.this, Projects.class);
-				startActivity(goTo);
-				return true;
-			case R.id.action_home:
-				finish();
-				goTo = getIntent();
-				startActivity(goTo);
-				return true;
-			case R.id.admin:
-				goTo = new Intent(MainActivity.this, AdminHomePage.class);
-				startActivity(goTo);
-				return true;
-			case R.id.action_profile:
-				goTo = new Intent(MainActivity.this, ProfileActivity.class);
-				startActivity(goTo);
-				return true;
-			case R.id.action_about_us:
-				goTo = new Intent(MainActivity.this, AboutUs.class);
-				startActivity(goTo);
-				return true;
-			case R.id.action_logout:
-				session.logoutUser();
-				finish();
-				return true;
-			default:
-				return super.onOptionsItemSelected(item);
+		switch (item.getItemId()) {
+		case R.id.action_projects:
+			goTo = new Intent(MainActivity.this, Projects.class);
+			startActivity(goTo);
+			return true;
+		case R.id.action_home:
+			finish();
+			goTo = getIntent();
+			startActivity(goTo);
+			return true;
+		case R.id.admin:
+			goTo = new Intent(MainActivity.this, AdminHomePage.class);
+			startActivity(goTo);
+			return true;
+		case R.id.action_profile:
+			goTo = new Intent(MainActivity.this, ProfileActivity.class);
+			startActivity(goTo);
+			return true;
+		case R.id.action_about_us:
+			goTo = new Intent(MainActivity.this, AboutUs.class);
+			startActivity(goTo);
+			return true;
+		case R.id.action_logout:
+			session.logoutUser();
+			finish();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -150,16 +147,16 @@ public class MainActivity extends ListActivity {
 		damnUserTask task = new damnUserTask();
 		task.execute(uri);
 	}
-	
+
 	protected void updateDisplay() {
-		// get list view from MessageAdapter
+		// get list view from CommentAdapter
 		MessageAdapter adapter = new MessageAdapter(this,
-				R.layout.item_message, messageList, userList);
+				R.layout.item_message, commentList, userList);
 		setListAdapter(adapter);
 
 	}
-	
-	public void display(){
+
+	public void display() {
 		if (isOnline()) {
 			requestData("http://gb3it.pickworth.info:3000/comments");
 		} else {
@@ -167,8 +164,8 @@ public class MainActivity extends ListActivity {
 					.show();
 		}
 	}
-	
-	public void userDisplay(){
+
+	public void userDisplay() {
 		if (isOnline()) {
 			requestUserData("http://gb3it.pickworth.info:3000/person_infos");
 		} else {
@@ -176,7 +173,7 @@ public class MainActivity extends ListActivity {
 					.show();
 		}
 	}
-		
+
 	// Connect to database
 	protected boolean isOnline() {
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -188,7 +185,7 @@ public class MainActivity extends ListActivity {
 		}
 	}
 
-	// Async task for the Message board to display
+	// Async task for the Comment board to display
 	private class MyTask extends AsyncTask<String, String, String> {
 
 		@Override
@@ -212,7 +209,7 @@ public class MainActivity extends ListActivity {
 		@Override
 		protected void onPostExecute(String result) {
 
-			messageList = MessageJSONParser.parseFeed(result);
+			commentList = CommentJSONParser.parseFeed(result);
 
 			tasks.remove(this);
 			if (tasks.size() == 0) {
@@ -227,48 +224,47 @@ public class MainActivity extends ListActivity {
 		}
 
 	}
-	
-	// Async task for the Message board to display
-		private class damnUserTask extends AsyncTask<String, String, String> {
 
-			@Override
-			protected void onPreExecute() {
-				// updateDisplay("Starting task");
+	// Async task for the Comment board to display
+	private class damnUserTask extends AsyncTask<String, String, String> {
 
-//				if (userTask.size() == 0) {
-//					pb.setVisibility(View.VISIBLE);
-//				}
-//				userTask.add(this);
-			}
+		@Override
+		protected void onPreExecute() {
+			// updateDisplay("Starting task");
 
-			@Override
-			protected String doInBackground(String... params) {
+			// if (userTask.size() == 0) {
+			// pb.setVisibility(View.VISIBLE);
+			// }
+			// userTask.add(this);
+		}
 
-				String content = HttpManager.getData(params[0]);
-				return content;
+		@Override
+		protected String doInBackground(String... params) {
 
-			}
-
-			@Override
-			protected void onPostExecute(String result) {
-
-				userList = UsersJSONParser.parseFeed(result);
-				updateDisplay();
-
-				
-//				userTask.remove(this);
-//				if (userTask.size() == 0) {
-//					pb.setVisibility(View.INVISIBLE);
-//				}
-
-			}
-
-			@Override
-			protected void onProgressUpdate(String... values) {
-				// updateDisplay(values[0]);
-			}
+			String content = HttpManager.getData(params[0]);
+			return content;
 
 		}
+
+		@Override
+		protected void onPostExecute(String result) {
+
+			userList = UserJSONParser.parseFeed(result);
+			updateDisplay();
+
+			// userTask.remove(this);
+			// if (userTask.size() == 0) {
+			// pb.setVisibility(View.INVISIBLE);
+			// }
+
+		}
+
+		@Override
+		protected void onProgressUpdate(String... values) {
+			// updateDisplay(values[0]);
+		}
+
+	}
 
 	// Class to handle posting comments
 	public class postCommentHandler implements OnClickListener {
@@ -281,54 +277,49 @@ public class MainActivity extends ListActivity {
 			String commentString = commentData.getText().toString();
 
 			// get user data from session
-	        HashMap<String, String> userStored = session.getUserDetails();	        
-	        
-	        // get info id
-	        int userID = Integer.parseInt(userStored.get("id"));
+			HashMap<String, String> userStored = session.getUserDetails();
 
-			// Postal Code info (hard coded for now, but will need to get logged
-			// in person postalcode)
-			int postalInfo = 9001;
+			// get info id
+			int userID = Integer.parseInt(userStored.get("id"));
 
 			// If statement, checks to make sure that user has put something
 			// into the edit text field
 			if (commentString.equals("")) {
 				// If Edit Text is empty it will show a toast
 				Toast.makeText(MainActivity.this,
-						"You will need to write a message to post",
+						"You will need to write a comment to post",
 						Toast.LENGTH_LONG).show();
 			} else {
-				// If Edit Text is not empty it will Post to the new message to
+				// If Edit Text is not empty it will Post to the new comment to
 				// the database
-				
-				//TODO Debugging, DO NOT LEAVE THIS TOAST HERE
-				Toast.makeText(MainActivity.this,
-						"Posted",
-						Toast.LENGTH_LONG).show();
-				// Create new Message Object, then pass data into sets
-				messageEntity = new Message();
-				// Passes the infoID
-				messageEntity.setInfoID(userID);
-				// Passes the Postal Code
-				messageEntity.setPostalCode(postalInfo);
-				// Passes the comment
-				messageEntity.setComment(commentString);
 
-				// Calls the PostTask Method, and posts the messageEntity
+				// TODO Debugging, DO NOT LEAVE THIS TOAST HERE
+				Toast.makeText(MainActivity.this, "Posted", Toast.LENGTH_LONG)
+						.show();
+				// Create new Comment Object, then pass data into sets
+				commentEntity = new Comment();
+				// Passes the infoID
+				commentEntity.setUserID(userID);
+				// Passes the Postal Code
+				commentEntity.setCommunityID(1);//TODO fix this
+				// Passes the comment
+				commentEntity.setComment(commentString);
+
+				// Calls the PostTask Method, and posts the commentEntity
 				posttasks = new ArrayList<>();
 				PostTask task = new PostTask();
 				task.execute();
 				// Sets the Edit Text field to empty
 				commentData.setText("");
-				
-				//refresh the display for the list view.
+
+				// refresh the display for the list view.
 				display();
 				userDisplay();
 			}
 			// Debugging Activity
-			// String messageEntityString =
-			// MessageJSONParser.POSTMessage(messageEntity);
-			// Toast.makeText(MainActivity.this, messageEntityString,
+			// String commentEntityString =
+			// CommentJSONParser.POSTComment(commentEntity);
+			// Toast.makeText(MainActivity.this, commentEntityString,
 			// Toast.LENGTH_LONG).show();
 
 		}
@@ -337,8 +328,8 @@ public class MainActivity extends ListActivity {
 
 	// Handles the posting side
 	private class PostTask extends AsyncTask<String, String, String> {
-		String messageEntityString = MessageJSONParser
-				.POSTMessage(messageEntity);
+		String commentEntityString = CommentJSONParser
+				.POSTComment(commentEntity);
 
 		@Override
 		protected void onPreExecute() {
@@ -353,15 +344,15 @@ public class MainActivity extends ListActivity {
 		@Override
 		protected String doInBackground(String... params) {
 			HttpManager.postData("http://gb3it.pickworth.info:3000/comments",
-					messageEntityString);
-			String result = "Message Posted";
+					commentEntityString);
+			String result = "Comment Posted";
 			return result;
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
 
-			// String messageResult = (result);
+			// String commentResult = (result);
 
 			posttasks.remove(this);
 			if (tasks.size() == 0) {

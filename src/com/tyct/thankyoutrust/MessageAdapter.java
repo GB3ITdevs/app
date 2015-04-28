@@ -15,15 +15,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.tyct.thankyoutrust.model.Message;
-import com.tyct.thankyoutrust.model.Users;
+import com.tyct.thankyoutrust.model.Comment;
+import com.tyct.thankyoutrust.model.User;
 
-public class MessageAdapter extends ArrayAdapter<Message> {
+public class MessageAdapter extends ArrayAdapter<Comment> {
 
 	Context context;
-	List<Users> userList;
+	List<User> userList;
 
-	public MessageAdapter(Context contextPassed, int resource, List<Message> objects, List<Users> o1) {
+	public MessageAdapter(Context contextPassed, int resource, List<Comment> objects, List<User> o1) {
 		super(contextPassed, resource, objects);
 		
 		context = contextPassed;
@@ -32,7 +32,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 	
 	//Get Item and reverse order it
 	@Override
-	public Message getItem(int position)
+	public Comment getItem(int position)
 	{
 	    return super.getItem(getCount() - 1 - position);
 	}
@@ -46,9 +46,9 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		View view = inflater.inflate(R.layout.item_message, parent, false);
 
 		//Reverse order the messageList.
-		Message message = getItem(position);
+		Comment message = getItem(position);
 		//Old Code that worked fine but did not reverse order anything
-		//Message message = messageList.get(position);
+		//Comment message = messageList.get(position);
 		
 		//Text View that displays the comments
 		TextView tvComment = (TextView) view.findViewById(R.id.tvComment);
@@ -83,9 +83,9 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 		String displayName = "";
 		
 		//for users in the userlist where user info id equals message get name
-		for(Users user : userList)
+		for(User user : userList)
 		{
-			if(user.getInfoID()==message.getInfoID())
+			if(user.getUserID()==message.getUserID())
 			{
 				//get last name from user list
 				String lastName = user.getLastName();

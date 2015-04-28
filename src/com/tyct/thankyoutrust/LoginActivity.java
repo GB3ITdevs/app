@@ -35,14 +35,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tyct.thankyoutrust.model.ContactInfo;
-import com.tyct.thankyoutrust.model.UserID;
+import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.model.AdminID;
-import com.tyct.thankyoutrust.model.Users;
 import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
-import com.tyct.thankyoutrust.parsers.ContactInfoJSONParser;
-import com.tyct.thankyoutrust.parsers.UserIDJSONParser;
-import com.tyct.thankyoutrust.parsers.UsersJSONParser;
+import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
 /**
  * A login screen that offers login via email/password.
@@ -51,14 +47,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 	// Async Tasks
 	List<UsersTask> tasks;
-	List<ContactTask> contactTask;
-	List<UsidTask> usidTask;
 	List<AdminTask> adminTask;
 
 	// retrieved data lists
-	List<Users> userList;
-	List<UserID> usidList;
-	List<ContactInfo> contactList;
+	List<User> userList;
 	List<AdminID> adminList;
 
 	// User Session Manager Class
@@ -66,12 +58,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 	// User data
 	int loggedInUserId;
-	int contactId;
-	int userId;
 	String uName;
 	String uSurname;
 	String uCity;
 	String uSuburb;
+	String uAddress;
 	String uPostcode;
 	String uAdmin;
 
@@ -125,13 +116,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		mProgressView = findViewById(R.id.login_progress);
 
 		tasks = new ArrayList<>();
-		contactTask = new ArrayList<>();
-		usidTask = new ArrayList<>();
 		adminTask = new ArrayList<>();
 
 		personInfo();
-		userInfo();
-		contactInfo();
 		adminInfo();
 	}
 
@@ -180,7 +167,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		}
 
 		// Check if user entered email address exists in database.
-		for (Users user : userList) {
+		for (User user : userList) {
 			if (user.getEmail().equals(email)) {
 				// Account exists.
 				userExists = true;
@@ -374,16 +361,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		UsersTask task = new UsersTask();
 		task.execute(uri);
 	}
-
-	private void requestUserData(String uri) {
-		UsidTask task = new UsidTask();
-		task.execute(uri);
-	}
-
-	private void requestContactData(String uri) {
-		ContactTask task = new ContactTask();
-		task.execute(uri);
-	}
 	
 	private void requestAdminData(String uri) {
 		AdminTask task = new AdminTask();
@@ -393,24 +370,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	public void personInfo() {
 		if (isOnline()) {
 			requestData("http://gb3it.pickworth.info:3000/person_infos");
-		} else {
-			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
-					.show();
-		}
-	}
-
-	public void userInfo() {
-		if (isOnline()) {
-			requestUserData("http://gb3it.pickworth.info:3000/users");
-		} else {
-			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
-					.show();
-		}
-	}
-
-	public void contactInfo() {
-		if (isOnline()) {
-			requestContactData("http://gb3it.pickworth.info:3000/contact_infos");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -450,49 +409,26 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 				return false;
 			}
 
-			for (Users user : userList) {
+			for (User user : userList) {
 				if (user.getEmail().equals(mEmail)) {
 					// if the password matches, retrieve further user info
 					if (user.getPassword().equals(mPassword)) {
-						loggedInUserId = user.getInfoID();
+						loggedInUserId = user.getUserID();
 						uName = user.getFirstName();
 						uSurname = user.getLastName();
-
-						for (UserID usid : usidList) {
-							if (usid.getInfoID() == loggedInUserId) {
-								// get userID
-								userId = usid.getUserID();
-								// get contactID
-								contactId = usid.getContactID();
-								break;
-							}
-						}
+						uAddress = user.getStreetAddress();
+						uSuburb = user.getSuburb();
+						uCity = user.getCity();
+						uPostcode = Integer.toString(user.getPostalCode());
 						
 						//Admin 
 						//If info id is in admin page make string a 1, otherwise a 0
 						uAdmin = "0";
 						for (AdminID adm : adminList) {
-							if(adm.getInfoID()==loggedInUserId){
+							if(adm.getUserID()==loggedInUserId){
 								uAdmin ="1";
-							}
-							
+							}					
 						}
-						
-//TODO fix this shit
-//						for (ContactInfo ci : contactList) {
-//							if (ci.getContactID() == loggedInUserId) {
-//								// get address
-//								// TODO uAddress = ci.getAddress();
-//								// get suburb
-//								uSuburb = ci.getSuburb();
-//								// get city
-//								uCity = ci.getCity();
-//								// get postcode
-//								uPostcode = Integer
-//										.toString(ci.getPostalCode());
-//								break;
-//							}
-//						}
 					}
 					return user.getPassword().equals(mPassword);
 				}
@@ -545,7 +481,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 		@Override
 		protected void onPostExecute(String result) {
-			userList = UsersJSONParser.parseFeed(result);
+			userList = UserJSONParser.parseFeed(result);
 			tasks.remove(this);
 		}
 
@@ -556,65 +492,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 	}
 
-	/**
-	 * Represents an asynchronous task used to retrieve contact data from
-	 * contact info.
-	 */
-	private class ContactTask extends AsyncTask<String, String, String> {
-
-		@Override
-		protected void onPreExecute() {
-			contactTask.add(this);
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			String content = HttpManager.getData(params[0]);
-			return content;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			contactList = ContactInfoJSONParser.parseFeed(result);
-			contactTask.remove(this);
-		}
-
-		@Override
-		protected void onProgressUpdate(String... values) {
-			// updateDisplay(values[0]);
-		}
-
-	}
-
-	/**
-	 * Represents an asynchronous task used to retrieve user id data from users
-	 */
-	private class UsidTask extends AsyncTask<String, String, String> {
-
-		@Override
-		protected void onPreExecute() {
-			usidTask.add(this);
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			String content = HttpManager.getData(params[0]);
-			return content;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			usidList = UserIDJSONParser.parseFeed(result);
-			usidTask.remove(this);
-		}
-
-		@Override
-		protected void onProgressUpdate(String... values) {
-			// updateDisplay(values[0]);
-		}
-
-	}
-	
 	/**
 	 * Represents an asynchronous task used to retrieve admin data from
 	 * contact info.

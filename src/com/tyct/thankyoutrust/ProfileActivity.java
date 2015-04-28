@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.tyct.thankyoutrust.model.Users;
-import com.tyct.thankyoutrust.parsers.UsersJSONParser;
+import com.tyct.thankyoutrust.model.User;
+import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -34,7 +34,7 @@ public class ProfileActivity extends Activity {
 	List<UsersTask> tasks;
 
 	// retrieved user list
-	List<Users> userList;
+	List<User> userList;
 
 	// Session Manager Class
 	SessionManager session;
@@ -294,8 +294,8 @@ public class ProfileActivity extends Activity {
 						String pw = eiPassw.getText().toString();
 
 						// Check current password is correct
-						for (Users user : userList) {
-							if (user.getInfoID() == (infoId)) {
+						for (User user : userList) {
+							if (user.getUserID() == (infoId)) {
 								// Check if the current password matches stored
 								// password
 								if (!user.getPassword().equals(pw)) {
@@ -476,8 +476,8 @@ public class ProfileActivity extends Activity {
 						String newPwCheck = tNewPwCheck.getText().toString();
 
 						// Check current password is correct
-						for (Users user : userList) {
-							if (user.getInfoID() == (infoId)) {
+						for (User user : userList) {
+							if (user.getUserID() == (infoId)) {
 								// Check if the current password matches stored
 								// password
 								if (!user.getPassword().equals(pw)) {
@@ -571,7 +571,7 @@ public class ProfileActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			userList = UsersJSONParser.parseFeed(result);
+			userList = UserJSONParser.parseFeed(result);
 			tasks.remove(this);
 		}
 	}
@@ -595,7 +595,7 @@ public class ProfileActivity extends Activity {
 			user.put("firstName", mFName);
 			user.put("lastName", mLName);
 			user.put("email", mEmail);
-			mInfo = UsersJSONParser.PUTUsers(user);
+			mInfo = UserJSONParser.PUTUser(user);
 		}
 
 		@Override
@@ -632,7 +632,7 @@ public class ProfileActivity extends Activity {
 		public UpdatePwTask(String newPw) {
 			ArrayMap<String, String> user = new ArrayMap<String, String>();
 			user.put("password", newPw);
-			mPassword = UsersJSONParser.PUTUsers(user);
+			mPassword = UserJSONParser.PUTUser(user);
 		}
 
 		@Override

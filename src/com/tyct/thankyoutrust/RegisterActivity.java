@@ -3,8 +3,8 @@ package com.tyct.thankyoutrust;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tyct.thankyoutrust.model.Users;
-import com.tyct.thankyoutrust.parsers.UsersJSONParser;
+import com.tyct.thankyoutrust.model.User;
+import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -43,9 +43,9 @@ import android.widget.Toast;
 public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 	List<PostTask> tasks;
-	Users newUser;
+	User newUser;
 	
-	List<Users> userList;
+	List<User> userList;
 
 	/**
 	 * Keep track of the registration task to ensure we can cancel it if requested.
@@ -182,7 +182,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 		}
 		
 		// Check if user entered email address exists in database.
-		for (Users user : userList) {
+		for (User user : userList) {
 			if (user.getEmail().equals(email)) {
 				// Account exists.
 				userExists = true;
@@ -202,7 +202,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 			focusView.requestFocus();
 		} else {
 			//Create new User Object, passing the data into sets
-			newUser = new Users();
+			newUser = new User();
 			newUser.setFirstName(fName);
 			newUser.setLastName(lName);
 			newUser.setEmail(email);
@@ -371,7 +371,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 	 */
 	public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
-		String newUserString = UsersJSONParser.POSTUsers(newUser);
+		String newUserString = UserJSONParser.POSTUser(newUser);
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
@@ -429,7 +429,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 		
 		@Override
 		protected void onPostExecute(String result) {			
-			userList = UsersJSONParser.parseFeed(result);
+			userList = UserJSONParser.parseFeed(result);
 			tasks.remove(this);
 
 		}
