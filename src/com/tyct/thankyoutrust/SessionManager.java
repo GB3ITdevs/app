@@ -20,7 +20,7 @@ public class SessionManager {
 	// Shared pref mode
 	int PRIVATE_MODE = 0;
 
-	// Sharedpref file name
+	// Shared pref file name
 	private static final String PREF_NAME = "UserInfo";
 
 	// All Shared Preferences Keys
@@ -51,6 +51,9 @@ public class SessionManager {
 	// Admin
 	public static final String KEY_ADMIN = "admin";
 
+	// Community ID
+	public static final String KEY_COMMUNITY = "communityID";
+
 	// Constructor
 	public SessionManager(Context context) {
 		this._context = context;
@@ -62,8 +65,8 @@ public class SessionManager {
 	 * Create login session
 	 * */
 	public void createUserLoginSession(int id, String email, String name,
-			String surname, String suburb, String city, String postcode,
-			String admin) {
+			String surname, String address, String suburb, String city,
+			String postcode, String admin, String communityID) {
 		// Storing login value as TRUE
 		editor.putBoolean(IS_USER_LOGIN, true);
 
@@ -76,15 +79,17 @@ public class SessionManager {
 		editor.putString(KEY_NAME, name);
 		editor.putString(KEY_SURNAME, surname);
 		// Store address in pref
-		// TODO editor.putString(KEY_ADDR, address);
+		editor.putString(KEY_ADDR, address);
 		// Store city in pref
 		editor.putString(KEY_CITY, city);
 		// Store suburb in pref
 		editor.putString(KEY_SUB, suburb);
 		// Store postcode in pref
 		editor.putString(KEY_PCODE, postcode);
-		// Store padmin in pref
+		// Store admin in pref
 		editor.putString(KEY_ADMIN, admin);
+		// Store community id in pref
+		editor.putString(KEY_COMMUNITY, communityID);
 
 		// commit changes
 		editor.commit();
@@ -149,7 +154,7 @@ public class SessionManager {
 		user.put(KEY_SURNAME, pref.getString(KEY_SURNAME, null));
 
 		// user address
-		// TODO user.put(KEY_ADDR, pref.getString(KEY_ADDR, null));
+		user.put(KEY_ADDR, pref.getString(KEY_ADDR, null));
 
 		// user city
 		user.put(KEY_CITY, pref.getString(KEY_CITY, null));
@@ -162,6 +167,9 @@ public class SessionManager {
 
 		// user admin
 		user.put(KEY_ADMIN, pref.getString(KEY_ADMIN, null));
+
+		// user community
+		user.put(KEY_COMMUNITY, pref.getString(KEY_COMMUNITY, null));
 
 		// return user
 		return user;

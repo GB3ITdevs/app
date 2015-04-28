@@ -35,9 +35,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tyct.thankyoutrust.model.Community;
 import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.model.AdminID;
 import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
+import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
 import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
 /**
@@ -65,6 +67,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	String uAddress;
 	String uPostcode;
 	String uAdmin;
+	String uCommunityID;
 
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -420,12 +423,13 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 						uSuburb = user.getSuburb();
 						uCity = user.getCity();
 						uPostcode = Integer.toString(user.getPostalCode());
+						uCommunityID = Integer.toString(user.getCommunityID());
 						
 						//Admin 
 						//If info id is in admin page make string a 1, otherwise a 0
 						uAdmin = "0";
 						for (AdminID adm : adminList) {
-							if(adm.getUserID()==loggedInUserId){
+							if(adm.getUserID() == loggedInUserId){
 								uAdmin ="1";
 							}					
 						}
@@ -444,7 +448,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 			if (success) {
 				session.createUserLoginSession(loggedInUserId, mEmail, uName,
-						uSurname, uSuburb, uCity, uPostcode, uAdmin);
+						uSurname, uAddress, uSuburb, uCity, uPostcode, uAdmin, uCommunityID);
 				Intent i = new Intent(LoginActivity.this, HomeActivity.class);
 				startActivity(i);
 				finish();
@@ -484,12 +488,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			userList = UserJSONParser.parseFeed(result);
 			tasks.remove(this);
 		}
-
-		@Override
-		protected void onProgressUpdate(String... values) {
-			// updateDisplay(values[0]);
-		}
-
 	}
 
 	/**
@@ -514,11 +512,5 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			adminList = AdminIDJSONParser.parseFeed(result);
 			adminTask.remove(this);
 		}
-
-		@Override
-		protected void onProgressUpdate(String... values) {
-			// updateDisplay(values[0]);
-		}
-
 	}
 }
