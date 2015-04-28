@@ -53,13 +53,11 @@ public class AdminAllUsers extends Activity {
 
 	String[] userNames;
 	String selectedItem = "";
-	int[] UsersInfoId;
-	int selectedInfoId;
-	int adminid;
+	int[] userIds;
 	int selectedUserId;
-	int selectedContactId;
+	int adminid;
 	AdminID adminEntity;
-	int[] projectRatingIdDeleteList;
+	
 	// Array for Admin Options
 	String[] optionsArray = { "Set as admin", "Remove as admin", "Delete user" };
 
@@ -126,7 +124,7 @@ public class AdminAllUsers extends Activity {
 
 	// Gets the clicked users infoId
 	public int getInfoId(int positionClicked) {
-		int infoID = UsersInfoId[positionClicked];
+		int infoID = userIds[positionClicked];
 		return infoID;
 
 	}
@@ -135,12 +133,12 @@ public class AdminAllUsers extends Activity {
 	public void setUserList(List<User> userList) {
 
 		userNames = new String[userList.size()];
-		UsersInfoId = new int[userList.size()];
+		userIds = new int[userList.size()];
 		int i = 0;
 		// Add each user name from the project list to the array of strings
 		for (User user : userList) {
 			userNames[i] = user.getFirstName() + " " + user.getLastName();
-			UsersInfoId[i] = user.getUserID();
+			userIds[i] = user.getUserID();
 			i++;
 		}
 
@@ -171,7 +169,7 @@ public class AdminAllUsers extends Activity {
 	// Method that checks if phone is online
 	public void display() {
 		if (isOnline()) {
-			requestData("http://gb3it.pickworth.info:3000/person_infos");
+			requestData("http://gb3it.pickworth.info:3000/users");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -371,17 +369,11 @@ public class AdminAllUsers extends Activity {
 
 	// Handles the posting side
 	private class DeleteUserTask extends AsyncTask<String, String, String> {
-		// user/person_infos string
-		String personInfosUriString = "http://gb3it.pickworth.info:3000/person_infos/";
-
 		// ratings string
 		String ratingUriString = "http://gb3it.pickworth.info:3000/ratings/";
 
 		// user Id string
 		String userIdUriString = "http://gb3it.pickworth.info:3000/users/";
-
-		// comments string
-		String contactInfosUriString = "http://gb3it.pickworth.info:3000/contact_infos/";
 
 		int num = 0;
 
@@ -392,9 +384,7 @@ public class AdminAllUsers extends Activity {
 
 		@Override
 		protected String doInBackground(String... params) {
-			HttpManager.deleteData(personInfosUriString + selectedInfoId);
 			HttpManager.deleteData(userIdUriString + selectedUserId);
-			HttpManager.deleteData(contactInfosUriString + selectedContactId);
 
 			// for (int i=0; i<projectRatingIdDeleteList.length; i++)
 			// {
@@ -470,7 +460,7 @@ public class AdminAllUsers extends Activity {
 		// if selected item is same as optionArray[0] (Set As admin) then add as
 		// an admin
 		if (selectedItem == optionsArray[0]) {
-			addAdmin(selectedInfoId);
+			addAdmin(selectedUserId);
 		}
 		// if selected item is same as optionArray[1] (Remove As admin) then
 		// delete admin status
@@ -486,12 +476,13 @@ public class AdminAllUsers extends Activity {
 
 	public void selectRatingsToDelete() {
 		prtask = new ArrayList<>();
+		int[] projectRatingIdDeleteList;
 
 		projectRatingIdDeleteList = new int[prList.size()];
 		int i = 0;
 		// Add each user name from the project list to the array of strings
 		for (ProjectRating pr : prList) {
-			if (pr.getUserID() == selectedInfoId) {
+			if (pr.getUserID() == selectedUserId) {
 
 				projectRatingIdDeleteList[i] = pr.getRatingID();
 				i++;
@@ -505,9 +496,9 @@ public class AdminAllUsers extends Activity {
 
 		selectRatingsToDelete();
 
-		deleteusertask = new ArrayList<>();
-		DeleteUserTask task = new DeleteUserTask();
-		task.execute();
+//		deleteusertask = new ArrayList<>();
+//		DeleteUserTask task = new DeleteUserTask();
+//		task.execute();
 
 	}
 
@@ -517,7 +508,7 @@ public class AdminAllUsers extends Activity {
 		adminTask = new ArrayList<>();
 
 		for (AdminID adm : adminList) {
-			if (selectedInfoId == adm.getUserID()) {
+			if (selectedUserId == adm.getUserID()) {
 				adminid = adm.getAdminID();
 				deleteAdminTask = new ArrayList<>();
 				DeleteAdminTask task = new DeleteAdminTask();
@@ -534,7 +525,7 @@ public class AdminAllUsers extends Activity {
 		adminTask = new ArrayList<>();
 
 		for (AdminID adm : adminList) {
-			if (selectedInfoId == adm.getUserID()) {
+			if (selectedUserId == adm.getUserID()) {
 				isAdmin = true;
 				Toast.makeText(AdminAllUsers.this, "User is already an admin",
 						Toast.LENGTH_LONG).show();
@@ -563,7 +554,7 @@ public class AdminAllUsers extends Activity {
 
 		public OptionsDialog(String user, int infoId) {
 			selectedUser = user;
-			selectedInfoId = infoId;
+			selectedUserId = infoId;
 		}
 
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
