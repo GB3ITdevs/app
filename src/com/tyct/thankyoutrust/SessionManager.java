@@ -111,6 +111,25 @@ public class SessionManager {
 	}
 
 	/**
+	 * Update address details
+	 * */
+	public void updateAddressDetails(String address, String city,
+			String suburb, String postcode) {
+
+		// Store address in pref
+		editor.putString(KEY_ADDR, address);
+		// Store city in pref
+		editor.putString(KEY_CITY, city);
+		// Store suburb in pref
+		editor.putString(KEY_SUB, suburb);
+		// Store postcode in pref
+		editor.putString(KEY_PCODE, postcode);
+
+		// commit changes
+		editor.commit();
+	}
+
+	/**
 	 * Check login method will check user login status If false it will redirect
 	 * user to login page Else do anything
 	 * */

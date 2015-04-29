@@ -26,8 +26,7 @@
         <LinearLayout
             android:id="@+id/email_register_form"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="vertical" >
 
@@ -35,6 +34,7 @@
                 android:id="@+id/reg_firstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:ems="10"
                 android:hint="@string/prompt_name"
                 android:inputType="textPersonName" >
@@ -61,6 +61,56 @@
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/reg_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:hint="@string/prompt_home_address"
+                android:inputType="textPostalAddress" />
+            
+            <EditText
+                android:id="@+id/reg_suburb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:hint="@string/prompt_suburb"
+                android:inputType="textPostalAddress" />
+            
+            <EditText
+                android:id="@+id/reg_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:hint="@string/prompt_city"
+                android:inputType="textPostalAddress" />
+            
+            <EditText
+                android:id="@+id/reg_postcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:hint="@string/prompt_postcode"
+                android:inputType="textPostalAddress" />
+
+            <TextView
+                android:id="@+id/reg_community"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="@string/select_community"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Spinner
+                android:id="@+id/spinnerCommunity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" />
 
             <EditText
                 android:id="@+id/reg_password"

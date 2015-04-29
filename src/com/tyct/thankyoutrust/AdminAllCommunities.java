@@ -81,7 +81,6 @@ public class AdminAllCommunities extends Activity {
 		task.execute(uri);
 	}
 
-	@SuppressWarnings("null")
 	public void setCommunityList(List<Community> communityList) {
 
 		int i = 0;
