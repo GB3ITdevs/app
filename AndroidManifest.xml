@@ -35,7 +35,7 @@
                 android:value="com.tyct.thankyoutrust.LoginActivity" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".HomeActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask" >
         </activity>
