@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tyct.thankyoutrust.model.AdminID;
+import com.tyct.thankyoutrust.model.PhoneNumber;
 import com.tyct.thankyoutrust.model.ProjectRating;
 import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
+import com.tyct.thankyoutrust.parsers.PhoneNumberJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
 import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
@@ -42,16 +44,14 @@ public class AdminAllUsers extends Activity {
 	List<User> userList;
 	List<AdminID> adminList;
 	List<ProjectRating> prList;
+	List<PhoneNumber> phoneNumberList;
 
-	List<AdminTask> adminTask;
-	List<DeleteAdminTask> deleteAdminTask;
+
 	List<MyTask> tasks;
-	List<PostAdminTask> postadmintask;
+
 	List<DeleteUserTask> deleteusertask;
 	List<ProjectRatingTask> prtask;
-
-	DialogFragment userOptions;
-	OptionsDialog dialog;
+	List<PhoneNumberTask> phoneNumbertask;
 
 	String[] userNames;
 	String selectedItem = "";
@@ -59,9 +59,6 @@ public class AdminAllUsers extends Activity {
 	int selectedUserId;
 	int adminid;
 	AdminID adminEntity;
-	
-	// Array for Admin Options
-	String[] optionsArray = { "Set as admin", "Remove as admin", "Delete user" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,17 +70,14 @@ public class AdminAllUsers extends Activity {
 
 		// start async task
 		tasks = new ArrayList<>();
-		adminTask = new ArrayList<>();
+		//adminTask = new ArrayList<>();
 		prtask = new ArrayList<>();
+		phoneNumbertask = new ArrayList<>();
 
 		// makes connection to database
 		display();
-		adminInfo();
 		projectRatingInfo();
-
-		// setup listview to and call method for clickable
-//		ListView groupAct = (ListView) findViewById(R.id.lstvewuser);
-//		groupAct.setOnItemClickListener(new ListViewClickHandler());
+		phoneNumberInfo();
 		
 		ListView groupAct = (ListView) findViewById(R.id.lstvewuser);
 		groupAct.setOnItemClickListener(new ListViewUserClickHandler());
@@ -161,13 +155,13 @@ public class AdminAllUsers extends Activity {
 		task.execute(uri);
 	}
 
-	private void requestAdminData(String uri) {
-		AdminTask task = new AdminTask();
-		task.execute(uri);
-	}
-
 	private void requestProjectRatingData(String uri) {
 		ProjectRatingTask task = new ProjectRatingTask();
+		task.execute(uri);
+	}
+	
+	private void requestPhoneNumberData(String uri) {
+		PhoneNumberTask task = new PhoneNumberTask();
 		task.execute(uri);
 	}
 
@@ -181,18 +175,18 @@ public class AdminAllUsers extends Activity {
 		}
 	}
 
-	public void adminInfo() {
+	public void projectRatingInfo() {
 		if (isOnline()) {
-			requestAdminData("http://gb3it.pickworth.info:3000/administrators");
+			requestProjectRatingData("http://gb3it.pickworth.info:3000/ratings");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
 		}
 	}
-
-	public void projectRatingInfo() {
+	
+	public void phoneNumberInfo() {
 		if (isOnline()) {
-			requestProjectRatingData("http://gb3it.pickworth.info:3000/ratings");
+			requestPhoneNumberData("http://gb3it.pickworth.info:3000/phone_numbers");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -208,100 +202,6 @@ public class AdminAllUsers extends Activity {
 		} else {
 			return false;
 		}
-	}
-
-	// Handles the posting side
-	private class PostAdminTask extends AsyncTask<String, String, String> {
-		String adminEntityString = AdminIDJSONParser.POST(adminEntity);
-
-		@Override
-		protected void onPreExecute() {
-			postadmintask.add(this);
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			HttpManager.postData(
-					"http://gb3it.pickworth.info:3000/administrators",
-					adminEntityString);
-			String result = "Admin Posted";
-			return result;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-
-			// String messageResult = (result);
-
-			postadmintask.remove(this);
-
-		}
-
-		@Override
-		protected void onProgressUpdate(String... values) {
-		}
-
-	}
-
-	// Handles the posting side
-	private class DeleteAdminTask extends AsyncTask<String, String, String> {
-		String deleteAdmin = "http://gb3it.pickworth.info:3000/administrators/";
-
-		@Override
-		protected void onPreExecute() {
-			deleteAdminTask.add(this);
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			HttpManager.deleteData(deleteAdmin + adminid);
-			String result = "Admin Deleted";
-			return result;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-
-			// String messageResult = (result);
-
-			deleteAdminTask.remove(this);
-
-		}
-
-		@Override
-		protected void onProgressUpdate(String... values) {
-		}
-
-	}
-
-	/**
-    	 * 
-    	 * 
-    	 */
-	private class AdminTask extends AsyncTask<String, String, String> {
-
-		@Override
-		protected void onPreExecute() {
-			adminTask.add(this);
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			String content = HttpManager.getData(params[0]);
-			return content;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			adminList = AdminIDJSONParser.parseFeed(result);
-			adminTask.remove(this);
-		}
-
-		@Override
-		protected void onProgressUpdate(String... values) {
-			// updateDisplay(values[0]);
-		}
-
 	}
 
 	/**
@@ -331,9 +231,7 @@ public class AdminAllUsers extends Activity {
 		protected void onProgressUpdate(String... values) {
 			// updateDisplay(values[0]);
 		}
-
 	}
-
 
 	/**
     	 * 
@@ -420,28 +318,36 @@ public class AdminAllUsers extends Activity {
 		}
 
 	}
+	
+	/**
+	 * 
+	 * 
+	 */
+private class PhoneNumberTask extends AsyncTask<String, String, String> {
 
-	// Handles the ListView clicks
-	public class ListViewClickHandler implements OnItemClickListener {
-
-		@Override
-		public void onItemClick(AdapterView<?> list, View itemview,
-				int posistion, long id) {
-			// Gets the string of what is been clicked on.
-			String clickedItemString = (String) list.getItemAtPosition(
-					posistion).toString();
-			int selectedInfoID = getUserId(posistion);
-			// debugging
-			// Toast.makeText(AdminAllUsers.this, clickedUsersInfoId,
-			// Toast.LENGTH_LONG).show();
-
-			dialog = new OptionsDialog(clickedItemString, selectedInfoID);
-			FragmentManager fm = getFragmentManager();
-			dialog.show(fm, "confirm");
-
-		}
-
+	@Override
+	protected void onPreExecute() {
+		phoneNumbertask.add(this);
 	}
+
+	@Override
+	protected String doInBackground(String... params) {
+		String content = HttpManager.getData(params[0]);
+		return content;
+	}
+
+	@Override
+	protected void onPostExecute(String result) {
+		phoneNumberList = PhoneNumberJSONParser.parseFeed(result);
+		phoneNumbertask.remove(this);
+	}
+
+	@Override
+	protected void onProgressUpdate(String... values) {
+		// updateDisplay(values[0]);
+	}
+
+}
 	
 	// Handles the ListView clicks
 		public class ListViewUserClickHandler implements OnItemClickListener {
@@ -463,7 +369,7 @@ public class AdminAllUsers extends Activity {
 				String city = null;
 				//int communityId;
 			//	String community = null;
-			//	String phoneNumber = null;
+				//String phoneNumber = null;
 				
 				for (User user : userList) {
 					if(user.getUserID() == theUsersID)
@@ -478,13 +384,21 @@ public class AdminAllUsers extends Activity {
 					}
 				}
 				
+//				for(PhoneNumber phone : phoneNumberList)
+//				{
+//					if(theUsersID == phone.getUserID())
+//					{
+//						phoneNumber = phone.getPhoneNumber();
+//					}
+//				}
+//				
 				editor.putString("name", name);
 				editor.putInt("userId", theUsersID);
 				editor.putString("email", email);
 				editor.putString("address", address);
 				editor.putString("suburb", suburb);
 				editor.putString("city", city);
-				//editor.putInt("userId", theUsersID);
+				//editor.putString("phone", phoneNumber);
 				editor.commit();
 				
 				Intent intent = new Intent(AdminAllUsers.this, AdminUsersProfile.class);
@@ -493,44 +407,6 @@ public class AdminAllUsers extends Activity {
 			}
 
 		}
-		
-		
-
-	// Method to return data to the Dialog Fragment
-	public void setDialogResults(boolean result) {
-		dialog.dismiss();
-
-		if (result == true) {
-			// Toast.makeText(AdminAllUsers.this, "Submitted you choice " +
-			// selectedItem, Toast.LENGTH_LONG).show();
-			setOptionIntents();
-		}
-
-		if (result == false) {
-			// Toast.makeText(AdminAllUsers.this, "Cancelled",
-			// Toast.LENGTH_LONG).show();
-		}
-
-	}
-
-	// Method where selected options are implemented
-	public void setOptionIntents() {
-		// if selected item is same as optionArray[0] (Set As admin) then add as
-		// an admin
-		if (selectedItem == optionsArray[0]) {
-			addAdmin(selectedUserId);
-		}
-		// if selected item is same as optionArray[1] (Remove As admin) then
-		// delete admin status
-		if (selectedItem == optionsArray[1]) {
-			deleteAdmin();
-		}
-		// if selected item is same as optionArray[2] (delete user) then delete
-		// user
-		if (selectedItem == optionsArray[2]) {
-			deleteUser();
-		}
-	}
 
 	public void selectRatingsToDelete() {
 		prtask = new ArrayList<>();
@@ -560,122 +436,8 @@ public class AdminAllUsers extends Activity {
 
 	}
 
-	// method to delete an administrator
-	public void deleteAdmin() {
+	
 
-		adminTask = new ArrayList<>();
-
-		for (AdminID adm : adminList) {
-			if (selectedUserId == adm.getUserID()) {
-				adminid = adm.getAdminID();
-				deleteAdminTask = new ArrayList<>();
-				DeleteAdminTask task = new DeleteAdminTask();
-				task.execute();
-			}
-		}
-		Toast.makeText(AdminAllUsers.this, "Admin deleted", Toast.LENGTH_LONG)
-				.show();
-	}
-
-	// method to add an admin
-	public void addAdmin(int infoId) {
-		boolean isAdmin = false;
-		adminTask = new ArrayList<>();
-
-		for (AdminID adm : adminList) {
-			if (selectedUserId == adm.getUserID()) {
-				isAdmin = true;
-				Toast.makeText(AdminAllUsers.this, "User is already an admin",
-						Toast.LENGTH_LONG).show();
-				break;
-			}
-		}
-
-		if (!isAdmin) {
-			adminEntity = new AdminID();
-			adminEntity.setUserID(infoId);
-
-			postadmintask = new ArrayList<>();
-			PostAdminTask task = new PostAdminTask();
-			task.execute();
-			Toast.makeText(AdminAllUsers.this, "Admin added", Toast.LENGTH_LONG)
-					.show();
-		}
-	}
-
-	public class OptionsDialog extends android.app.DialogFragment {
-		// selected user
-		String selectedUser;
-
-		public OptionsDialog() {
-		}
-
-		public OptionsDialog(String user, int infoId) {
-			selectedUser = user;
-			selectedUserId = infoId;
-		}
-
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-			Builder builder = new AlertDialog.Builder(getActivity());
-			// Set Title
-			builder.setTitle("Select Options for " + selectedUser);
-			// Set single choice options (radio buttons)
-			builder.setSingleChoiceItems(optionsArray, 0,
-					new OnMultiChoiceClickListener());
-			// set Submit Button
-			builder.setPositiveButton("Submit", new positiveListener());
-			// set Cancel Button
-			builder.setNegativeButton("Cancel", new negativeListener());
-
-			Dialog dialog = builder.create();
-
-			return dialog;
-
-		}
-
-		public class positiveListener implements
-				DialogInterface.OnClickListener {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				setDialogResults(true);
-			}
-
-		}
-
-		public class negativeListener implements
-				DialogInterface.OnClickListener {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				setDialogResults(false);
-			}
-
-		}
-
-		public class OnMultiChoiceClickListener implements
-				DialogInterface.OnClickListener,
-				android.content.DialogInterface.OnMultiChoiceClickListener {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which,
-					boolean isChecked) {
-				// use this method for checkboxes
-			}
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-
-				// Get selected Item from radio buttons
-				selectedItem = optionsArray[which];
-
-				// debugging
-				// Toast.makeText(AdminAllUsers.this, selectedItem,
-				// Toast.LENGTH_LONG).show();
-			}
-
-		}
-
-	}
+	
+	
 }
