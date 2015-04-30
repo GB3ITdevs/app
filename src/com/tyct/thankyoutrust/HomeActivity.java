@@ -88,7 +88,7 @@ public class HomeActivity extends ListActivity {
 			admin = true;
 		}
 		Toast.makeText(this,
-				userEmail + ", usid: " + userId + " admin = " + admin,
+				userEmail + ", usid: " + userId + " admin = " + adminStatus,
 				Toast.LENGTH_LONG).show();
 	}
 

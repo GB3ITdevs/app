@@ -35,17 +35,17 @@
                 android:value="com.tyct.thankyoutrust.LoginActivity" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".HomeActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask" >
         </activity>
         <activity
             android:name=".Projects"
             android:label="@string/app_name"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.tyct.thankyoutrust.MainActivity" />
+                android:value="com.tyct.thankyoutrust.HomeActivity" />
         </activity>
         <activity
             android:name=".SingleProject"
@@ -80,10 +80,10 @@
         <activity
             android:name=".AdminHomePage"
             android:label="@string/title_activity_admin_home_page"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.tyct.thankyoutrust.MainActivity" />
+                android:value="com.tyct.thankyoutrust.HomeActivity" />
         </activity>
         <activity
             android:name=".AdminAllUsers"
@@ -112,6 +112,14 @@
         <activity
             android:name=".ConfirmDialog"
             android:label="@string/title_activity_confirm_dialog" >
+        </activity>
+        <activity
+            android:name=".AdminUsersProfile"
+            android:label="@string/title_activity_admin_users_profile"
+            android:parentActivityName=".AdminAllUsers" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tyct.thankyoutrust.AdminAllUsers" />
         </activity>
     </application>
 

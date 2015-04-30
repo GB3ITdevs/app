@@ -55,5 +55,7 @@
     <string name="admin_alert_btn_submit">Submit</string>
     <string name="admin_alert_btn_cancel">Cancel</string>
     <string name="title_activity_confirm_dialog">ConfirmDialog</string>
+    <string name="title_activity_admin_users_profile">AdminUsersProfile</string>
+     <string name="options">Options</string>
 
 </resources>

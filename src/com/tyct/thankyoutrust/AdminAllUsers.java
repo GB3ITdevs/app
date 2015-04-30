@@ -19,6 +19,8 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -80,8 +82,11 @@ public class AdminAllUsers extends Activity {
 		projectRatingInfo();
 
 		// setup listview to and call method for clickable
+//		ListView groupAct = (ListView) findViewById(R.id.lstvewuser);
+//		groupAct.setOnItemClickListener(new ListViewClickHandler());
+		
 		ListView groupAct = (ListView) findViewById(R.id.lstvewuser);
-		groupAct.setOnItemClickListener(new ListViewClickHandler());
+		groupAct.setOnItemClickListener(new ListViewUserClickHandler());
 	}
 
 	// Top menu
@@ -123,7 +128,7 @@ public class AdminAllUsers extends Activity {
 	}
 
 	// Gets the clicked users infoId
-	public int getInfoId(int positionClicked) {
+	public int getUserId(int positionClicked) {
 		int infoID = userIds[positionClicked];
 		return infoID;
 
@@ -425,7 +430,7 @@ public class AdminAllUsers extends Activity {
 			// Gets the string of what is been clicked on.
 			String clickedItemString = (String) list.getItemAtPosition(
 					posistion).toString();
-			int selectedInfoID = getInfoId(posistion);
+			int selectedInfoID = getUserId(posistion);
 			// debugging
 			// Toast.makeText(AdminAllUsers.this, clickedUsersInfoId,
 			// Toast.LENGTH_LONG).show();
@@ -437,6 +442,59 @@ public class AdminAllUsers extends Activity {
 		}
 
 	}
+	
+	// Handles the ListView clicks
+		public class ListViewUserClickHandler implements OnItemClickListener {
+
+			@Override
+			public void onItemClick(AdapterView<?> list, View itemview,
+					int posistion, long id) {
+				String name = (String) list.getItemAtPosition(
+						posistion).toString();
+				int theUsersID = getUserId(posistion);
+				
+				SharedPreferences prefs = getSharedPreferences("prefsFile", MODE_PRIVATE);
+				SharedPreferences.Editor editor = prefs.edit();
+				
+				//get User Data
+				String email = null;
+				String address = null;
+				String suburb = null;
+				String city = null;
+				//int communityId;
+			//	String community = null;
+			//	String phoneNumber = null;
+				
+				for (User user : userList) {
+					if(user.getUserID() == theUsersID)
+					{
+					//userName = user.getFirstName() + " " + user.getLastName();
+					email = user.getEmail();
+					address = user.getStreetAddress();
+					suburb = user.getSuburb();
+					city = user.getCity();
+					//communityId = user.getCommunityID();
+					break;
+					}
+				}
+				
+				editor.putString("name", name);
+				editor.putInt("userId", theUsersID);
+				editor.putString("email", email);
+				editor.putString("address", address);
+				editor.putString("suburb", suburb);
+				editor.putString("city", city);
+				//editor.putInt("userId", theUsersID);
+				editor.commit();
+				
+				Intent intent = new Intent(AdminAllUsers.this, AdminUsersProfile.class);
+				startActivity(intent);
+				
+			}
+
+		}
+		
+		
 
 	// Method to return data to the Dialog Fragment
 	public void setDialogResults(boolean result) {
@@ -563,7 +621,7 @@ public class AdminAllUsers extends Activity {
 			// Set Title
 			builder.setTitle("Select Options for " + selectedUser);
 			// Set single choice options (radio buttons)
-			builder.setSingleChoiceItems(optionsArray, -1,
+			builder.setSingleChoiceItems(optionsArray, 0,
 					new OnMultiChoiceClickListener());
 			// set Submit Button
 			builder.setPositiveButton("Submit", new positiveListener());
