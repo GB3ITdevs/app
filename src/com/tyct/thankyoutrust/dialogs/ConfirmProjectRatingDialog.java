@@ -3,15 +3,19 @@ package com.tyct.thankyoutrust.dialogs;
 import com.tyct.thankyoutrust.ProjectDetailsActivity;
 import com.tyct.thankyoutrust.ProjectDetailsFragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
 public class ConfirmProjectRatingDialog extends android.app.DialogFragment
 {
 	ProjectDetailsActivity myActivity;
+	
+	boolean result;
 
 	
 	public ConfirmProjectRatingDialog() {}
@@ -40,7 +44,8 @@ public class ConfirmProjectRatingDialog extends android.app.DialogFragment
 		@Override
 		public void onClick(DialogInterface dialog, int which) 
 		{
-			myActivity.setDialogResults(true);
+			result = true;
+			returnToTarget(result);
 		}
 		
 	}
@@ -51,8 +56,19 @@ public class ConfirmProjectRatingDialog extends android.app.DialogFragment
 		@Override
 		public void onClick(DialogInterface dialog, int which) 
 		{
-			myActivity.setDialogResults(false);
+			result = false;
+			returnToTarget(result);
 		}
 		
+	}
+	
+	private void returnToTarget(boolean result)
+	{
+		ProjectDetailsFragment targetFragment = (ProjectDetailsFragment) getTargetFragment();
+		
+        if (targetFragment != null) 
+        {
+            targetFragment.setDialogResults(result);
+        }
 	}
 }

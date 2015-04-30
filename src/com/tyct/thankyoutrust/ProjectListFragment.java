@@ -1,5 +1,6 @@
 package com.tyct.thankyoutrust;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Fragment;
@@ -18,9 +19,10 @@ import com.tyct.thankyoutrust.model.ProjectRating;
 public class ProjectListFragment extends Fragment {
 	// Declare the class fields
 
+	List<Project> projectListUnsorted;
 	List<Project> projectList;
 	List<ProjectRating> ratings;
-	String[] projectNames;
+	//String[] projectNames;
 	Projects ma;
 	ListView projectListView;
 	private Callbacks mCallbacks = sCallbacks;
@@ -44,33 +46,27 @@ public class ProjectListFragment extends Fragment {
 		View v = inflater.inflate(R.layout.fragment_project_list, container,
 				false);
 
-		//ratings = new List<ProjectRating>();
 		ma = (Projects) getActivity();
-
-		projectNames = ma.getProjects();
+		
+		projectListUnsorted = ma.getProjectList();
+		projectList = new ArrayList<>();
 		
 		ratings = ma.getProjectRatingList();
 		
-		//List<ProjectRating> ratingsUnsorted = ma.getProjectRatingList();
-		//
-		//int index = 0;
-		//
-		//for (ProjectRating projectRating : ratingsUnsorted) 
-		//{
-		//	if(projectRating.getUserID() == ma.userID)
-		//	{
-		//		ratings.set(index, projectRating);
-		//		index ++;
-		//	}
-		//}
+		int userID = ma.userID;
+		int commID = ma.userCommunityID;
+		
+		for (Project project : projectListUnsorted) 
+		{
+			if(project.getCommunityID() == commID)
+			{
+				projectList.add(project);
+			}
+		}
 
 		projectListView = (ListView) v.findViewById(R.id.projectListView);
 
-		//ArrayAdapter<String> projectNamesAdapter = new ArrayAdapter<>(
-		//		getActivity(), android.R.layout.simple_list_item_1,
-		//		projectNames);
-		
-		ProjectItemAdapter projectAdapter = new ProjectItemAdapter(getActivity(), R.layout.item_project, projectNames,ratings, ma.userID);
+		ProjectItemAdapter projectAdapter = new ProjectItemAdapter(getActivity(), R.layout.item_project, projectList ,ratings, userID);
 		
 		
 		OnItemClickListener listItemClick = new onListItemClick();
@@ -87,10 +83,11 @@ public class ProjectListFragment extends Fragment {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			String clickedItem = (String) projectListView.getItemAtPosition(
-					position).toString();
+			Project clickedItem = (Project) projectListView.getItemAtPosition(
+					position);
+			
 			// Project selectedProject = projectList.get(position);
-			ma.changeProjectDetails(clickedItem);
+			ma.changeProjectDetails(clickedItem.getProjectID());
 
 			// mCallbacks.onItemSelected(clickedItem);
 

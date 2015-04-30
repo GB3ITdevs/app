@@ -12,35 +12,38 @@ import android.widget.ArrayAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.ProjectRating;
 
-public class ProjectItemAdapter extends ArrayAdapter<String>
+public class ProjectItemAdapter extends ArrayAdapter<Project>
 {
 
 		Context context;
 		List<ProjectRating> ratingList;
-		String[] projects;
+		List<Project> projects;
 		int userID;
 
-		public ProjectItemAdapter(Context contextPassed, int resource, String[] projectNames, List<ProjectRating> ratings, int loggedInUserID) {
-			super(contextPassed, resource, projectNames);
+		public ProjectItemAdapter(Context contextPassed, int resource, List<Project> projectList, List<ProjectRating> ratings, int loggedInUserID) {
+			super(contextPassed, resource, projectList);
 			
 			context = contextPassed;
 			ratingList = ratings;
-			projects = projectNames;
+			projects = projectList;
 			userID = loggedInUserID;
 		}
 		
 		//Get Item and reverse order it
 		@Override
-		public String getItem(int position)
+		public Project getItem(int position)
 		{
 		    return super.getItem(position);
 		}
 		
 		@SuppressLint("ViewHolder")
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(int position, View convertView, ViewGroup parent) 
+		{
+			Project currentProject = projects.get(position);
 
 			LayoutInflater inflater = 
 					(LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -48,18 +51,16 @@ public class ProjectItemAdapter extends ArrayAdapter<String>
 			
 			//Text View that displays the comments
 			TextView tvProjectName = (TextView) view.findViewById(R.id.tvItemProjectName);
-			tvProjectName.setText(projects[position]);
+			tvProjectName.setText(currentProject.getProjectName());
 
 			RatingBar itemRating = (RatingBar) view.findViewById(R.id.itemRatingBar);
 			
 			//for users in the userlist where user info id equals message get name
 			for(ProjectRating rating : ratingList)
 			{
-				if(rating.getUserID()== userID)
+				if((rating.getUserID()== userID) && (rating.getProjectID() == currentProject.getProjectID()))
 				{
-					itemRating.setIsIndicator(false);
 					itemRating.setRating(rating.getRating());
-					itemRating.setIsIndicator(true);
 				}
 			}
 			

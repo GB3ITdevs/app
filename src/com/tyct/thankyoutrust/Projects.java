@@ -168,11 +168,11 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  	}
  	
  	//Method to replace the list fragment with the details fragment
- 	public void changeProjectDetails(String clickedItem)
+ 	public void changeProjectDetails(int projectID)
  	{
  		for (int i = 0; i < projectList.size(); i++) 
  		{
- 			if(clickedItem == projectList.get(i).getProjectName())
+ 			if(projectID == projectList.get(i).getProjectID())
  			{
  				selectedProject = projectList.get(i);
  			}

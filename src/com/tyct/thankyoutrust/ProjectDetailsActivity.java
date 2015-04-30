@@ -36,6 +36,8 @@ public class ProjectDetailsActivity extends Activity {
 	boolean dialogResult;
 	
 	boolean admin = false;
+	
+	int userID;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,8 @@ public class ProjectDetailsActivity extends Activity {
         {
         	admin = true;
         }
+        
+        userID = Integer.parseInt(userStored.get("id"));
 		
 	}
 
@@ -153,13 +157,6 @@ public class ProjectDetailsActivity extends Activity {
 		return projectRating;
 	}
 
-	public void setDialogResults(boolean returnedDialogResult) {
-		dialogResult = returnedDialogResult;
-	}
-
-	public boolean getDialogResult() {
-		return dialogResult;
-	}
 
 	// Method to retrieve the array of project names for use in the fragments
 	public Project getSelectProject() {

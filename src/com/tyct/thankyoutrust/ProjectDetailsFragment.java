@@ -25,6 +25,9 @@ import com.tyct.thankyoutrust.model.ProjectRating;
 import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
 
 public class ProjectDetailsFragment extends Fragment {
+	
+	private static final int REQ_CODE = 1;
+	
 	// Declare the class fields
 	Project projectDisplayed;
 	ProjectDetailsActivity ma;
@@ -32,7 +35,7 @@ public class ProjectDetailsFragment extends Fragment {
 	List<MyTask> tasks;
 	List<ProjectRating> projectRatingList;
 	ProjectRating projectRating;
-	int infoID;
+	int userID;
 	RatingBar ratingBar;
 
 	SharedPreferences prefs;
@@ -92,11 +95,8 @@ public class ProjectDetailsFragment extends Fragment {
 		tvProjectBlurb.setText(projectDisplayed.getProjectBlurb());
 		ratingBar.setOnRatingBarChangeListener(ratingChangeListener);
 
-		// prefs = ma.prefs;
-		prefs = ma.prefs;
-
 		// Get the logged in user info id from the shared preferences
-		infoID = prefs.getInt("UserInfoId", 0);
+		userID = ma.userID;
 
 		// Check if the project has already been rated and if so make it
 		// unavailable to rate
@@ -131,7 +131,7 @@ public class ProjectDetailsFragment extends Fragment {
 
 	public void checkRetrievedRatings() {
 		for (int i = 0; i < projectRatingList.size(); i++) {
-			if ((projectRatingList.get(i).getUserID() == infoID)
+			if ((projectRatingList.get(i).getUserID() == userID)
 					&& (projectRatingList.get(i).getProjectID() == projectDisplayed
 							.getProjectID())) {
 				ratingBar.setRating(projectRatingList.get(i).getRating());
@@ -142,6 +142,33 @@ public class ProjectDetailsFragment extends Fragment {
 
 	public void setProjectRating() {
 		ma.setProjectRating(projectRating.getRating());
+	}
+	
+	//Method to handle the return from the dialog fragment
+	public void setDialogResults(boolean result)
+	{
+		confirmDialog.dismiss();
+		
+		if (result == true) 
+		{
+			if (isOnline()) 
+			{
+				posttasks = new ArrayList<>();
+				PostTask task = new PostTask();
+				task.execute();
+			} 
+			else 
+			{
+				Toast.makeText(ma, "Network isn't available.",
+						Toast.LENGTH_LONG).show();
+			}
+		} 
+		else 
+		{
+
+			Toast.makeText(ma, "Rating not submitted.",
+					Toast.LENGTH_LONG).show();
+		}
 	}
 
 	// Inner
@@ -160,7 +187,7 @@ public class ProjectDetailsFragment extends Fragment {
 
 				int roundedRating = (int) rating;
 
-				projectRating.setUserID(infoID);
+				projectRating.setUserID(userID);
 
 				projectRating.setProjectID(projectDisplayed.getProjectID());
 				projectRating.setRating(roundedRating);
@@ -169,22 +196,8 @@ public class ProjectDetailsFragment extends Fragment {
 
 				confirmDialog = new ConfirmProjectRatingDialog();
 				FragmentManager fm = getFragmentManager();
+				confirmDialog.setTargetFragment(ProjectDetailsFragment.this, REQ_CODE);
 				confirmDialog.show(fm, "confirm");
-
-				if (ma.getDialogResult() == true) {
-					if (isOnline()) {
-						posttasks = new ArrayList<>();
-						PostTask task = new PostTask();
-						task.execute();
-					} else {
-						Toast.makeText(ma, "Network isn't available.",
-								Toast.LENGTH_LONG).show();
-					}
-				} else {
-
-					Toast.makeText(ma, "Please choose your new rating.",
-							Toast.LENGTH_LONG).show();
-				}
 
 			}
 		}
