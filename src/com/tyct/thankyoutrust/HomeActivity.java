@@ -37,7 +37,11 @@ public class HomeActivity extends ListActivity {
 	Comment commentEntity;
 
 	List<Comment> commentList;
+	List<Comment> commentListUnsorted;
+	
 	List<User> userList;
+	
+	int communityID;
 
 	// User Session Manager Class
 	SessionManager session;
@@ -82,6 +86,9 @@ public class HomeActivity extends ListActivity {
 
 		// get admin
 		int adminStatus = Integer.parseInt(userStored.get("admin"));
+		
+ 		//Retrieve the logged in users communityID
+ 		communityID = Integer.parseInt(userStored.get("communityID"));
 
 		// set admin
 		if (adminStatus == 1) {
@@ -209,7 +216,18 @@ public class HomeActivity extends ListActivity {
 		@Override
 		protected void onPostExecute(String result) {
 
-			commentList = CommentJSONParser.parseFeed(result);
+			commentListUnsorted = CommentJSONParser.parseFeed(result);
+			
+			commentList = new ArrayList<>();
+			
+			for (Comment comment : commentListUnsorted) 
+			{
+				if(comment.getCommunityID() == communityID)
+				{
+					commentList.add(comment);
+				}
+				
+			}
 
 			tasks.remove(this);
 			if (tasks.size() == 0) {
@@ -301,7 +319,7 @@ public class HomeActivity extends ListActivity {
 				// Passes the infoID
 				commentEntity.setUserID(userID);
 				// Passes the Postal Code
-				commentEntity.setCommunityID(1);//TODO fix this
+				commentEntity.setCommunityID(communityID);
 				// Passes the comment
 				commentEntity.setComment(commentString);
 
