@@ -55,7 +55,10 @@
     <string name="admin_alert_btn_submit">Submit</string>
     <string name="admin_alert_btn_cancel">Cancel</string>
     <string name="title_activity_confirm_dialog">ConfirmDialog</string>
-    <string name="prompt_home_address">Home Address</string>
+    <string name="title_activity_admin_users_profile">AdminUsersProfile</string>
+     <string name="options">Options</string>
+      <string name="prompt_home_address">Home Address</string>
     <string name="select_community">Choose a community to register for:</string>
+     
 
 </resources>
