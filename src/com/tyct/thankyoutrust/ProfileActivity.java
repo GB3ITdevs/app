@@ -42,8 +42,8 @@ public class ProfileActivity extends Activity {
 	// Stored session data
 	HashMap<String, String> userStored;
 
-	// User info id
-	int infoId;
+	// User id
+	int usID;
 
 	boolean admin = false;
 
@@ -92,7 +92,7 @@ public class ProfileActivity extends Activity {
 		tasks = new ArrayList<>();
 		personInfo();
 
-		// get user id
+		// get admin status
 		int adminStatus = Integer.parseInt(userStored.get("admin"));
 
 		if (adminStatus == 1) {
@@ -193,12 +193,12 @@ public class ProfileActivity extends Activity {
 		if (userStored.get("address") != null) {
 			String address = userStored.get("address");
 			// If exists, append to location
-			location += address;
+			location += address + ", ";
 		}
 		if (userStored.get("suburb") != null) {
 			String suburb = userStored.get("suburb");
 			// If exists, append to location
-			location += suburb;
+			location += suburb + ", ";
 		}
 		if (userStored.get("city") != null) {
 			// If exists, append to location
@@ -208,7 +208,7 @@ public class ProfileActivity extends Activity {
 		if (userStored.get("postcode") != null) {
 			// If exists, append to location
 			String postcode = userStored.get("postcode");
-			location += postcode;
+			location += "\n" + postcode;
 		}
 		pLocation.setText(location);
 	}
@@ -240,6 +240,7 @@ public class ProfileActivity extends Activity {
 		if (userStored.get("fName") != null) {
 			String userName = userStored.get("fName");
 			eFName.setText(userName);
+			eFName.setSelection(eFName.getText().length());
 		}
 
 		// Display surname
@@ -293,7 +294,7 @@ public class ProfileActivity extends Activity {
 
 						// Check current password is correct
 						for (User user : userList) {
-							if (user.getUserID() == (infoId)) {
+							if (user.getUserID() == (usID)) {
 								// Check if the current password matches stored
 								// password
 								if (!user.getPassword().equals(pw)) {
@@ -347,16 +348,22 @@ public class ProfileActivity extends Activity {
 		final View textEntryView = factory.inflate(R.layout.edit_address, null);
 
 		// Get each editText field
-		final EditText eAddress = (EditText) findViewById(R.id.editTextEditAddress);
-		final EditText eSuburb = (EditText) findViewById(R.id.editTextEditSuburb);
-		final EditText eCity = (EditText) findViewById(R.id.editTextEditCity);
-		final EditText ePostcode = (EditText) findViewById(R.id.editTextEditPostcode);
-		final EditText eaPassw = (EditText) findViewById(R.id.editTextLocPw);
+		final EditText eAddress = (EditText) textEntryView
+				.findViewById(R.id.editTextEditAddress);
+		final EditText eSuburb = (EditText) textEntryView
+				.findViewById(R.id.editTextEditSuburb);
+		final EditText eCity = (EditText) textEntryView
+				.findViewById(R.id.editTextEditCity);
+		final EditText ePostcode = (EditText) textEntryView
+				.findViewById(R.id.editTextEditPostcode);
+		final EditText eaPassw = (EditText) textEntryView
+				.findViewById(R.id.editTextLocPw);
 
 		// Display address
 		if (userStored.get("address") != null) {
 			String address = userStored.get("address");
 			eAddress.setText(address);
+			eAddress.setSelection(eAddress.getText().length());
 		}
 
 		// Display suburb
@@ -418,7 +425,7 @@ public class ProfileActivity extends Activity {
 
 						// Check current password is correct
 						for (User user : userList) {
-							if (user.getUserID() == (infoId)) {
+							if (user.getUserID() == (usID)) {
 								// Check if the current password matches stored
 								// password
 								if (!user.getPassword().equals(pw)) {
@@ -510,7 +517,7 @@ public class ProfileActivity extends Activity {
 
 						// Check current password is correct
 						for (User user : userList) {
-							if (user.getUserID() == (infoId)) {
+							if (user.getUserID() == (usID)) {
 								// Check if the current password matches stored
 								// password
 								if (!user.getPassword().equals(pw)) {
@@ -578,7 +585,7 @@ public class ProfileActivity extends Activity {
 
 		// get user info id
 		if (userStored.get("id") != null) {
-			infoId = Integer.parseInt(userStored.get("id"));
+			usID = Integer.parseInt(userStored.get("id"));
 		}
 
 		// Populate data at top of screen
@@ -636,7 +643,7 @@ public class ProfileActivity extends Activity {
 
 			// update details here
 			HttpManager.updateData(
-					"http://gb3it.pickworth.info:3000/person_infos/" + infoId,
+					"http://gb3it.pickworth.info:3000/users/" + usID,
 					mInfo);
 			return true;
 		}
@@ -674,10 +681,10 @@ public class ProfileActivity extends Activity {
 			mPostcode = postcode;
 
 			ArrayMap<String, String> user = new ArrayMap<String, String>();
-			user.put("address", mAddress);
+			user.put("streetAddress", mAddress);
 			user.put("suburb", mSuburb);
 			user.put("city", mCity);
-			user.put("postcode", mPostcode);
+			user.put("postalCode", mPostcode);
 			mInfo = UserJSONParser.PUTUser(user);
 		}
 
@@ -686,7 +693,7 @@ public class ProfileActivity extends Activity {
 
 			// update details here
 			HttpManager.updateData(
-					"http://gb3it.pickworth.info:3000/person_infos/" + infoId,
+					"http://gb3it.pickworth.info:3000/users/" + usID,
 					mInfo);
 			return true;
 		}
@@ -722,7 +729,7 @@ public class ProfileActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 			// update details here
 			HttpManager.updateData(
-					"http://gb3it.pickworth.info:3000/person_infos/" + infoId,
+					"http://gb3it.pickworth.info:3000/users/" + usID,
 					mPassword);
 			return true;
 		}

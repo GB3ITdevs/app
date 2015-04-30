@@ -91,7 +91,7 @@ public class UserJSONParser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		json = "{\"person_info\":" + jsonUser.toString() + "}";
+		json = "{\"user\":" + jsonUser.toString() + "}";
 		return json;
 	}
 }
