@@ -42,22 +42,23 @@ public class ProfileActivity extends Activity {
 	// Stored session data
 	HashMap<String, String> userStored;
 
-	// User info id
-	int infoId;
-	
+	// User id
+	int usID;
+
 	boolean admin = false;
 
 	/**
 	 * Keep track of the tasks to ensure we can cancel it if requested.
 	 */
-	private UpdatePwTask mPwTask = null;
 	private UpdatePersonInfo mPersonTask = null;
+	private UpdateAddressTask mAddressTask = null;
+	private UpdatePwTask mPwTask = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
-		
+
 		// set session manager
 		updateSession();
 
@@ -90,27 +91,24 @@ public class ProfileActivity extends Activity {
 
 		tasks = new ArrayList<>();
 		personInfo();
-		
-		// get user id
-        int adminStatus = Integer.parseInt(userStored.get("admin"));
-        
-        if(adminStatus == 1)
-        {
-        	admin = true;
-        }
+
+		// get admin status
+		int adminStatus = Integer.parseInt(userStored.get("admin"));
+
+		if (adminStatus == 1) {
+			admin = true;
+		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		if(!admin)
-		{
+		if (!admin) {
 			getMenuInflater().inflate(R.menu.admin_all_users, menu);
 		}
-		
-		if(admin)
-		{
-		getMenuInflater().inflate(R.menu.main, menu);
+
+		if (admin) {
+			getMenuInflater().inflate(R.menu.main, menu);
 		}
 		return true;
 	}
@@ -192,15 +190,15 @@ public class ProfileActivity extends Activity {
 
 		// Display location
 		String location = "";
-		// TODO if (userStored.get("address") != null) {
-		// String address = userStored.get("address");
-		// // If exists, append to location
-		// location += address;
-		// }
+		if (userStored.get("address") != null) {
+			String address = userStored.get("address");
+			// If exists, append to location
+			location += address + ", ";
+		}
 		if (userStored.get("suburb") != null) {
 			String suburb = userStored.get("suburb");
 			// If exists, append to location
-			location += suburb;
+			location += suburb + ", ";
 		}
 		if (userStored.get("city") != null) {
 			// If exists, append to location
@@ -210,7 +208,7 @@ public class ProfileActivity extends Activity {
 		if (userStored.get("postcode") != null) {
 			// If exists, append to location
 			String postcode = userStored.get("postcode");
-			location += postcode;
+			location += "\n" + postcode;
 		}
 		pLocation.setText(location);
 	}
@@ -242,6 +240,7 @@ public class ProfileActivity extends Activity {
 		if (userStored.get("fName") != null) {
 			String userName = userStored.get("fName");
 			eFName.setText(userName);
+			eFName.setSelection(eFName.getText().length());
 		}
 
 		// Display surname
@@ -295,7 +294,7 @@ public class ProfileActivity extends Activity {
 
 						// Check current password is correct
 						for (User user : userList) {
-							if (user.getUserID() == (infoId)) {
+							if (user.getUserID() == (usID)) {
 								// Check if the current password matches stored
 								// password
 								if (!user.getPassword().equals(pw)) {
@@ -309,8 +308,8 @@ public class ProfileActivity extends Activity {
 
 						// Check for a valid email
 						if (!isEmailValid(email)) {
-							eiPassw.setError(getString(R.string.error_invalid_email));
-							focusView = eiPassw;
+							eEmail.setError(getString(R.string.error_invalid_email));
+							focusView = eEmail;
 							cancel = true;
 						}
 
@@ -349,17 +348,23 @@ public class ProfileActivity extends Activity {
 		final View textEntryView = factory.inflate(R.layout.edit_address, null);
 
 		// Get each editText field
-		final EditText eAddress = (EditText) findViewById(R.id.editTextEditAddress);
-		final EditText eSuburb = (EditText) findViewById(R.id.editTextEditSuburb);
-		final EditText eCity = (EditText) findViewById(R.id.editTextEditCity);
-		final EditText ePostcode = (EditText) findViewById(R.id.editTextEditPostcode);
-		final EditText eaPassw = (EditText) findViewById(R.id.editTextLocPw);
+		final EditText eAddress = (EditText) textEntryView
+				.findViewById(R.id.editTextEditAddress);
+		final EditText eSuburb = (EditText) textEntryView
+				.findViewById(R.id.editTextEditSuburb);
+		final EditText eCity = (EditText) textEntryView
+				.findViewById(R.id.editTextEditCity);
+		final EditText ePostcode = (EditText) textEntryView
+				.findViewById(R.id.editTextEditPostcode);
+		final EditText eaPassw = (EditText) textEntryView
+				.findViewById(R.id.editTextLocPw);
 
-		// Display address (TODO pending addition to session manager)
-		// if (userStored.get("address") != null) {
-		// String address = userStored.get("address");
-		// eAddress.setText(address);
-		// }
+		// Display address
+		if (userStored.get("address") != null) {
+			String address = userStored.get("address");
+			eAddress.setText(address);
+			eAddress.setSelection(eAddress.getText().length());
+		}
 
 		// Display suburb
 		if (userStored.get("suburb") != null) {
@@ -383,36 +388,71 @@ public class ProfileActivity extends Activity {
 		alertDialogBuilder.setTitle("Edit Address Details");
 
 		// set dialog message
-		alertDialogBuilder
-				.setView(textEntryView)
-				// .setMessage(
-				// "Leave a field blank if you do not wish to make any changes to it")
-				.setCancelable(false)
-				.setPositiveButton("Submit Changes",
-						new DialogInterface.OnClickListener() {
-							// if this button is clicked, update details
-							public void onClick(DialogInterface dialog, int id) {
-								// Get values form EditText fields
-//		TODO						String addr = eAddress.getText().toString();
-//								String suburb = eSuburb.getText().toString();
-//								String city = eCity.getText().toString();
-//								String postcode = ePostcode.getText()
-//										.toString();
-//								String passw = eaPassw.getText().toString();
-								dialog.cancel();
-							}
-						})
-				.setNegativeButton("Cancel",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								// if this button is clicked, just close
-								// the dialog box and do nothing
-								dialog.cancel();
-							}
-						});
+		alertDialogBuilder.setView(textEntryView).setCancelable(false)
+				.setPositiveButton("Save Changes", null)
+				.setNegativeButton("Cancel", null);
 
 		// create alert dialog
-		AlertDialog alertDialog = alertDialogBuilder.create();
+		final AlertDialog alertDialog = alertDialogBuilder.create();
+
+		alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+			@Override
+			public void onShow(DialogInterface dialog) {
+				Button positive = alertDialog
+						.getButton(AlertDialog.BUTTON_POSITIVE);
+				positive.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// Reset errors.
+						eAddress.setError(null);
+						eSuburb.setError(null);
+						eCity.setError(null);
+						ePostcode.setError(null);
+						eaPassw.setError(null);
+
+						// Deal with input errors
+						boolean cancel = false;
+						View focusView = null;
+
+						// Get values from the EditText fields
+						String address = eAddress.getText().toString();
+						String suburb = eSuburb.getText().toString();
+						String city = eCity.getText().toString();
+						String postcode = ePostcode.getText().toString();
+						String pw = eaPassw.getText().toString();
+
+						// Check current password is correct
+						for (User user : userList) {
+							if (user.getUserID() == (usID)) {
+								// Check if the current password matches stored
+								// password
+								if (!user.getPassword().equals(pw)) {
+									eaPassw.setError(getString(R.string.error_incorrect_password));
+									focusView = eaPassw;
+									cancel = true;
+								}
+								break;
+							}
+						}
+
+						if (cancel) {
+							// There was an error; don't attempt update
+							// and focus the first form field with an error.
+							focusView.requestFocus();
+						} else {
+							// Show a progress spinner, and kick off a
+							// background task to update user password
+							mAddressTask = new UpdateAddressTask(address,
+									suburb, city, postcode);
+							mAddressTask.execute((Void) null);
+							alertDialog.dismiss();
+						}
+					}
+				});
+			}
+		});
 
 		// show it
 		alertDialog.show();
@@ -477,7 +517,7 @@ public class ProfileActivity extends Activity {
 
 						// Check current password is correct
 						for (User user : userList) {
-							if (user.getUserID() == (infoId)) {
+							if (user.getUserID() == (usID)) {
 								// Check if the current password matches stored
 								// password
 								if (!user.getPassword().equals(pw)) {
@@ -545,7 +585,7 @@ public class ProfileActivity extends Activity {
 
 		// get user info id
 		if (userStored.get("id") != null) {
-			infoId = Integer.parseInt(userStored.get("id"));
+			usID = Integer.parseInt(userStored.get("id"));
 		}
 
 		// Populate data at top of screen
@@ -590,7 +630,7 @@ public class ProfileActivity extends Activity {
 			mFName = fName;
 			mLName = lName;
 			mEmail = email;
-			
+
 			ArrayMap<String, String> user = new ArrayMap<String, String>();
 			user.put("firstName", mFName);
 			user.put("lastName", mLName);
@@ -603,22 +643,72 @@ public class ProfileActivity extends Activity {
 
 			// update details here
 			HttpManager.updateData(
-					"http://gb3it.pickworth.info:3000/person_infos/" + infoId,
+					"http://gb3it.pickworth.info:3000/users/" + usID,
 					mInfo);
 			return true;
 		}
 
 		@Override
 		protected void onPostExecute(Boolean success) {
-			
+
 			session.updateUserDetails(mFName, mLName, mEmail);
 			updateSession();
-			mPwTask = null;
+			mPersonTask = null;
 		}
 
 		@Override
 		protected void onCancelled() {
-			mPwTask = null;
+			mPersonTask = null;
+		}
+	}
+
+	/**
+	 * Async task used to send the updated info to the database
+	 */
+	private class UpdateAddressTask extends AsyncTask<Void, Void, Boolean> {
+
+		private final String mInfo;
+		private final String mAddress;
+		private final String mSuburb;
+		private final String mCity;
+		private final String mPostcode;
+
+		public UpdateAddressTask(String address, String suburb, String city,
+				String postcode) {
+			mAddress = address;
+			mSuburb = suburb;
+			mCity = city;
+			mPostcode = postcode;
+
+			ArrayMap<String, String> user = new ArrayMap<String, String>();
+			user.put("streetAddress", mAddress);
+			user.put("suburb", mSuburb);
+			user.put("city", mCity);
+			user.put("postalCode", mPostcode);
+			mInfo = UserJSONParser.PUTUser(user);
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+
+			// update details here
+			HttpManager.updateData(
+					"http://gb3it.pickworth.info:3000/users/" + usID,
+					mInfo);
+			return true;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean success) {
+
+			session.updateAddressDetails(mAddress, mCity, mSuburb, mPostcode);
+			updateSession();
+			mAddressTask = null;
+		}
+
+		@Override
+		protected void onCancelled() {
+			mAddressTask = null;
 		}
 	}
 
@@ -639,7 +729,7 @@ public class ProfileActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 			// update details here
 			HttpManager.updateData(
-					"http://gb3it.pickworth.info:3000/person_infos/" + infoId,
+					"http://gb3it.pickworth.info:3000/users/" + usID,
 					mPassword);
 			return true;
 		}

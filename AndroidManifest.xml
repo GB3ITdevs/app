@@ -122,5 +122,4 @@
                 android:value="com.tyct.thankyoutrust.AdminAllUsers" />
         </activity>
     </application>
-
 </manifest>

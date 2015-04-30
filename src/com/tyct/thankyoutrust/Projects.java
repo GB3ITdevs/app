@@ -20,20 +20,22 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
  
- import com.tyct.thankyoutrust.model.PhoneNumber;
+//import com.tyct.thankyoutrust.model.PhoneNumber;
 import com.tyct.thankyoutrust.model.Project;
-import com.tyct.thankyoutrust.model.ProjectWebsite;
+import com.tyct.thankyoutrust.model.ProjectRating;
+//import com.tyct.thankyoutrust.model.ProjectWebsite;
+import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
 //import com.tyct.thankyoutrust.parsers.PhoneNumberJSONParser;
-import com.tyct.thankyoutrust.parsers.ProjectWebsiteJSONParser;
+//import com.tyct.thankyoutrust.parsers.ProjectWebsiteJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  
  public class Projects extends Activity implements ProjectListFragment.Callbacks
  {
  	List<GetProjectsTask> projectTasks;
- 	List<GetProjectWebsitesTask> websiteTasks;
+ 	List<GetProjectRatingsTask> ratingTasks;
  	
  	List<Project> projectList;
- 	List<ProjectWebsite> projectWebsiteList;
+ 	List<ProjectRating> projectRatingList;
  	
  	String[] projectNames;
  	ProgressBar pb;
@@ -43,14 +45,9 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
 	SessionManager session;
 	
 	boolean admin = false;
- 
- 			//***********Testing the models and the json parsers************************************************************************************
- 
- 			PhoneNumber newPhone = new PhoneNumber();
- 			ProjectWebsite newProjectSite = new ProjectWebsite();
- 
- 			
- 			
+	
+	int userCommunityID;
+	int userID;
  	
  	@Override
  	protected void onCreate(Bundle savedInstanceState) 
@@ -58,12 +55,9 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		super.onCreate(savedInstanceState);
  		setContentView(R.layout.activity_projects);
  		
- 		//***********Testing the models and the json parsers************************************************************************************
- 		//SetupModels();
- 		
  		//Create a new list of tasks
  		projectTasks = new ArrayList<>();
- 		websiteTasks = new ArrayList<>();
+ 		ratingTasks = new ArrayList<>();
  		
  		//Initialize the progress bar and set it to not be visible
  		pb = (ProgressBar) findViewById(R.id.progressBar1);
@@ -77,7 +71,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		if (isOnline()) 
  		{
  			//Begin the request data method below
- 			requestData("http://gb3it.pickworth.info:3000/projects");
+ 			requestData();
  
  		} 
  		//Otherwise make a toast message to state the network is not available
@@ -87,7 +81,13 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		}
  		selectedProject = new Project();
  		
- 		// get admin 
+ 		//Retrieve the logged in users communityID
+ 		userCommunityID = Integer.parseInt(userStored.get("communityID"));
+ 		
+ 		//Retrieve the logged in users userID
+ 		userID = Integer.parseInt(userStored.get("id"));
+ 		
+ 		// Retrieve whether the logged in user is an administrator 
         int adminStatus = Integer.parseInt(userStored.get("admin"));
         
         //set admin 
@@ -150,8 +150,17 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  
  	
  	//Method to create a and start a new task
- 	private void requestData(String uri) 
+ 	private void requestData() 
  	{
+ 		//Set the uri string
+ 		String uri = "http://gb3it.pickworth.info:3000/ratings";
+ 		//Create the new async task
+ 		GetProjectRatingsTask ratingTask = new GetProjectRatingsTask();
+ 		//Start it using the url that has been passed into the method
+ 		ratingTask.execute(uri);
+ 		
+ 		//Set the new uri string
+ 		uri = "http://gb3it.pickworth.info:3000/projects";		
  		//Create the new async task
  		GetProjectsTask task = new GetProjectsTask();
  		//Start it using the url that has been passed into the method
@@ -191,8 +200,12 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		//Add each project name from the project list to the array of strings
  		for(Project project : projectList)
  		{
- 			projectNames[i] = project.getProjectName();
- 			i++;
+ 			//If the project belongs to the same community as the logged in user, add it to the list to display
+ 			if (project.getCommunityID() == userCommunityID)
+ 			{
+ 				projectNames[i] = project.getProjectName();
+ 				i++;
+ 			}
  		}
  		
  		//Create new Fragments
@@ -235,6 +248,13 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  	{
  		
  		return projectList;
+ 	}
+ 	
+ 	//Method to retrieve the array of ratings for use in the fragments
+ 	public List<ProjectRating> getProjectRatingList()
+ 	{
+ 		
+ 		return projectRatingList;
  	}
  	
  	//Method to retrieve the array of project names for use in the fragments
@@ -282,17 +302,6 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		startActivity(detailIntent);
  	}	
  	
- 	//Test method to create the new models******************************************************************************************************
- 	public void SetupModels()
- 	{
- 
- 		newPhone.setUserID(9);
- 		newPhone.setPhoneNumber("0001122");
- 		
- 		newProjectSite.setSiteAddress("project website model test");
- 		newProjectSite.setProjectID(8);
- 		
- 	}
  	
  	//Inner class for performing network activity - getting and setting project list from the database
  	private class GetProjectsTask extends AsyncTask<String, String, String> 
@@ -313,18 +322,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		//Tasks do in background method
  		@Override
  		protected String doInBackground(String... params) 
- 		{
-			/*
- 			//Testing the models and parsers**************************************************************************************************	
- 			String JSONresult = ProjectWebsiteJSONParser.POST(newProjectSite);
- 			String uri = "http://gb3it.pickworth.info:3000/projects/7/project_websites";
- 			HttpManager.postData(uri, JSONresult);	
- 			
- 			JSONresult = PhoneNumberJSONParser.POST(newPhone);
- 			uri = "http://gb3it.pickworth.info:3000/contact_infos/7/phone_numbers";
- 			HttpManager.postData(uri, JSONresult);
-			*/
- 			
+ 		{			
  			//Create a new string from the http managers get data method and return it
  			String content = HttpManager.getData(params[0]);
  			return content;
@@ -365,7 +363,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  
  	
  	//Inner class for performing network activity - getting and setting project list from the database
- 	 	private class GetProjectWebsitesTask extends AsyncTask<String, String, String> 
+ 	 	private class GetProjectRatingsTask extends AsyncTask<String, String, String> 
  	 	{
  	 		
  	 		//Tasks pre-execute method
@@ -373,11 +371,11 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  	 		protected void onPreExecute() 
  	 		{
  	 			//If the task has been started set the progress bar to visible
- 	 			if (websiteTasks.size() == 0) 
+ 	 			if (ratingTasks.size() == 0) 
  	 			{
  	 				pb.setVisibility(View.VISIBLE);
  	 			}
- 	 			websiteTasks.add(this);
+ 	 			ratingTasks.add(this);
  	 		}
  	 		
  	 		//Tasks do in background method
@@ -394,12 +392,12 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  	 		protected void onPostExecute(String result) 
  	 		{
  				//Create a new list of project websites from the JSON parser using the passed in string from the http manager
- 				projectWebsiteList = ProjectWebsiteJSONParser.parseFeed(result);
+ 				projectRatingList = ProjectRatingsJSONParser.parseFeed(result);
 
 
  	 			//Remove the current task and set the progress bar to be invisible again
- 	 			websiteTasks.remove(this);
- 	 			if (websiteTasks.size() == 0) 
+ 	 			ratingTasks.remove(this);
+ 	 			if (ratingTasks.size() == 0) 
  	 			{
  	 				pb.setVisibility(View.INVISIBLE);
  	 			}

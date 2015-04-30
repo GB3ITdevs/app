@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import android.support.v4.util.ArrayMap;
 
 import com.tyct.thankyoutrust.model.User;
@@ -65,7 +64,7 @@ public class UserJSONParser {
 					Integer.toString(user.getPostalCode()));
 			jsonUser.accumulate("suburb", user.getSuburb());
 			jsonUser.accumulate("city", user.getCity());
-			jsonUser.accumulate("streetNumber", user.getStreetAddress());
+			jsonUser.accumulate("streetAddress", user.getStreetAddress());
 
 		}
 
@@ -92,7 +91,7 @@ public class UserJSONParser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		json = "{\"person_info\":" + jsonUser.toString() + "}";
+		json = "{\"user\":" + jsonUser.toString() + "}";
 		return json;
 	}
 }

@@ -3,7 +3,10 @@ package com.tyct.thankyoutrust;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tyct.thankyoutrust.model.Community;
 import com.tyct.thankyoutrust.model.User;
+import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
+import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
 import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
 import android.animation.Animator;
@@ -34,21 +37,27 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * A registration screen that allows users to register an account requiring name/email/password.
+ * A registration screen that allows users to register an account requiring
+ * name/email/password.
  */
-public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor> {
+public class RegisterActivity extends Activity implements
+		LoaderCallbacks<Cursor> {
 
 	List<PostTask> tasks;
+	List<CommunityTask> communityTask;
 	User newUser;
-	
+
 	List<User> userList;
+	List<Community> communityList;
 
 	/**
-	 * Keep track of the registration task to ensure we can cancel it if requested.
+	 * Keep track of the registration task to ensure we can cancel it if
+	 * requested.
 	 */
 	private UserRegisterTask mAuthTask = null;
 
@@ -56,6 +65,10 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 	private EditText mNameView;
 	private EditText mSurnameView;
 	private AutoCompleteTextView mEmailView;
+	private EditText mAddressView;
+	private EditText mSuburbView;
+	private EditText mCityView;
+	private EditText mPostcodeView;
 	private EditText mPasswordView;
 	private EditText mPasswordCheckView;
 	private View mProgressView;
@@ -65,25 +78,33 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
-		
+
 		// Fetch intent data
-        Bundle extras = getIntent().getExtras();
-        String userEmail = null;
+		Bundle extras = getIntent().getExtras();
+		String userEmail = null;
 		if (extras != null) {
 			userEmail = extras.getString("email");
 		}
 
 		// Set up the registration form.
 		mNameView = (EditText) findViewById(R.id.reg_firstName);
-		
+
 		mSurnameView = (EditText) findViewById(R.id.reg_surname);
-		
+
 		mEmailView = (AutoCompleteTextView) findViewById(R.id.reg_email);
 		populateAutoComplete();
 		mEmailView.setText(userEmail);
 
-		mPasswordView = (EditText) findViewById(R.id.reg_password);
+		mAddressView = (EditText) findViewById(R.id.reg_address);
+
+		mSuburbView = (EditText) findViewById(R.id.reg_suburb);
+
+		mCityView = (EditText) findViewById(R.id.reg_city);
 		
+		mPostcodeView = (EditText) findViewById(R.id.reg_postcode);
+
+		mPasswordView = (EditText) findViewById(R.id.reg_password);
+
 		mPasswordCheckView = (EditText) findViewById(R.id.reg_password_check);
 		mPasswordCheckView
 				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -109,19 +130,40 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 
 		mRegisterFormView = findViewById(R.id.email_register_form);
 		mProgressView = findViewById(R.id.register_progress);
-		
+
 		tasks = new ArrayList<>();
-		
-		if (isOnline()) {
-			requestData("http://gb3it.pickworth.info:3000/users");
-		} else {
-			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
-		}
+		communityTask = new ArrayList<>();
+
+		personInfo();
+		communityInfo();
 	}
-	
+
 	private void requestData(String uri) {
 		PostTask task = new PostTask();
 		task.execute(uri);
+	}
+
+	private void requestCommunityData(String uri) {
+		CommunityTask task = new CommunityTask();
+		task.execute(uri);
+	}
+
+	public void personInfo() {
+		if (isOnline()) {
+			requestData("http://gb3it.pickworth.info:3000/users");
+		} else {
+			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
+					.show();
+		}
+	}
+
+	public void communityInfo() {
+		if (isOnline()) {
+			requestCommunityData("http://gb3it.pickworth.info:3000/communities");
+		} else {
+			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
+					.show();
+		}
 	}
 
 	private void populateAutoComplete() {
@@ -129,9 +171,9 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 	}
 
 	/**
-	 * Attempts to register the account specified by the login form.
-	 * If there are form errors (invalid email, missing fields, etc.), the
-	 * errors are presented and no actual attempt is made.
+	 * Attempts to register the account specified by the login form. If there
+	 * are form errors (invalid email, missing fields, etc.), the errors are
+	 * presented and no actual attempt is made.
 	 */
 	public void attemptRegister() {
 		if (mAuthTask != null) {
@@ -142,6 +184,10 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 		mNameView.setError(null);
 		mSurnameView.setError(null);
 		mEmailView.setError(null);
+		mAddressView.setError(null);
+		mSuburbView.setError(null);
+		mCityView.setError(null);
+		mPostcodeView.setError(null);
 		mPasswordView.setError(null);
 		mPasswordCheckView.setError(null);
 
@@ -149,6 +195,10 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 		String fName = mNameView.getText().toString();
 		String lName = mSurnameView.getText().toString();
 		String email = mEmailView.getText().toString();
+		String address = mAddressView.getText().toString();
+		String suburb = mSuburbView.getText().toString();
+		String city = mCityView.getText().toString();
+		String postcode = mPostcodeView.getText().toString();
 		String password = mPasswordView.getText().toString();
 		String pwCheck = mPasswordCheckView.getText().toString();
 
@@ -162,10 +212,11 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 			focusView = mPasswordView;
 			cancel = true;
 		}
-		
+
 		// Check entered password matches retyped password
 		if (!password.equals(pwCheck)) {
-			mPasswordCheckView.setError(getString(R.string.error_nonmatching_password));
+			mPasswordCheckView
+					.setError(getString(R.string.error_nonmatching_password));
 			focusView = mPasswordCheckView;
 			cancel = true;
 		}
@@ -180,7 +231,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 			focusView = mEmailView;
 			cancel = true;
 		}
-		
+
 		// Check if user entered email address exists in database.
 		for (User user : userList) {
 			if (user.getEmail().equals(email)) {
@@ -188,26 +239,44 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 				userExists = true;
 			}
 		}
-		
-		if (userExists) {			
+
+		if (userExists) {
 			mEmailView.setError(getString(R.string.error_invalid_email));
 			focusView = mEmailView;
 			cancel = true;
-		}				
+		}
 
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
-			Toast.makeText(this, "Unsuccessful login", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Unsuccessful login", Toast.LENGTH_SHORT)
+					.show();
 			focusView.requestFocus();
 		} else {
-			//Create new User Object, passing the data into sets
+			// Get the selected community to assign its id to user
+			Spinner communitySpinner = (Spinner) findViewById(R.id.spinnerCommunity);
+			String selectedCommunity = (String) communitySpinner.getSelectedItem();
+
+			// Find id of selected community
+			int communityID = 0;
+			for (Community community : communityList) {
+				if (selectedCommunity.equals(community.getCommunityName())) {
+					communityID = community.getCommunityID();
+				}
+			}
+			
+			// Create new User Object, passing the data into sets
 			newUser = new User();
+			newUser.setCommunityID(communityID);
 			newUser.setFirstName(fName);
 			newUser.setLastName(lName);
 			newUser.setEmail(email);
+			newUser.setStreetAddress(address);
+			newUser.setSuburb(suburb);
+			newUser.setCity(city);
+			newUser.setPostalCode(Integer.parseInt(postcode));
 			newUser.setPassword(password);
-			
+
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			showProgress(true);
@@ -225,39 +294,42 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 		// TODO: Replace this with your own logic
 		return password.length() > 3;
 	}
-	
+
 	/**
 	 * Shows pop-up dialog to confirm user wishes to register an account
 	 */
-	public void registrationDialog () {
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(RegisterActivity.this);
- 
-			// set title
-			alertDialogBuilder.setTitle("Are you sure you want to register this account?");
- 
-			// set dialog message
-			alertDialogBuilder
+	public void registrationDialog() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				RegisterActivity.this);
+
+		// set title
+		alertDialogBuilder
+				.setTitle("Are you sure you want to register this account?");
+
+		// set dialog message
+		alertDialogBuilder
 				.setCancelable(false)
-				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,int id) {
-						// if this button is clicked,
-						// attempt registration
-						attemptRegister();
-					}
-				  })
-				.setNegativeButton("No",new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,int id) {
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								// if this button is clicked,
+								// attempt registration
+								attemptRegister();
+							}
+						})
+				.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
 						// if this button is clicked, just close
 						// the dialog box and do nothing
 						dialog.cancel();
 					}
 				});
- 
-				// create alert dialog
-				AlertDialog alertDialog = alertDialogBuilder.create();
- 
-				// show it
-				alertDialog.show();
+
+		// create alert dialog
+		AlertDialog alertDialog = alertDialogBuilder.create();
+
+		// show it
+		alertDialog.show();
 	}
 
 	/**
@@ -354,7 +426,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 
 		mEmailView.setAdapter(adapter);
 	}
-	
+
 	protected boolean isOnline() {
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -366,8 +438,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 	}
 
 	/**
-	 * Represents an asynchronous register task used to authenticate
-	 * the user.
+	 * Represents an asynchronous register task used to authenticate the user.
 	 */
 	public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -383,7 +454,8 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 			}
 
 			// register the new account here.
-			HttpManager.postData("http://gb3it.pickworth.info:3000/users", newUserString);
+			HttpManager.postData("http://gb3it.pickworth.info:3000/users",
+					newUserString);
 			return true;
 		}
 
@@ -393,7 +465,8 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 			showProgress(false);
 
 			if (success) {
-				Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
+				Intent i = new Intent(RegisterActivity.this,
+						LoginActivity.class);
 				startActivity(i);
 				finish();
 			} else {
@@ -409,29 +482,66 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 			showProgress(false);
 		}
 	}
-	
+
 	/**
-	 * Represents an asynchronous task used to retrieve user data
-	 * from database.
+	 * Represents an asynchronous task used to retrieve user data from database.
 	 */
-	private class PostTask extends AsyncTask<String, String, String> 
-	{
+	private class PostTask extends AsyncTask<String, String, String> {
 		@Override
 		protected void onPreExecute() {
 			tasks.add(this);
 		}
-		
+
 		@Override
-		protected String doInBackground(String... params) {			
+		protected String doInBackground(String... params) {
 			String content = HttpManager.getData(params[0]);
 			return content;
 		}
-		
+
 		@Override
-		protected void onPostExecute(String result) {			
+		protected void onPostExecute(String result) {
 			userList = UserJSONParser.parseFeed(result);
 			tasks.remove(this);
 
+		}
+	}
+
+	/**
+	 * Represents an asynchronous task used to retrieve community data
+	 */
+	private class CommunityTask extends AsyncTask<String, String, String> {
+
+		@Override
+		protected void onPreExecute() {
+			communityTask.add(this);
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			String content = HttpManager.getData(params[0]);
+			return content;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			communityList = CommunityJSONParser.parseFeed(result);
+			communityTask.remove(this);
+
+			// Convert communityList to an array
+			String[] communityNames = new String[communityList.size()];
+
+			// get the name of each community in communityList
+			for (Community community : communityList) {
+				int i = communityList.indexOf(community);
+				communityNames[i] = community.getCommunityName();
+			}
+
+			// Dropdown spinner featuring list of community names
+			Spinner communitySpinner = (Spinner) findViewById(R.id.spinnerCommunity);
+			ArrayAdapter<String> communityAdapter = new ArrayAdapter<String>(
+					RegisterActivity.this,
+					android.R.layout.simple_spinner_item, communityNames);
+			communitySpinner.setAdapter(communityAdapter);
 		}
 	}
 }

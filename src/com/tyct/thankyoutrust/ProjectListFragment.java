@@ -13,11 +13,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.tyct.thankyoutrust.model.Project;
+import com.tyct.thankyoutrust.model.ProjectRating;
 
 public class ProjectListFragment extends Fragment {
 	// Declare the class fields
 
 	List<Project> projectList;
+	List<ProjectRating> ratings;
 	String[] projectNames;
 	Projects ma;
 	ListView projectListView;
@@ -42,19 +44,38 @@ public class ProjectListFragment extends Fragment {
 		View v = inflater.inflate(R.layout.fragment_project_list, container,
 				false);
 
+		//ratings = new List<ProjectRating>();
 		ma = (Projects) getActivity();
 
 		projectNames = ma.getProjects();
-		// projectList = ma.getProjectList();
+		
+		ratings = ma.getProjectRatingList();
+		
+		//List<ProjectRating> ratingsUnsorted = ma.getProjectRatingList();
+		//
+		//int index = 0;
+		//
+		//for (ProjectRating projectRating : ratingsUnsorted) 
+		//{
+		//	if(projectRating.getUserID() == ma.userID)
+		//	{
+		//		ratings.set(index, projectRating);
+		//		index ++;
+		//	}
+		//}
 
 		projectListView = (ListView) v.findViewById(R.id.projectListView);
 
-		ArrayAdapter<String> projectNamesAdapter = new ArrayAdapter<>(
-				getActivity(), android.R.layout.simple_list_item_1,
-				projectNames);
+		//ArrayAdapter<String> projectNamesAdapter = new ArrayAdapter<>(
+		//		getActivity(), android.R.layout.simple_list_item_1,
+		//		projectNames);
+		
+		ProjectItemAdapter projectAdapter = new ProjectItemAdapter(getActivity(), R.layout.item_project, projectNames,ratings, ma.userID);
+		
+		
 		OnItemClickListener listItemClick = new onListItemClick();
 
-		projectListView.setAdapter(projectNamesAdapter);
+		projectListView.setAdapter(projectAdapter);
 
 		projectListView.setOnItemClickListener(listItemClick);
 

@@ -30,7 +30,7 @@ public class AdminIDJSONParser {
 				// Set each JSON adminID field to the appropriate adminID object
 				// field
 				adminID.setAdminID(obj.getInt("adminID"));
-				adminID.setAdminID(obj.getInt("userID"));
+				adminID.setUserID(obj.getInt("userID"));
 
 				// Add the admin ID object to the list of admin IDs
 				adminIDList.add(adminID);
