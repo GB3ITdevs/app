@@ -58,8 +58,6 @@ public class AdminUsersProfile extends Activity {
 		
 		//Poputlate Text fields with chosen user
 		populateFields();
-		
-		Toast.makeText(this, "userId = " + userId, Toast.LENGTH_LONG).show();
 
 		//Button 
 		Button optionsButton = (Button) findViewById(R.id.btnOptions);
