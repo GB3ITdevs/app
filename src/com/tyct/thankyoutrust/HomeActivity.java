@@ -94,9 +94,10 @@ public class HomeActivity extends ListActivity {
 		if (adminStatus == 1) {
 			admin = true;
 		}
-		Toast.makeText(this,
-				userEmail + ", usid: " + userId + " admin = " + adminStatus,
-				Toast.LENGTH_LONG).show();
+		//Toast message used for development**************************************
+//		Toast.makeText(this,
+//				userEmail + ", usid: " + userId + " admin = " + adminStatus,
+//				Toast.LENGTH_LONG).show();
 	}
 
 	@Override

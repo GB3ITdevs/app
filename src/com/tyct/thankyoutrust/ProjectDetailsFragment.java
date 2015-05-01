@@ -20,8 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tyct.thankyoutrust.dialogs.ConfirmProjectRatingDialog;
+import com.tyct.thankyoutrust.model.Community;
 import com.tyct.thankyoutrust.model.Project;
+import com.tyct.thankyoutrust.model.ProjectNote;
 import com.tyct.thankyoutrust.model.ProjectRating;
+import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
+import com.tyct.thankyoutrust.parsers.ProjectNoteJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
 
 public class ProjectDetailsFragment extends Fragment {
@@ -30,13 +34,21 @@ public class ProjectDetailsFragment extends Fragment {
 	
 	// Declare the class fields
 	Project projectDisplayed;
+
 	ProjectDetailsActivity ma;
+	
 	List<PostTask> posttasks;
-	List<MyTask> tasks;
+	List<RetrieveProjectRatings> tasks;
+	List<RetrieveProjectNotes> noteTasks;
+	List<RetrieveCommunityTask> communityTasks;
+	
 	List<ProjectRating> projectRatingList;
+	List<ProjectNote> noteList;
 	ProjectRating projectRating;
 	int userID;
 	RatingBar ratingBar;
+	
+	TextView tvPostalCode;
 
 	SharedPreferences prefs;
 
@@ -56,22 +68,11 @@ public class ProjectDetailsFragment extends Fragment {
 
 		projectDisplayed = new Project();
 
-		// if (getArguments() != null)
-		// {
-		// projectDisplayed.setProjectName(getArguments().getString(currProjectName));
-		// //projectDisplayed.setProjectID(Integer.parseInt(getArguments().getString(currProjectID)));
-		// projectDisplayed.setProjectBlurb(getArguments().getString(currProjectBlurb));
-		// projectDisplayed.setApplicantName(getArguments().getString(currApplicantName));
-		// projectDisplayed.setFundsRequested(Integer.parseInt(getArguments().getString(currFundsRequested)));
-		// projectDisplayed.setPostalCode(Integer.parseInt(getArguments().getString(currPostalCode)));
-		// projectDisplayed.setUseOfFunds(getArguments().getString(currUseOfFunds));
-		// }
-
 		View v = inflater.inflate(R.layout.fragment_project_details, container,
 				false);
 		// Initialize the layout vies
 		TextView tvProjectTitle = (TextView) v.findViewById(R.id.projectName);
-		TextView tvPostalCode = (TextView) v.findViewById(R.id.postalCode);
+		tvPostalCode = (TextView) v.findViewById(R.id.postalCode);
 		TextView tvApplicantName = (TextView) v
 				.findViewById(R.id.applicantName);
 		TextView tvFundsRequested = (TextView) v
@@ -87,7 +88,7 @@ public class ProjectDetailsFragment extends Fragment {
 
 		// Set the text views to display the project information
 		tvProjectTitle.setText(projectDisplayed.getProjectName());
-		tvPostalCode.setText(Integer.toString(projectDisplayed.getCommunityID()));
+		
 		tvApplicantName.setText(projectDisplayed.getApplicantName());
 		tvFundsRequested.setText(Integer.toString(projectDisplayed
 				.getFundsRequested()));
@@ -101,6 +102,9 @@ public class ProjectDetailsFragment extends Fragment {
 		// Check if the project has already been rated and if so make it
 		// unavailable to rate
 		checkForExistingRating();
+		
+		//Method to retrieve the postal code for the community the project is listed in
+		getCommunities();
 
 		// Return the view
 		return v;
@@ -123,7 +127,7 @@ public class ProjectDetailsFragment extends Fragment {
 	public void checkForExistingRating() {
 		if (isOnline()) {
 			tasks = new ArrayList<>();
-			MyTask task = new MyTask();
+			RetrieveProjectRatings task = new RetrieveProjectRatings();
 			task.execute("http://gb3it.pickworth.info:3000/ratings");
 		}
 
@@ -139,9 +143,52 @@ public class ProjectDetailsFragment extends Fragment {
 			}
 		}
 	}
+	
+	// Method to populate project notes if there is already any in the
+	// database
+	public void checkForExistingNotes() {
+		if (isOnline()) {
+			noteTasks = new ArrayList<>();
+			RetrieveProjectRatings noteTask = new RetrieveProjectRatings();
+			noteTask.execute("http://gb3it.pickworth.info:3000/ratings");
+		}
+
+	}
+
+	public void checkRetrievedNotes() {
+		for (int i = 0; i < noteList.size(); i++) {
+			if ((noteList.get(i).getUserID() == userID)
+					&& (noteList.get(i).getProjectID() == projectDisplayed
+							.getProjectID())) {
+//Need to set the notes to a textview here
+			}
+		}
+	}
 
 	public void setProjectRating() {
 		ma.setProjectRating(projectRating.getRating());
+	}
+	
+	public void getCommunities()
+	{
+		if(isOnline())
+		{
+			communityTasks = new ArrayList<>();
+			RetrieveCommunityTask communityTask = new RetrieveCommunityTask();
+			communityTask.execute("http://gb3it.pickworth.info:3000/communities");
+		}		
+	}
+	
+	public void getPostalCode(List<Community> communities)
+	{
+		
+		for (Community community : communities) 
+		{
+			if(projectDisplayed.getCommunityID() == community.getCommunityID())
+			{
+				tvPostalCode.setText(Integer.toString(community.getPostalCode()));
+			}
+		}
 	}
 	
 	//Method to handle the return from the dialog fragment
@@ -249,7 +296,7 @@ public class ProjectDetailsFragment extends Fragment {
 
 	// ASync task to populate the rating bar if there is an existing rating
 	// stored
-	private class MyTask extends AsyncTask<String, String, String> {
+	private class RetrieveProjectRatings extends AsyncTask<String, String, String> {
 
 		// Tasks pre-execute method
 		@Override
@@ -286,4 +333,86 @@ public class ProjectDetailsFragment extends Fragment {
 		}
 
 	}
+	
+	// ASync task to populate the project notes if there is an existing note
+		// stored
+		private class RetrieveProjectNotes extends AsyncTask<String, String, String> {
+
+			// Tasks pre-execute method
+			@Override
+			protected void onPreExecute() {
+
+				noteTasks.add(this);
+			}
+
+			// Tasks do in background method
+			@Override
+			protected String doInBackground(String... params) {
+				// Create a new string from the http managers get data method and
+				// return it
+				String content = HttpManager.getData(params[0]);
+				return content;
+			}
+
+			// Tasks post-execute method
+			@Override
+			protected void onPostExecute(String result) {
+				// Create a new list of project ratings from the JSON parser using
+				// the passed in string from the http manager
+				noteList = ProjectNoteJSONParser.parseFeed(result);
+				checkRetrievedNotes();
+				// Remove the current task and set the progress bar to be invisible
+				// again
+				noteTasks.remove(this);
+
+			}
+
+			@Override
+			protected void onProgressUpdate(String... values) {
+				// updateDisplay(values[0]);
+			}
+
+		}
+		
+		
+		// ASync task to populate the rating bar if there is an existing rating
+		// stored
+		private class RetrieveCommunityTask extends AsyncTask<String, String, String> {
+
+			// Tasks pre-execute method
+			@Override
+			protected void onPreExecute() {
+
+				communityTasks.add(this);
+			}
+
+			// Tasks do in background method
+			@Override
+			protected String doInBackground(String... params) {
+				// Create a new string from the http managers get data method and
+				// return it
+				String content = HttpManager.getData(params[0]);
+				return content;
+			}
+
+			// Tasks post-execute method
+			@Override
+			protected void onPostExecute(String result) {
+				// Create a new list of project ratings from the JSON parser using
+				// the passed in string from the http manager
+				List<Community> communityList = CommunityJSONParser.parseFeed(result);
+				getPostalCode(communityList);
+				// Remove the current task and set the progress bar to be invisible
+				// again
+				communityTasks.remove(this);
+
+			}
+
+			@Override
+			protected void onProgressUpdate(String... values) {
+				// updateDisplay(values[0]);
+			}
+
+		}
+		
 }
