@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tyct.thankyoutrust.model.AdminID;
+import com.tyct.thankyoutrust.model.Community;
 import com.tyct.thankyoutrust.model.PhoneNumber;
 import com.tyct.thankyoutrust.model.ProjectRating;
 import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
+import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
 import com.tyct.thankyoutrust.parsers.PhoneNumberJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
 import com.tyct.thankyoutrust.parsers.UserJSONParser;
@@ -43,15 +45,12 @@ public class AdminAllUsers extends Activity {
 
 	List<User> userList;
 	List<AdminID> adminList;
-	List<ProjectRating> prList;
 	List<PhoneNumber> phoneNumberList;
-
+	List<Community> communityList;
 
 	List<MyTask> tasks;
-
-	List<DeleteUserTask> deleteusertask;
-	List<ProjectRatingTask> prtask;
 	List<PhoneNumberTask> phoneNumbertask;
+	List<CommunityTask> communitytask;
 
 	String[] userNames;
 	String selectedItem = "";
@@ -70,14 +69,13 @@ public class AdminAllUsers extends Activity {
 
 		// start async task
 		tasks = new ArrayList<>();
-		//adminTask = new ArrayList<>();
-		prtask = new ArrayList<>();
 		phoneNumbertask = new ArrayList<>();
+		communitytask = new ArrayList<>();
 
 		// makes connection to database
 		display();
-		projectRatingInfo();
 		phoneNumberInfo();
+		communityInfo();
 		
 		ListView groupAct = (ListView) findViewById(R.id.lstvewuser);
 		groupAct.setOnItemClickListener(new ListViewUserClickHandler());
@@ -154,14 +152,14 @@ public class AdminAllUsers extends Activity {
 		MyTask task = new MyTask();
 		task.execute(uri);
 	}
-
-	private void requestProjectRatingData(String uri) {
-		ProjectRatingTask task = new ProjectRatingTask();
-		task.execute(uri);
-	}
 	
 	private void requestPhoneNumberData(String uri) {
 		PhoneNumberTask task = new PhoneNumberTask();
+		task.execute(uri);
+	}
+	
+	private void requestCommunityData(String uri) {
+		CommunityTask task = new CommunityTask();
 		task.execute(uri);
 	}
 
@@ -174,19 +172,19 @@ public class AdminAllUsers extends Activity {
 					.show();
 		}
 	}
-
-	public void projectRatingInfo() {
+	
+	public void phoneNumberInfo() {
 		if (isOnline()) {
-			requestProjectRatingData("http://gb3it.pickworth.info:3000/ratings");
+			requestPhoneNumberData("http://gb3it.pickworth.info:3000/phone_numbers");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
 		}
 	}
 	
-	public void phoneNumberInfo() {
+	public void communityInfo() {
 		if (isOnline()) {
-			requestPhoneNumberData("http://gb3it.pickworth.info:3000/phone_numbers");
+			requestCommunityData("http://gb3it.pickworth.info:3000/communities");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -203,16 +201,12 @@ public class AdminAllUsers extends Activity {
 			return false;
 		}
 	}
-
-	/**
-    	 * 
-    	 * 
-    	 */
-	private class ProjectRatingTask extends AsyncTask<String, String, String> {
+	
+	private class CommunityTask extends AsyncTask<String, String, String> {
 
 		@Override
 		protected void onPreExecute() {
-			prtask.add(this);
+			communitytask.add(this);
 		}
 
 		@Override
@@ -223,8 +217,8 @@ public class AdminAllUsers extends Activity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			prList = ProjectRatingsJSONParser.parseFeed(result);
-			prtask.remove(this);
+			communityList = CommunityJSONParser.parseFeed(result);
+			communitytask.remove(this);
 		}
 
 		@Override
@@ -235,7 +229,7 @@ public class AdminAllUsers extends Activity {
 
 	/**
     	 * 
-    	 * 
+    	 * Populates userList
     	 */
 	private class MyTask extends AsyncTask<String, String, String> {
 
@@ -269,59 +263,10 @@ public class AdminAllUsers extends Activity {
 		}
 
 	}
-
-	// Handles the posting side
-	private class DeleteUserTask extends AsyncTask<String, String, String> {
-		// ratings string
-		String ratingUriString = "http://gb3it.pickworth.info:3000/ratings/";
-
-		// user Id string
-		String userIdUriString = "http://gb3it.pickworth.info:3000/users/";
-
-		int num = 0;
-
-		@Override
-		protected void onPreExecute() {
-			deleteusertask.add(this);
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			HttpManager.deleteData(userIdUriString + selectedUserId);
-
-			// for (int i=0; i<projectRatingIdDeleteList.length; i++)
-			// {
-			// num = projectRatingIdDeleteList[i];
-			// //HttpManager.deleteData(ratingUriString + num);
-			// Toast.makeText(AdminAllUsers.this, "rating id = " + num,
-			// Toast.LENGTH_LONG).show();
-			// }
-
-			String result = "User Deleted";
-
-			return result;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-
-			// String messageResult = (result);
-
-			deleteusertask.remove(this);
-
-			startActivity(new Intent(AdminAllUsers.this, AdminAllUsers.class));
-			finish();
-		}
-
-		@Override
-		protected void onProgressUpdate(String... values) {
-		}
-
-	}
-	
+		
 	/**
 	 * 
-	 * 
+	 * Gets phone List
 	 */
 private class PhoneNumberTask extends AsyncTask<String, String, String> {
 
@@ -359,85 +304,55 @@ private class PhoneNumberTask extends AsyncTask<String, String, String> {
 						posistion).toString();
 				int theUsersID = getUserId(posistion);
 				
-				SharedPreferences prefs = getSharedPreferences("prefsFile", MODE_PRIVATE);
-				SharedPreferences.Editor editor = prefs.edit();
-				
 				//get User Data
 				String email = null;
 				String address = null;
 				String suburb = null;
 				String city = null;
-				//int communityId;
-			//	String community = null;
-				//String phoneNumber = null;
+				int communityId = 0;
+				String communityName = null;
+				String phoneNumber = null;
 				
 				for (User user : userList) {
 					if(user.getUserID() == theUsersID)
 					{
-					//userName = user.getFirstName() + " " + user.getLastName();
 					email = user.getEmail();
 					address = user.getStreetAddress();
 					suburb = user.getSuburb();
 					city = user.getCity();
-					//communityId = user.getCommunityID();
+					communityId = user.getCommunityID();
 					break;
 					}
 				}
 				
-//				for(PhoneNumber phone : phoneNumberList)
-//				{
-//					if(theUsersID == phone.getUserID())
-//					{
-//						phoneNumber = phone.getPhoneNumber();
-//					}
-//				}
-//				
-				editor.putString("name", name);
-				editor.putInt("userId", theUsersID);
-				editor.putString("email", email);
-				editor.putString("address", address);
-				editor.putString("suburb", suburb);
-				editor.putString("city", city);
-				//editor.putString("phone", phoneNumber);
-				editor.commit();
+				for(Community com : communityList) {
+					if(communityId == com.getCommunityID())
+					{
+						communityName = com.getCommunityName();
+					}
+				}
 				
-				Intent intent = new Intent(AdminAllUsers.this, AdminUsersProfile.class);
-				startActivity(intent);
+				for(PhoneNumber phone : phoneNumberList)
+				{
+					if(theUsersID == phone.getUserID())
+					{
+						phoneNumber = phone.getPhoneNumber();
+					}
+				}
+				
+				Intent detailIntent = new Intent(AdminAllUsers.this, AdminUsersProfile.class);
+				
+				detailIntent.putExtra("name", name);
+				detailIntent.putExtra("userId", theUsersID);
+				detailIntent.putExtra("email", email);
+				detailIntent.putExtra("address", address);
+				detailIntent.putExtra("suburb", suburb);
+				detailIntent.putExtra("city", city);
+				detailIntent.putExtra("communityName", communityName);
+				detailIntent.putExtra("phoneNumber", phoneNumber);
+				startActivity(detailIntent);
 				
 			}
 
 		}
-
-	public void selectRatingsToDelete() {
-		prtask = new ArrayList<>();
-		int[] projectRatingIdDeleteList;
-
-		projectRatingIdDeleteList = new int[prList.size()];
-		int i = 0;
-		// Add each user name from the project list to the array of strings
-		for (ProjectRating pr : prList) {
-			if (pr.getUserID() == selectedUserId) {
-
-				projectRatingIdDeleteList[i] = pr.getRatingID();
-				i++;
-
-			}
-		}
-	}
-
-	// method to delete a user
-	public void deleteUser() {
-
-		selectRatingsToDelete();
-
-//		deleteusertask = new ArrayList<>();
-//		DeleteUserTask task = new DeleteUserTask();
-//		task.execute();
-
-	}
-
-	
-
-	
-	
 }

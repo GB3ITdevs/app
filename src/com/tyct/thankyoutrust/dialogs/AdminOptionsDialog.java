@@ -10,7 +10,7 @@ import com.tyct.thankyoutrust.AdminUsersProfile;
 
 public class AdminOptionsDialog extends android.app.DialogFragment{
 		// Array for Admin Options
-		String[] optionsArray = { "Set as admin", "Remove as admin", "Delete user", "Change community" };
+		String[] optionsArray = { "Set as admin", "Remove as admin"};
 	
 		AdminUsersProfile myActivity;
 		// selected user

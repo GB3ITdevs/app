@@ -5,12 +5,13 @@ import java.util.List;
 
 import com.tyct.thankyoutrust.dialogs.AdminOptionsDialog;
 import com.tyct.thankyoutrust.model.AdminID;
+import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
 
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -49,11 +50,6 @@ public class AdminUsersProfile extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_admin_users_profile);
 		
-		//get users name
-		SharedPreferences prefs = getSharedPreferences("prefsFile", MODE_PRIVATE);
-		userName = prefs.getString("name", "name");
-		userId = prefs.getInt("userId", 0);	
-		
 		// start async task
 		adminTask = new ArrayList<>();
 		
@@ -62,6 +58,8 @@ public class AdminUsersProfile extends Activity {
 		
 		//Poputlate Text fields with chosen user
 		populateFields();
+		
+		Toast.makeText(this, "userId = " + userId, Toast.LENGTH_LONG).show();
 
 		//Button 
 		Button optionsButton = (Button) findViewById(R.id.btnOptions);
@@ -88,32 +86,44 @@ public class AdminUsersProfile extends Activity {
 	}
 	
 	
+	//populate text fields
 	private void populateFields() {
 		
-		SharedPreferences prefs = getSharedPreferences("prefsFile", MODE_PRIVATE);
-		String namedPerson = prefs.getString("name", "name");	
-		String email = prefs.getString("email", "email");
-		String address = prefs.getString("address", "address");
-		String suburb = prefs.getString("suburb", "suburb");
-		String city = prefs.getString("city", "city");
-		String phoneNumber = prefs.getString("phone","phoneNumber");
+		//get all data from passed in intent
+		Intent intent = getIntent();
+		Bundle allData = intent.getExtras();
+
+		//get data
+		String name = allData.getString("name");
+		String email = allData.getString("email");
+		String address = allData.getString("address");
+		String suburb = allData.getString("suburb");
+		String city = allData.getString("city");
+		String communityName = allData.getString("communityName");
+		int id = allData.getInt("userId");
+		String phoneNumber = allData.getString("phoneNumber");
 		
-		// Get references
-				TextView uName = (TextView) findViewById(R.id.tvProfName);
-				TextView uEmail = (TextView) findViewById(R.id.tvProfEmail);
-				TextView uPhone = (TextView) findViewById(R.id.tvPPhoneNumber);
-				TextView uAddress = (TextView) findViewById(R.id.tvPStreetAddress);
-				TextView uSuburb = (TextView) findViewById(R.id.tvPSuburb);
-				TextView uCity = (TextView) findViewById(R.id.tvPCity);
-			//	TextView uCommunity = (TextView) findViewById(R.id.tvPCommunity);
-								
-				//set textfields	
-				uName.setText(namedPerson);
-				uEmail.setText(email);
-				uPhone.setText(phoneNumber);
-				uAddress.setText(address);
-				uSuburb.setText(suburb);
-				uCity.setText(city);
+		//setup textfields
+		TextView uName = (TextView) findViewById(R.id.tvProfName);
+		TextView uEmail = (TextView) findViewById(R.id.tvProfEmail);
+		TextView uAddress = (TextView) findViewById(R.id.tvPStreetAddress);
+		TextView uSuburb = (TextView) findViewById(R.id.tvPSuburb);
+		TextView uCity = (TextView) findViewById(R.id.tvPCity);
+		TextView uCommunityName = (TextView) findViewById(R.id.tvPCommunity);
+		TextView uPhone = (TextView) findViewById(R.id.tvPPhoneNumber);
+		
+		//set text fields
+		uName.setText(name);
+		uEmail.setText(email);
+		uAddress.setText(address);
+		uSuburb.setText(suburb);
+		uCity.setText(city);
+		uCommunityName.setText(communityName);
+		uPhone.setText(phoneNumber);
+		
+		//make global
+		userName = name;
+		userId = id;
 	}
 	
 	//button that brings up admins options for said user
@@ -146,14 +156,6 @@ public class AdminUsersProfile extends Activity {
 
 			if (options == "Remove as admin") {
 				deleteAdmin();
-			}
-
-			if (options == "Delete user") {
-				Toast.makeText(this, "Delete User", Toast.LENGTH_LONG).show();
-			}
-			
-			if (options == "Change community") {
-				Toast.makeText(this, "Delete User", Toast.LENGTH_LONG).show();
 			}
 		}
 		
