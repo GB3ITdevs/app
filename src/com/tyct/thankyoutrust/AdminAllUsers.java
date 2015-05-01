@@ -29,13 +29,16 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AdminAllUsers extends Activity {
@@ -73,10 +76,10 @@ public class AdminAllUsers extends Activity {
 		communitytask = new ArrayList<>();
 
 		// makes connection to database
+		communityInfo();
 		display();
 		phoneNumberInfo();
-		communityInfo();
-		
+
 		ListView groupAct = (ListView) findViewById(R.id.lstvewuser);
 		groupAct.setOnItemClickListener(new ListViewUserClickHandler());
 	}
@@ -124,28 +127,6 @@ public class AdminAllUsers extends Activity {
 		int infoID = userIds[positionClicked];
 		return infoID;
 
-	}
-
-	// Method to setup the List View to display all users
-	public void setUserList(List<User> userList) {
-
-		userNames = new String[userList.size()];
-		userIds = new int[userList.size()];
-		int i = 0;
-		// Add each user name from the project list to the array of strings
-		for (User user : userList) {
-			userNames[i] = user.getFirstName() + " " + user.getLastName();
-			userIds[i] = user.getUserID();
-			i++;
-		}
-
-		// Create the adapter
-		ArrayAdapter<String> adminOptionsAdapter = new ArrayAdapter<String>(
-				this, android.R.layout.simple_list_item_1, userNames);
-		// Create the ListView
-		ListView userNameListView = (ListView) findViewById(R.id.lstvewuser);
-		// Bind the ListView to the above adapter
-		userNameListView.setAdapter(adminOptionsAdapter);
 	}
 
 	private void requestData(String uri) {
@@ -250,11 +231,10 @@ public class AdminAllUsers extends Activity {
 
 		@Override
 		protected void onPostExecute(String result) {
-
 			// populates userlist from parser
 			userList = UserJSONParser.parseFeed(result);
-			// populates the list view using the setUserList Method.
-			setUserList(userList);
+	
+			setListView();
 		}
 
 		@Override
@@ -300,30 +280,18 @@ private class PhoneNumberTask extends AsyncTask<String, String, String> {
 			@Override
 			public void onItemClick(AdapterView<?> list, View itemview,
 					int posistion, long id) {
-				String name = (String) list.getItemAtPosition(
-						posistion).toString();
-				int theUsersID = getUserId(posistion);
 				
-				//get User Data
-				String email = null;
-				String address = null;
-				String suburb = null;
-				String city = null;
-				int communityId = 0;
+				User selectedUser = (User) list.getItemAtPosition(posistion);
+
+				int theUsersID = selectedUser.getUserID();
+				String name = selectedUser.getFirstName() + " " + selectedUser.getLastName();
+				String	email = selectedUser.getEmail();
+				String	address = selectedUser.getStreetAddress();
+				String	suburb = selectedUser.getSuburb();
+				String	city = selectedUser.getCity();
+				int	communityId = selectedUser.getCommunityID();
 				String communityName = null;
 				String phoneNumber = null;
-				
-				for (User user : userList) {
-					if(user.getUserID() == theUsersID)
-					{
-					email = user.getEmail();
-					address = user.getStreetAddress();
-					suburb = user.getSuburb();
-					city = user.getCity();
-					communityId = user.getCommunityID();
-					break;
-					}
-				}
 				
 				for(Community com : communityList) {
 					if(communityId == com.getCommunityID())
@@ -354,5 +322,16 @@ private class PhoneNumberTask extends AsyncTask<String, String, String> {
 				
 			}
 
+		}
+		
+		private void setListView() {
+			
+			// Get reference to the listView
+			ListView userNameListView = (ListView) findViewById(R.id.lstvewuser);
+			
+			UserListAdapter adapter = new UserListAdapter(this, R.layout.admin_allusers_layout, userList, communityList);
+			// Bind the ListView to the above adapter
+			userNameListView.setAdapter(adapter);
+		
 		}
 }
