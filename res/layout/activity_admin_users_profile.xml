@@ -64,20 +64,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Stree Address" />
+                android:text="Street Address" />
   <TextView
                 android:id="@+id/tvPSuburb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Suburb" />
+                android:text="@string/prompt_suburb" />
   
   <TextView
                 android:id="@+id/tvPCity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="City" />
+                android:text="@string/prompt_city" />
   
   <TextView
                 android:id="@+id/tvPCommunity"
