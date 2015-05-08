@@ -63,7 +63,7 @@ public class ProjectNoteJSONParser {
 			// appropriate JSON object field
 			jsonProjectNote.accumulate("projectID",
 					Integer.toString(projectNote.getProjectID()));
-			jsonProjectNote.accumulate("contactID",
+			jsonProjectNote.accumulate("userID",
 					Integer.toString(projectNote.getUserID()));
 			jsonProjectNote.accumulate("note", projectNote.getNote());
 

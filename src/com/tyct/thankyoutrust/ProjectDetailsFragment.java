@@ -6,14 +6,18 @@ import java.util.List;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
@@ -24,9 +28,11 @@ import com.tyct.thankyoutrust.model.Community;
 import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.ProjectNote;
 import com.tyct.thankyoutrust.model.ProjectRating;
+import com.tyct.thankyoutrust.model.ProjectWebsite;
 import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectNoteJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
+import com.tyct.thankyoutrust.parsers.ProjectWebsiteJSONParser;
 
 public class ProjectDetailsFragment extends Fragment {
 	
@@ -41,6 +47,8 @@ public class ProjectDetailsFragment extends Fragment {
 	List<RetrieveProjectRatings> tasks;
 	List<RetrieveProjectNotes> noteTasks;
 	List<RetrieveCommunityTask> communityTasks;
+	List<RetrieveWebsite> websiteTasks;
+	List<PostProjectNotes> postProjectTasks;
 	
 	List<ProjectRating> projectRatingList;
 	List<ProjectNote> noteList;
@@ -49,8 +57,15 @@ public class ProjectDetailsFragment extends Fragment {
 	RatingBar ratingBar;
 	
 	TextView tvPostalCode;
+	TextView tvProjectNotes;
+	
+	Button viewWebsite;
+	
+	String websiteAddress;
 
-	SharedPreferences prefs;
+	ProjectNote noteEntity;
+	EditText noteData;
+	
 
 	ConfirmProjectRatingDialog confirmDialog;
 
@@ -80,7 +95,20 @@ public class ProjectDetailsFragment extends Fragment {
 		TextView tvUseOfFunds = (TextView) v.findViewById(R.id.useOfFunds);
 		TextView tvProjectBlurb = (TextView) v.findViewById(R.id.projectBlurb);
 		ratingBar = (RatingBar) v.findViewById(R.id.projectRatingBar);
-
+		Button postNote = (Button) v.findViewById(R.id.btnPostNotes);
+		// Get Text from editText field
+		noteData = (EditText) v.findViewById(R.id.textProjectNotes);
+		
+		
+		viewWebsite = (Button) v.findViewById(R.id.btnViewWebsite);
+		viewWebsite.setVisibility(View.INVISIBLE);
+		
+		android.view.View.OnClickListener websiteListener = new ViewWebsiteListener();
+		viewWebsite.setOnClickListener(websiteListener);
+		
+		//ProjectNotes textview
+		tvProjectNotes = (TextView) v.findViewById(R.id.projectDetailsNotes);
+				
 		// Retrieve the project selected from the activity
 		ma = (ProjectDetailsActivity) getActivity();
 		projectDisplayed = ma.getSelectProject();
@@ -95,8 +123,12 @@ public class ProjectDetailsFragment extends Fragment {
 		tvUseOfFunds.setText(projectDisplayed.getUseOfFunds());
 		tvProjectBlurb.setText(projectDisplayed.getProjectBlurb());
 		ratingBar.setOnRatingBarChangeListener(ratingChangeListener);
+		
+		OnClickListener postNoteListener = new postNoteHandler();
+		postNote.setOnClickListener(postNoteListener);
 
-		// Get the logged in user info id from the shared preferences
+
+		// Get the logged in user info id from the details activity
 		userID = ma.userID;
 
 		// Check if the project has already been rated and if so make it
@@ -105,6 +137,12 @@ public class ProjectDetailsFragment extends Fragment {
 		
 		//Method to retrieve the postal code for the community the project is listed in
 		getCommunities();
+		
+		//Method to check for existing notes that the user has entered about the current project
+		checkForExistingNotes();
+		
+		//Method to check if the project has an existing website
+		checkForWebsite();
 
 		// Return the view
 		return v;
@@ -149,20 +187,46 @@ public class ProjectDetailsFragment extends Fragment {
 	public void checkForExistingNotes() {
 		if (isOnline()) {
 			noteTasks = new ArrayList<>();
-			RetrieveProjectRatings noteTask = new RetrieveProjectRatings();
-			noteTask.execute("http://gb3it.pickworth.info:3000/ratings");
+			RetrieveProjectNotes noteTask = new RetrieveProjectNotes();
+			noteTask.execute("http://gb3it.pickworth.info:3000/project_notes");
 		}
 
 	}
 
 	public void checkRetrievedNotes() {
+		tvProjectNotes.setText("");
+		int count = 1;
 		for (int i = 0; i < noteList.size(); i++) {
 			if ((noteList.get(i).getUserID() == userID)
 					&& (noteList.get(i).getProjectID() == projectDisplayed
 							.getProjectID())) {
-//Need to set the notes to a textview here
+				//Set the notes to the textview in the details layout	
+				tvProjectNotes.append(" " + count + "." + " " + noteList.get(i).getNote());
+				count++;
 			}
 		}
+	}
+	
+	public void checkForWebsite() {
+		if (isOnline()) {
+			websiteTasks = new ArrayList<>();
+			RetrieveWebsite websiteTask = new RetrieveWebsite();
+			websiteTask.execute("http://gb3it.pickworth.info:3000/project_websites");
+		}
+
+	}
+	
+	public void checkRetrievedWebsites(List<ProjectWebsite> websites) {
+		for (ProjectWebsite projectWebsite : websites) 
+		{
+			if(projectWebsite.getProjectID() == projectDisplayed.getProjectID())
+			{
+				viewWebsite.setVisibility(View.VISIBLE);
+				websiteAddress = "http://" + projectWebsite.getSiteAddress();
+			}
+		}
+			
+		
 	}
 
 	public void setProjectRating() {
@@ -250,6 +314,65 @@ public class ProjectDetailsFragment extends Fragment {
 		}
 
 	}
+	
+	public class ViewWebsiteListener implements View.OnClickListener
+	{
+
+		@Override
+		public void onClick(View v) 
+		{
+			Uri goToProjectSite = Uri.parse(websiteAddress);
+			
+			Intent websiteIntent = new Intent(Intent.ACTION_VIEW, goToProjectSite);
+			
+			startActivity(websiteIntent);
+			
+		}
+
+		
+	}
+	
+	public class postNoteHandler implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			// Put Text into string form
+			String noteString = noteData.getText().toString();
+
+			// If statement, checks to make sure that user has put something
+			// into the edit text field
+			if (noteString.equals("")) {
+				// If Edit Text is empty it will show a toast
+				Toast.makeText(ma, "Please enter a note about this project", Toast.LENGTH_LONG).show();
+
+			} else {
+				// If Edit Text is not empty it will Post to the new project note to
+				// the database
+
+				// Create new Note Object, then pass data into sets
+				noteEntity = new ProjectNote();
+				// Passes the infoID
+				noteEntity.setUserID(userID);
+				
+				noteEntity.setProjectID(projectDisplayed.getProjectID());
+				
+				noteEntity.setNote(noteString);
+
+				// Calls the PostTask Method, and posts the commentEntity
+				postProjectTasks = new ArrayList<>();
+				PostProjectNotes task = new PostProjectNotes();
+				task.execute();
+				// Sets the Edit Text field to empty
+				noteData.setText("");
+
+				// refresh the display for the list view.
+
+			}
+
+		}
+
+	}
+
 
 	// ASync
 	// Tasks*************************************************************************************************
@@ -414,5 +537,87 @@ public class ProjectDetailsFragment extends Fragment {
 			}
 
 		}
+		
+		// ASync task to populate the rating bar if there is an existing rating
+				// stored
+				private class RetrieveWebsite extends AsyncTask<String, String, String> {
+
+					// Tasks pre-execute method
+					@Override
+					protected void onPreExecute() {
+
+						websiteTasks.add(this);
+					}
+
+					// Tasks do in background method
+					@Override
+					protected String doInBackground(String... params) {
+						// Create a new string from the http managers get data method and
+						// return it
+						String content = HttpManager.getData(params[0]);
+						return content;
+					}
+
+					// Tasks post-execute method
+					@Override
+					protected void onPostExecute(String result) {
+						// Create a new list of project ratings from the JSON parser using
+						// the passed in string from the http manager
+						List<ProjectWebsite> websiteList = ProjectWebsiteJSONParser.parseFeed(result);
+						checkRetrievedWebsites(websiteList);
+						// Remove the current task and set the progress bar to be invisible
+						// again
+						websiteTasks.remove(this);
+
+					}
+
+					@Override
+					protected void onProgressUpdate(String... values) {
+						// updateDisplay(values[0]);
+					}
+
+				}
+		
+				
+				
+				// ASync task to post enter project notes
+				private class PostProjectNotes extends AsyncTask<String, String, String> {
+					String noteEntityString = ProjectNoteJSONParser.POST(noteEntity);
+
+					@Override
+					protected void onPreExecute() {
+						// updateDisplay("Starting task");
+
+						if (postProjectTasks.size() == 0) {
+							
+						}
+						postProjectTasks.add(this);
+					}
+
+					@Override
+					protected String doInBackground(String... params) {
+						HttpManager.postData("http://gb3it.pickworth.info:3000/project_notes", noteEntityString);
+						String result = "Note Posted";
+						return result;
+					}
+
+					@Override
+					protected void onPostExecute(String result) {
+
+						// String commentResult = (result);
+						Toast.makeText(ma, result, Toast.LENGTH_LONG).show();
+						postProjectTasks.remove(this);
+						if (postProjectTasks.size() == 0) {
+							
+						}
+					}
+
+					@Override
+					protected void onProgressUpdate(String... values) {
+						
+					}
+
+				}
+
 		
 }

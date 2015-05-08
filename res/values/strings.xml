@@ -59,6 +59,9 @@
      <string name="options">Options</string>
       <string name="prompt_home_address">Home Address</string>
     <string name="select_community">Choose a community to register for:</string>
+    <string name="fragment_project_details_notes_title">Project Notes:</string>
+    <string name="fragment_project_details_notes_placeholder">You have no notes on this project yet.</string>
+    <string name="edit_project_notes">Enter your personal notes on this project</string>
      
 
 </resources>

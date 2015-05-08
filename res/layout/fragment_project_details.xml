@@ -93,6 +93,12 @@
             android:layout_gravity="center_horizontal|top"
             android:text="blurb" />
 
+        <Button
+            android:id="@+id/btnViewWebsite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Website" />
+
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
@@ -106,7 +112,46 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:numStars="5" />
+
+        <TextView
+            android:id="@+id/projectDetailsNotesTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_project_details_notes_title"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/projectDetailsNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_project_details_notes_placeholder" />
+
     </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/postProjectNoteLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:weightSum="1" >
+        
+      <EditText
+        android:id="@+id/textProjectNotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_project_notes" 
+        android:layout_weight="1"
+        />
+
+      <Button
+          android:id="@+id/btnPostNotes"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/post" 
+          />
+
+      </LinearLayout>
 
 </LinearLayout>
 </ScrollView>
