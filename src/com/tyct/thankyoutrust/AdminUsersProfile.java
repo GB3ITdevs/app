@@ -3,10 +3,14 @@ package com.tyct.thankyoutrust;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tyct.thankyoutrust.dialogs.AdminChangeCommunitiesDialog;
 import com.tyct.thankyoutrust.dialogs.AdminOptionsDialog;
 import com.tyct.thankyoutrust.model.AdminID;
+import com.tyct.thankyoutrust.model.Community;
 import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
+import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
+import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -16,6 +20,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.util.ArrayMap;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,33 +35,45 @@ public class AdminUsersProfile extends Activity {
 	List<PostAdminTask> postadmintask;
 	List<AdminTask> adminTask;
 	List<DeleteAdminTask> deleteAdminTask;
+	List<CommunityTask> communityTask;
+	List<ChangeCommunityTask> changeCommunityTask;
 	
 	//Lists
 	List<AdminID> adminList;
+	List<Community> communityList;
+	
 	
 	// Session Manager Class
 	SessionManager session;
 	
 	//Global Variables
-	boolean dialogResult;
-	AdminOptionsDialog adminDialog;
 	String userName;
 	int userId;
 	int adminId;
 	AdminID adminEntity;
+	String[] communityNames;
+	int newCommunityId=0;
+	int userCommunityId;
+	
+	//Dialog Fragements
+	AdminOptionsDialog adminDialog;
+	AdminChangeCommunitiesDialog changeCommunityDialog;
+	boolean dialogResult;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_admin_users_profile);
 		
-		// start async task
+		// start asyncTask
 		adminTask = new ArrayList<>();
+		communityTask = new ArrayList<>();
 		
 		// makes connection to database
 		adminInfo();
-		
-		//Poputlate Text fields with chosen user
+		communityInfo();
+			
+		//Populate Text fields with chosen user
 		populateFields();
 
 		//Button 
@@ -67,20 +84,38 @@ public class AdminUsersProfile extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.admin_users_profile, menu);
+		getMenuInflater().inflate(R.menu.admin_home_page, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		Intent goTo = new Intent();
+		switch (item.getItemId()) {
+		case R.id.action_projects:
+			goTo = new Intent(AdminUsersProfile.this, Projects.class);
+			startActivity(goTo);
 			return true;
+		case R.id.action_home:
+			goTo = new Intent(AdminUsersProfile.this, HomeActivity.class);
+			startActivity(goTo);
+			finish();
+			return true;
+		case R.id.action_profile:
+			goTo = new Intent(AdminUsersProfile.this, ProfileActivity.class);
+			startActivity(goTo);
+			return true;
+		case R.id.action_about_us:
+			goTo = new Intent(AdminUsersProfile.this, AboutUs.class);
+			startActivity(goTo);
+			return true;
+		case R.id.action_logout:
+			session.logoutUser();
+			finish();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
 	}
 	
 	
@@ -100,6 +135,7 @@ public class AdminUsersProfile extends Activity {
 		String communityName = allData.getString("communityName");
 		int id = allData.getInt("userId");
 		String phoneNumber = allData.getString("phoneNumber");
+		int communityId = allData.getInt("communityID");
 		
 		//setup textfields
 		TextView uName = (TextView) findViewById(R.id.tvProfName);
@@ -122,6 +158,7 @@ public class AdminUsersProfile extends Activity {
 		//make global
 		userName = name;
 		userId = id;
+		userCommunityId = communityId;
 	}
 	
 	//button that brings up admins options for said user
@@ -155,6 +192,13 @@ public class AdminUsersProfile extends Activity {
 			if (options == "Remove as admin") {
 				deleteAdmin();
 			}
+			
+			if (options == "Change community") {
+				changeCommunityDialog = new AdminChangeCommunitiesDialog();
+				FragmentManager fragman = getFragmentManager();
+				changeCommunityDialog.show(fragman, "confirm");
+				//changeCommunity();
+			}
 		}
 		
 		// method to add an admin (POST)
@@ -170,7 +214,7 @@ public class AdminUsersProfile extends Activity {
 					break;
 				}
 			}
-
+			//Add as an admin if user is not already an admin
 			if (!isAdmin) {
 				adminEntity = new AdminID();
 				adminEntity.setUserID(userId);
@@ -196,6 +240,66 @@ public class AdminUsersProfile extends Activity {
 			}	
 		}
 		
+		// method to change community of selected user
+		public void setNewCommunity(boolean result, String newCommunity) {
+			changeCommunityDialog.dismiss();//dismiss dialog box
+			
+			//if clicked submit do this
+			if (result == true) 
+			{
+				if (isOnline()) 
+				{
+					// get the name of each community in communityList
+					for (Community com : communityList) {
+						if(newCommunity == com.getCommunityName()){
+							newCommunityId = com.getCommunityID();
+						}	
+					}
+					
+					//If user is already part of the community then don't execute
+					if(userCommunityId == newCommunityId)
+					{
+						Toast.makeText(this, userName + " is already in this community", Toast.LENGTH_LONG).show();
+					}
+					//go to asyncTask to change community
+					else
+					{
+					ChangeCommunityTask task = new ChangeCommunityTask (newCommunity);
+					task.execute();
+					}
+				} 
+				//Show toast if network is unavailable
+				else 
+				{
+					Toast.makeText(this, "Network isn't available.", Toast.LENGTH_LONG).show();
+				}
+			} 
+			
+			//if clicked cancel
+			else 
+			{
+				Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+			}
+		}
+		
+		//Method to set CommunityNames
+		public void setCommunityNames(List<Community> com){
+		
+			// Convert communityList to an array
+			communityNames = new String[communityList.size()];
+
+			// get the name of each community in communityList
+			for (Community community : communityList) {
+				int i = communityList.indexOf(community);
+				communityNames[i] = community.getCommunityName();
+			}			
+		}
+		
+		//Get communityNames which is called by the AdminChangeCommunitiesDailog
+		public String[] getCommunityNames()
+		{
+			return communityNames;
+		}
 		
 		//Checks to see if phone is online
 		protected boolean isOnline() {
@@ -214,7 +318,10 @@ public class AdminUsersProfile extends Activity {
 			task.execute(uri);
 		}
 		
-		
+		private void requestCommunityData(String uri) {
+			CommunityTask task = new CommunityTask();
+			task.execute(uri);
+		}
 		//************************************************** URI STRINGS FOR DATA *******************************************************************
 		public void adminInfo() {
 			if (isOnline()) {
@@ -225,6 +332,16 @@ public class AdminUsersProfile extends Activity {
 			}
 		}
 
+		public void communityInfo() {
+			if (isOnline()) {
+				requestCommunityData("http://gb3it.pickworth.info:3000/communities");
+			} else {
+				Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
+						.show();
+			}
+		}
+		
+		
 		/*****************************************************************************************************************************
     	 * 
     	 * 						ASYNC TASKS
@@ -285,7 +402,6 @@ public class AdminUsersProfile extends Activity {
 			@Override
 			protected void onProgressUpdate(String... values) {
 			}
-
 		}
 		
 		/** 
@@ -321,6 +437,65 @@ public class AdminUsersProfile extends Activity {
 			@Override
 			protected void onProgressUpdate(String... values) {
 			}
+		}
+		
+		/** 
+    	 * Get community List AsyncTask
+    	 */
+		private class CommunityTask extends AsyncTask<String, String, String> {
 
+			@Override
+			protected void onPreExecute() {
+				communityTask.add(this);
+			}
+
+			@Override
+			protected String doInBackground(String... params) {
+				String content = HttpManager.getData(params[0]);
+				return content;
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				communityList = CommunityJSONParser.parseFeed(result);
+				communityTask.remove(this);
+
+				setCommunityNames(communityList);
+			}
+		}
+		
+		/** 
+    	 * Change new Community for User (Update user Community)
+    	 */
+		private class ChangeCommunityTask extends AsyncTask<Void, Void, Boolean> {
+
+			private final String changeCommunity;
+			private final String communityName;
+
+			public ChangeCommunityTask(String community) {
+				ArrayMap<String, String> user = new ArrayMap<String, String>();
+				
+				String communityId = Integer.toString(newCommunityId);
+				user.put("communityID", communityId);
+				changeCommunity = UserJSONParser.PUTUser(user);
+				communityName = community;
+			}
+
+			@Override
+			protected Boolean doInBackground(Void... params) {
+				// update details here
+				HttpManager.updateData(
+						"http://gb3it.pickworth.info:3000/users/" + userId,
+						changeCommunity);
+				return true;
+			}
+
+			@Override
+			protected void onPostExecute(Boolean success) {			
+				newCommunityId = 0; //set community varibale back to 0
+				//udate textView for communityName
+				TextView uCommunityName = (TextView) findViewById(R.id.tvPCommunity);
+				uCommunityName.setText(communityName);			
+			}
 		}
 }

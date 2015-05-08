@@ -318,6 +318,7 @@ private class PhoneNumberTask extends AsyncTask<String, String, String> {
 				detailIntent.putExtra("city", city);
 				detailIntent.putExtra("communityName", communityName);
 				detailIntent.putExtra("phoneNumber", phoneNumber);
+				detailIntent.putExtra("communityID", communityId);
 				startActivity(detailIntent);
 				
 			}
