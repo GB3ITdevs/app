@@ -27,7 +27,7 @@ public class AboutUs extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		
-		if(userIsLoggedIn == false)
+		if(userIsLoggedIn == true)
 		{
 			getMenuInflater().inflate(R.menu.main, menu);
 			return true;
