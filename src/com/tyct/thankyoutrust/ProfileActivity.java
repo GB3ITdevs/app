@@ -130,6 +130,10 @@ public class ProfileActivity extends Activity {
 			startActivity(goTo);
 			finish();
 			return true;
+		case R.id.admin:
+			goTo = new Intent(ProfileActivity.this, AdminHomePage.class);
+			startActivity(goTo);
+			return true;
 		case R.id.action_about_us:
 			goTo = new Intent(ProfileActivity.this, AboutUs.class);
 			startActivity(goTo);
