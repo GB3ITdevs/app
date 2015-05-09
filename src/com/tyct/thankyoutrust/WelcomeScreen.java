@@ -64,11 +64,9 @@ public class WelcomeScreen extends Activity {
 
 		@Override
 		public void onClick(View v) {
-
 			Intent intent = new Intent(WelcomeScreen.this, LoginActivity.class);
 			startActivity(intent);
 		}
-
 	}
 
 	// Method for Registration page
@@ -80,18 +78,15 @@ public class WelcomeScreen extends Activity {
 					RegisterActivity.class);
 			startActivity(intent);
 		}
-
 	}
 
-	// Method to got to About Us page
+	// Method to go to About Us page
 	public class AboutUsButton implements OnClickListener {
 
 		@Override
 		public void onClick(View v) {
 			Intent intent = new Intent(WelcomeScreen.this, AboutUs.class);
 			startActivity(intent);
-
 		}
-
 	}
 }
