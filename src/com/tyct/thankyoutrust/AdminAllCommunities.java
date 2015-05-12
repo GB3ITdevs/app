@@ -2,10 +2,18 @@ package com.tyct.thankyoutrust;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.tyct.thankyoutrust.AdminAllUsers.ListViewUserClickHandler;
+import com.tyct.thankyoutrust.dialogs.AdminChangeCommunitiesDialog;
+import com.tyct.thankyoutrust.dialogs.AdminCommunityDialog;
+import com.tyct.thankyoutrust.dialogs.AdminOptionsDialog;
 import com.tyct.thankyoutrust.model.Community;
+import com.tyct.thankyoutrust.model.PhoneNumber;
+import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -14,9 +22,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class AdminAllCommunities extends Activity {
 	// Session Manager Class
@@ -25,6 +37,10 @@ public class AdminAllCommunities extends Activity {
 	List<Community> communityList;
 	String[] communityNames;
 	List<MyTask> tasks;
+	
+	//Dialog Fragements
+	AdminCommunityDialog adminDialog;
+	boolean dialogResult;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +53,9 @@ public class AdminAllCommunities extends Activity {
 		tasks = new ArrayList<>();
 
 		display();
+		
+		ListView groupAct = (ListView) findViewById(R.id.ListViewCommunities);
+		groupAct.setOnItemClickListener(new ListViewUserClickHandler());
 
 	}
 
@@ -104,6 +123,36 @@ public class AdminAllCommunities extends Activity {
 		ListView userNameListView = (ListView) findViewById(R.id.ListViewCommunities);
 		userNameListView.setAdapter(adminOptionsAdapter);
 	}
+	
+	//button that brings up admins options for said user
+		public class buttonOptionsClick implements OnClickListener
+		{
+
+			@Override
+			public void onClick(View v) {
+				adminDialog = new AdminCommunityDialog();
+				FragmentManager fm = getFragmentManager();
+				adminDialog.show(fm, "confirm");		
+			}
+			
+		}
+		
+		// Method to return data to the Dialog Fragment
+			public void setDialogResults(boolean result, String option) {
+				adminDialog.dismiss();
+
+				if (result == true) {
+					setOptionIntents(option);
+				}
+			}
+			
+			// Method where selected options are implemented
+			public void setOptionIntents(String options) {
+				if (options == "Post a message in community") {
+					Intent intent = new Intent(AdminAllCommunities.this, AdminUsersProfile.class);
+					startActivity(intent);
+				}
+			}
 
 	public void display() {
 		if (isOnline()) {
@@ -155,4 +204,21 @@ public class AdminAllCommunities extends Activity {
 		}
 
 	}
+	
+	// Handles the ListView clicks
+	public class ListViewUserClickHandler implements OnItemClickListener {
+
+		@Override
+		public void onItemClick(AdapterView<?> list, View itemview,
+				int posistion, long id) {
+			
+			adminDialog = new AdminCommunityDialog();
+			FragmentManager fm = getFragmentManager();
+			adminDialog.show(fm, "confirm");	
+			
+			
+		}
+
+	}
+	
 }

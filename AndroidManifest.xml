@@ -121,5 +121,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tyct.thankyoutrust.AdminAllUsers" />
         </activity>
+        <activity
+            android:name=".AdminMessageBoard"
+            android:label="@string/title_activity_admin_message_board"
+            android:parentActivityName=".AdminHomePage" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tyct.thankyoutrust.AdminHomePage" />
+        </activity>
     </application>
+
 </manifest>
