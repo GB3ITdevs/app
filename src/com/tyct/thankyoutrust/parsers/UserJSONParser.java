@@ -29,7 +29,7 @@ public class UserJSONParser {
 				user.setCommunityID(obj.getInt("communityID"));
 				user.setFirstName(obj.getString("firstName"));
 				user.setLastName(obj.getString("lastName"));
-				user.setPassword(obj.getString("password"));
+//				user.setPassword(obj.getString("password"));
 				user.setEmail(obj.getString("email"));
 				user.setPostalCode(obj.getInt("postalCode"));
 				user.setSuburb(obj.getString("suburb"));
@@ -76,6 +76,34 @@ public class UserJSONParser {
 		json = "{\"user\":" + jsonUser.toString() + "}";
 
 		return json;
+
+	}
+	
+	//Method to retrieve one authenticated user
+	public static User AuthenticateUser(String content)
+	{
+
+		try {
+
+				JSONObject obj = new JSONObject(content);
+				User user = new User();
+
+				user.setUserID(obj.getInt("userID"));
+				user.setCommunityID(obj.getInt("communityID"));
+				user.setFirstName(obj.getString("firstName"));
+				user.setLastName(obj.getString("lastName"));
+//				user.setPassword(obj.getString("password"));
+				user.setEmail(obj.getString("email"));
+				user.setPostalCode(obj.getInt("postalCode"));
+				user.setSuburb(obj.getString("suburb"));
+				user.setCity(obj.getString("city"));
+				user.setStreetAddress(obj.getString("streetAddress"));
+			
+			return user;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
