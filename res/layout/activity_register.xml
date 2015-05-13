@@ -37,7 +37,7 @@
                 android:layout_marginTop="16dp"
                 android:ems="10"
                 android:hint="@string/prompt_name"
-                android:inputType="textPersonName" >
+                android:inputType="textPersonName|textCapWords" >
 
                 <requestFocus />
             </EditText>
@@ -49,7 +49,7 @@
                 android:layout_marginTop="16dp"
                 android:ems="10"
                 android:hint="@string/prompt_surname"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName|textCapWords" />
 
             <AutoCompleteTextView
                 android:id="@+id/reg_email"
@@ -69,7 +69,7 @@
                 android:layout_marginTop="16dp"
                 android:ems="10"
                 android:hint="@string/prompt_home_address"
-                android:inputType="textPostalAddress" />
+                android:inputType="textPostalAddress|textCapWords" />
             
             <EditText
                 android:id="@+id/reg_suburb"
@@ -78,7 +78,7 @@
                 android:layout_marginTop="16dp"
                 android:ems="10"
                 android:hint="@string/prompt_suburb"
-                android:inputType="textPostalAddress" />
+                android:inputType="textCapWords" />
             
             <EditText
                 android:id="@+id/reg_city"
@@ -87,7 +87,7 @@
                 android:layout_marginTop="16dp"
                 android:ems="10"
                 android:hint="@string/prompt_city"
-                android:inputType="textPostalAddress" />
+                android:inputType="textCapWords" />
             
             <EditText
                 android:id="@+id/reg_postcode"
@@ -96,7 +96,7 @@
                 android:layout_marginTop="16dp"
                 android:ems="10"
                 android:hint="@string/prompt_postcode"
-                android:inputType="textPostalAddress" />
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/reg_community"
