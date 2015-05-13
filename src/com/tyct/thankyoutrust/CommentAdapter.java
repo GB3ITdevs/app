@@ -104,7 +104,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 		// By default the button is not visible
 		deleteMsg.setVisibility(View.INVISIBLE);
 		deleteMsg.setOnClickListener(new DeleteButtonHandler(message
-				.getCommentID()));
+				.getCommentID(), message.getComment()));
 
 		// for users in the userlist where user info id equals message get name
 		for (User user : userList) {
@@ -120,8 +120,10 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 
 		// get user data from session
 		HashMap<String, String> userStored = session.getUserDetails();
-		if (message.getUserID() == Integer.parseInt(userStored.get("id"))) {
-			// display the delete button for the logged in user
+		
+		// If message was posted by the logged in user OR the logged in user is an admin
+		if (message.getUserID() == Integer.parseInt(userStored.get("id")) || userStored.get("admin").equals("1")) {
+			// display the delete button
 			deleteMsg.setVisibility(View.VISIBLE);
 		}
 
@@ -136,19 +138,21 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 	// Delete a comment
 	public class DeleteButtonHandler implements OnClickListener {
 		int commentID;
+		String comment;
 
-		public DeleteButtonHandler(int commentID) {
+		public DeleteButtonHandler(int commentID, String comment) {
 			this.commentID = commentID;
+			this.comment = comment;
 		}
 
 		@Override
 		public void onClick(View v) {
-			deleteDialog(commentID);
+			deleteDialog(commentID, comment);
 		}
 	}
 
 	// Show a pop-up dialog to confirm user wants to delete the comment
-	public void deleteDialog(int commentID) {
+	public void deleteDialog(int commentID, String comment) {
 		final Integer[] commentToDelete = new Integer[1];
 		commentToDelete[0] = commentID;
 
@@ -161,6 +165,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 
 		// set dialog message
 		alertDialogBuilder
+				.setMessage(comment)
 				.setCancelable(false)
 				.setPositiveButton("Yes",
 						new DialogInterface.OnClickListener() {
