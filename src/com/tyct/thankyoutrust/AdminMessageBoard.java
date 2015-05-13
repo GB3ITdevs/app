@@ -52,7 +52,7 @@ public class AdminMessageBoard extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_admin_message_board);
 
 		// Session class instance
 		session = new SessionManager(getApplicationContext());
@@ -62,6 +62,14 @@ public class AdminMessageBoard extends ListActivity {
 		pb.setVisibility(View.INVISIBLE);
 
 		tasks = new ArrayList<>();
+		
+		//get all data from passed in intent
+		Intent intent = getIntent();
+		Bundle allData = intent.getExtras();
+
+		//get data
+		communityID = allData.getInt("CommunityId");
+		String communityName = allData.getString("CommunityName");
 
 		display();
 		userDisplay();
@@ -88,17 +96,18 @@ public class AdminMessageBoard extends ListActivity {
 		// get admin
 		int adminStatus = Integer.parseInt(userStored.get("admin"));
 		
- 		//Retrieve the logged in users communityID
- 		communityID = Integer.parseInt(userStored.get("communityID"));
+		String headerString = communityName + " Message Board";
+ 		TextView tvcomName = (TextView) findViewById(R.id.tvCommunityName);
+ 		tvcomName.setText(headerString);
 
 		// set admin
 		if (adminStatus == 1) {
 			admin = true;
-		}
+	}
+		
+				
 		//Toast message used for development**************************************
-//		Toast.makeText(this,
-//				userEmail + ", usid: " + userId + " admin = " + adminStatus,
-//				Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "communityId: " + communityID, Toast.LENGTH_LONG).show();
 	}
 
 	@Override

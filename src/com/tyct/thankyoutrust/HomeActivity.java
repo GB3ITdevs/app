@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,7 @@ public class HomeActivity extends ListActivity {
 	
 	List<User> userList;
 	
+	int userID;
 	int communityID;
 
 	// User Session Manager Class
@@ -82,7 +84,7 @@ public class HomeActivity extends ListActivity {
 		String userEmail = userStored.get("email");
 
 		// get user id
-		int userId = Integer.parseInt(userStored.get("id"));
+		userID = Integer.parseInt(userStored.get("id"));
 
 		// get admin
 		int adminStatus = Integer.parseInt(userStored.get("admin"));
@@ -161,7 +163,6 @@ public class HomeActivity extends ListActivity {
 		CommentAdapter adapter = new CommentAdapter(this,
 				R.layout.item_message, commentList, userList);
 		setListAdapter(adapter);
-
 	}
 
 	public void display() {
@@ -227,7 +228,6 @@ public class HomeActivity extends ListActivity {
 				{
 					commentList.add(comment);
 				}
-				
 			}
 
 			tasks.remove(this);
@@ -297,9 +297,6 @@ public class HomeActivity extends ListActivity {
 
 			// get user data from session
 			HashMap<String, String> userStored = session.getUserDetails();
-
-			// get info id
-			int userID = Integer.parseInt(userStored.get("id"));
 
 			// If statement, checks to make sure that user has put something
 			// into the edit text field

@@ -40,35 +40,14 @@ public class WelcomeScreen extends Activity {
 		buttonAboutUs.setOnClickListener(new AboutUsButton());
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.welcome_screen, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
 	// Method for Login Button
 	public class loginButton implements OnClickListener {
 
 		@Override
 		public void onClick(View v) {
-
 			Intent intent = new Intent(WelcomeScreen.this, LoginActivity.class);
 			startActivity(intent);
 		}
-
 	}
 
 	// Method for Registration page
@@ -80,18 +59,15 @@ public class WelcomeScreen extends Activity {
 					RegisterActivity.class);
 			startActivity(intent);
 		}
-
 	}
 
-	// Method to got to About Us page
+	// Method to go to About Us page
 	public class AboutUsButton implements OnClickListener {
 
 		@Override
 		public void onClick(View v) {
 			Intent intent = new Intent(WelcomeScreen.this, AboutUs.class);
 			startActivity(intent);
-
 		}
-
 	}
 }

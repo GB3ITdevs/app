@@ -42,9 +42,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/imageAvatar"
-         android:layout_marginLeft="5dp"
         android:layout_marginBottom="15dp"
-        android:textSize="14sp"
-        android:layout_toRightOf="@+id/tvName" />
+        android:layout_marginLeft="5dp"
+        android:layout_toLeftOf="@+id/btn_comment_delete"
+        android:layout_toRightOf="@+id/tvName"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/btn_comment_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentRight="true"
+        android:maxHeight="25dp"
+        android:maxWidth="25dp"
+        android:src="@android:drawable/ic_menu_close_clear_cancel" />
 
 </RelativeLayout>

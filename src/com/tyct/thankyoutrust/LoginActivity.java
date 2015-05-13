@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -463,7 +464,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 						uSurname, uAddress, uSuburb, uCity, uPostcode, uAdmin, uCommunityID);
 				Intent i = new Intent(LoginActivity.this, HomeActivity.class);
 				startActivity(i);
-				finish();
+				LoginActivity.this.finish();
 			} else {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));

@@ -130,5 +130,4 @@
                 android:value="com.tyct.thankyoutrust.AdminHomePage" />
         </activity>
     </application>
-
 </manifest>

@@ -19,18 +19,22 @@ public class AdminCommunityDialog extends android.app.DialogFragment {
 	String[] optionsArray = { "Post a message in community"};
 	String selectedItem;
 	boolean result;
+	String communityName;
+	int communityId;
 	
 	
-	public AdminCommunityDialog() {}
+	public AdminCommunityDialog(String comName, int comId) {
+		communityName = comName;
+		communityId = comId;
+	}
 	
 	public Dialog onCreateDialog(Bundle savedInstanceState)
 	{
 		myActivity = (AdminAllCommunities) getActivity();
-
 		
 		Builder builder = new AlertDialog.Builder(getActivity());
 		
-		builder.setTitle("Select an Option");
+		builder.setTitle("Select an Option " + communityName);
 	
 		builder.setSingleChoiceItems(optionsArray, -1, new OnMultiChoiceClickListener());
 		builder.setPositiveButton("Submit", new positiveListener());
@@ -88,13 +92,13 @@ public void onClick(DialogInterface dialog, int which) {
 
 }
 	
-	private void returnToTarget(boolean result, String community)
+	private void returnToTarget(boolean result, String option)
 	{
 		myActivity = (AdminAllCommunities) getActivity();
 		
         if (myActivity != null) 
         {
-            myActivity.setDialogResults(result, community);
+            myActivity.setDialogResults(result, option, communityId, communityName);
         }
 	}
 }

@@ -33,12 +33,11 @@ import android.widget.AdapterView.OnItemClickListener;
 public class AdminAllCommunities extends Activity {
 	// Session Manager Class
 	SessionManager session;
-
+	
 	List<Community> communityList;
-	String[] communityNames;
 	List<MyTask> tasks;
 	
-	//Dialog Fragements
+	//Dialog Fragments
 	AdminCommunityDialog adminDialog;
 	boolean dialogResult;
 
@@ -51,9 +50,11 @@ public class AdminAllCommunities extends Activity {
 		session = new SessionManager(getApplicationContext());
 
 		tasks = new ArrayList<>();
-
+		
+		//start communites task
 		display();
 		
+		//Clickable ListView
 		ListView groupAct = (ListView) findViewById(R.id.ListViewCommunities);
 		groupAct.setOnItemClickListener(new ListViewUserClickHandler());
 
@@ -95,61 +96,23 @@ public class AdminAllCommunities extends Activity {
 		}
 	}
 
-	private void requestData(String uri) {
-		MyTask task = new MyTask();
-		task.execute(uri);
-	}
-
-	@SuppressWarnings("null")
-	public void setCommunityList(List<Community> communityList) {
-
-		int i = 0;
-
-		if (communityList != null) {
-			communityNames = new String[communityList.size()];
-
-			// Add each user name from the project list to the array of strings
-			for (Community community : communityList) {
-				String communityNa = community.getCommunityName();
-				int code = community.getPostalCode();
-				String postalCode = String.valueOf(code);
-				communityNames[i] = communityNa + " " + postalCode;
-				i++;
-			}
-		}
-
-		ArrayAdapter<String> adminOptionsAdapter = new ArrayAdapter<String>(
-				this, android.R.layout.simple_list_item_1, communityNames);
-		ListView userNameListView = (ListView) findViewById(R.id.ListViewCommunities);
-		userNameListView.setAdapter(adminOptionsAdapter);
-	}
-	
-	//button that brings up admins options for said user
-		public class buttonOptionsClick implements OnClickListener
-		{
-
-			@Override
-			public void onClick(View v) {
-				adminDialog = new AdminCommunityDialog();
-				FragmentManager fm = getFragmentManager();
-				adminDialog.show(fm, "confirm");		
-			}
-			
-		}
-		
 		// Method to return data to the Dialog Fragment
-			public void setDialogResults(boolean result, String option) {
+			public void setDialogResults(boolean result, String option, int selectedCommunityId, String selectedCommunityName) {
 				adminDialog.dismiss();
 
 				if (result == true) {
-					setOptionIntents(option);
+					setOptionIntents(option, selectedCommunityId, selectedCommunityName);
 				}
 			}
 			
 			// Method where selected options are implemented
-			public void setOptionIntents(String options) {
+			public void setOptionIntents(String options, int selectedCommunityId, String selectedCommuntiyName) {
 				if (options == "Post a message in community") {
-					Intent intent = new Intent(AdminAllCommunities.this, AdminUsersProfile.class);
+					
+					//Toast.makeText(this, "New page", Toast.LENGTH_LONG).show();
+					Intent intent = new Intent(AdminAllCommunities.this, AdminMessageBoard.class);
+					intent.putExtra("CommunityId", selectedCommunityId);
+					intent.putExtra("CommunityName", selectedCommuntiyName);
 					startActivity(intent);
 				}
 			}
@@ -161,6 +124,11 @@ public class AdminAllCommunities extends Activity {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
 		}
+	}
+	
+	private void requestData(String uri) {
+		MyTask task = new MyTask();
+		task.execute(uri);
 	}
 
 	// Connect to database
@@ -187,14 +155,13 @@ public class AdminAllCommunities extends Activity {
 
 			String content = HttpManager.getData(params[0]);
 			return content;
-
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
 
 			communityList = CommunityJSONParser.parseFeed(result);
-			setCommunityList(communityList);
+			setListView();
 
 		}
 
@@ -202,7 +169,6 @@ public class AdminAllCommunities extends Activity {
 		protected void onProgressUpdate(String... values) {
 			// updateDisplay(values[0]);
 		}
-
 	}
 	
 	// Handles the ListView clicks
@@ -210,15 +176,27 @@ public class AdminAllCommunities extends Activity {
 
 		@Override
 		public void onItemClick(AdapterView<?> list, View itemview,
-				int posistion, long id) {
+				int position, long id) {
+		
+			Community selectedCommunity = (Community) list.getItemAtPosition(position);
 			
-			adminDialog = new AdminCommunityDialog();
+			String	communityName = selectedCommunity.getCommunityName();
+			int communityId = selectedCommunity.getCommunityID();
+		
+			adminDialog = new AdminCommunityDialog(communityName, communityId);
 			FragmentManager fm = getFragmentManager();
-			adminDialog.show(fm, "confirm");	
-			
-			
+			adminDialog.show(fm, "confirm");				
 		}
-
+	}
+	
+	private void setListView() {
+		// Get reference to the listView
+		ListView communityNameListView = (ListView) findViewById(R.id.ListViewCommunities);		
+		//set adapter
+		CommunityListAdapter adapter = new CommunityListAdapter(this, R.layout.admin_allusers_layout, communityList);
+		// Bind the ListView to the above adapter
+		communityNameListView.setAdapter(adapter);
+	
 	}
 	
 }
