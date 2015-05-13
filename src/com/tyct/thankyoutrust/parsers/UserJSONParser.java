@@ -29,7 +29,7 @@ public class UserJSONParser {
 				user.setCommunityID(obj.getInt("communityID"));
 				user.setFirstName(obj.getString("firstName"));
 				user.setLastName(obj.getString("lastName"));
-				//user.setPassword(obj.getString("password"));
+				user.setPassword(obj.getString("password"));
 				user.setEmail(obj.getString("email"));
 				user.setPostalCode(obj.getInt("postalCode"));
 				user.setSuburb(obj.getString("suburb"));
