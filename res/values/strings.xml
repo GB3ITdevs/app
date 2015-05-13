@@ -56,12 +56,17 @@
     <string name="admin_alert_btn_cancel">Cancel</string>
     <string name="title_activity_confirm_dialog">ConfirmDialog</string>
     <string name="title_activity_admin_users_profile">AdminUsersProfile</string>
-     <string name="options">Options</string>
-      <string name="prompt_home_address">Home Address</string>
+    <string name="options">Options</string>
+    <string name="prompt_home_address">Home Address</string>
     <string name="select_community">Choose a community to register for:</string>
     <string name="fragment_project_details_notes_title">Project Notes:</string>
     <string name="fragment_project_details_notes_placeholder">You have no notes on this project yet.</string>
     <string name="edit_project_notes">Enter your personal notes on this project</string>
-     
+    <string name="title_activity_admin_message_board">AdminMessageBoard</string>
+    <string name="community_post_code">Community Post Code</string>
+    <string name="all_users">All Users</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="st_address">Street Address</string>
+    <string name="community">Community</string>
 
 </resources>

@@ -40,8 +40,7 @@ public class AdminUsersProfile extends Activity {
 	
 	//Lists
 	List<AdminID> adminList;
-	List<Community> communityList;
-	
+	List<Community> communityList;	
 	
 	// Session Manager Class
 	SessionManager session;
@@ -170,8 +169,7 @@ public class AdminUsersProfile extends Activity {
 			adminDialog = new AdminOptionsDialog(userName);
 			FragmentManager fm = getFragmentManager();
 			adminDialog.show(fm, "confirm");		
-		}
-		
+		}		
 	}
 	
 	// Method to return data to the Dialog Fragment
@@ -197,7 +195,6 @@ public class AdminUsersProfile extends Activity {
 				changeCommunityDialog = new AdminChangeCommunitiesDialog();
 				FragmentManager fragman = getFragmentManager();
 				changeCommunityDialog.show(fragman, "confirm");
-				//changeCommunity();
 			}
 		}
 		
@@ -254,8 +251,7 @@ public class AdminUsersProfile extends Activity {
 						if(newCommunity == com.getCommunityName()){
 							newCommunityId = com.getCommunityID();
 						}	
-					}
-					
+					}					
 					//If user is already part of the community then don't execute
 					if(userCommunityId == newCommunityId)
 					{
@@ -340,8 +336,7 @@ public class AdminUsersProfile extends Activity {
 						.show();
 			}
 		}
-		
-		
+				
 		/*****************************************************************************************************************************
     	 * 
     	 * 						ASYNC TASKS
@@ -396,7 +391,8 @@ public class AdminUsersProfile extends Activity {
 			@Override
 			protected void onPostExecute(String result) {
 				deleteAdminTask.remove(this);
-				Toast.makeText(AdminUsersProfile.this, result , Toast.LENGTH_LONG).show();
+				String messageResult = result;
+				Toast.makeText(AdminUsersProfile.this, messageResult , Toast.LENGTH_LONG).show();
 			}
 
 			@Override
@@ -427,10 +423,10 @@ public class AdminUsersProfile extends Activity {
 			@Override
 			protected void onPostExecute(String result) {
 
-				// String messageResult = (result);
+				String messageResult = (result);
 
 				postadmintask.remove(this);
-				Toast.makeText(AdminUsersProfile.this, result, Toast.LENGTH_LONG)
+				Toast.makeText(AdminUsersProfile.this, messageResult, Toast.LENGTH_LONG)
 				.show();
 			}
 
@@ -493,7 +489,7 @@ public class AdminUsersProfile extends Activity {
 			@Override
 			protected void onPostExecute(Boolean success) {			
 				newCommunityId = 0; //set community varibale back to 0
-				//udate textView for communityName
+				//update textView for communityName
 				TextView uCommunityName = (TextView) findViewById(R.id.tvPCommunity);
 				uCommunityName.setText(communityName);			
 			}
