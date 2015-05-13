@@ -405,41 +405,46 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-
-			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return false;
-			}
+			
+			boolean result = false;
 
 			for (User user : userList) {
 				if (user.getEmail().equals(mEmail)) {
 					// if the password matches, retrieve further user info
-					if (user.getPassword().equals(mPassword)) {
-						loggedInUserId = user.getUserID();
-						uName = user.getFirstName();
-						uSurname = user.getLastName();
-						uAddress = user.getStreetAddress();
-						uSuburb = user.getSuburb();
-						uCity = user.getCity();
-						uPostcode = Integer.toString(user.getPostalCode());
-						uCommunityID = Integer.toString(user.getCommunityID());
-						
-						//Admin 
-						//If info id is in admin page make string a 1, otherwise a 0
-						uAdmin = "0";
-						for (AdminID adm : adminList) {
-							if(adm.getUserID() == loggedInUserId){
-								uAdmin ="1";
-							}					
+					User authUser;
+					String content = HttpManager.getData("http://gb3it.pickworth.info:3000/users/" + user.getUserID() + "/" + mPassword);
+					if(content != null)
+					{
+						if((authUser = UserJSONParser.AuthenticateUser(content)) != null)
+						{
+							loggedInUserId = authUser.getUserID();
+							uName = authUser.getFirstName();
+							uSurname = authUser.getLastName();
+							uAddress = authUser.getStreetAddress();
+							uSuburb = authUser.getSuburb();
+							uCity = authUser.getCity();
+							uPostcode = Integer.toString(authUser.getPostalCode());
+							uCommunityID = Integer.toString(authUser.getCommunityID());
+							
+							//Admin 
+							//If info id is in admin page make string a 1, otherwise a 0
+							uAdmin = "0";
+							for (AdminID adm : adminList) {
+								if(adm.getUserID() == loggedInUserId){
+									uAdmin ="1";
+								}					
+							}
+							result = true;
+						}
+						else
+						{
+							result = false;
 						}
 					}
-					return user.getPassword().equals(mPassword);
 				}
 			}
-
-			return true;
+			
+			return result;		
 		}
 
 		@Override
