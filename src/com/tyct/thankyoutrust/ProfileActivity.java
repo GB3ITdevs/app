@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.tyct.thankyoutrust.LoginActivity.UserLoginTask;
+import com.tyct.thankyoutrust.model.AdminID;
 import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
@@ -46,6 +48,7 @@ public class ProfileActivity extends Activity {
 	int usID;
 
 	boolean admin = false;
+	boolean pwMatches;
 
 	/**
 	 * Keep track of the tasks to ensure we can cancel it if requested.
@@ -129,10 +132,6 @@ public class ProfileActivity extends Activity {
 			goTo = new Intent(ProfileActivity.this, ProfileActivity.class);
 			startActivity(goTo);
 			finish();
-			return true;
-		case R.id.admin:
-			goTo = new Intent(ProfileActivity.this, AdminHomePage.class);
-			startActivity(goTo);
 			return true;
 		case R.id.action_about_us:
 			goTo = new Intent(ProfileActivity.this, AboutUs.class);
@@ -524,7 +523,10 @@ public class ProfileActivity extends Activity {
 							if (user.getUserID() == (usID)) {
 								// Check if the current password matches stored
 								// password
-								if (!user.getPassword().equals(pw)) {
+								CheckPasswordTask mAuthTask = new CheckPasswordTask(usID, pw);
+								mAuthTask.execute();
+
+								if (!pwMatches) {
 									tCurrentPw
 											.setError(getString(R.string.error_incorrect_password));
 									focusView = tCurrentPw;
@@ -577,7 +579,7 @@ public class ProfileActivity extends Activity {
 
 	private boolean isPasswordValid(String password) {
 		// TODO: Replace this with your own logic
-		return password.length() > 3;
+		return password.length() > 7;
 	}
 
 	private void updateSession() {
@@ -749,4 +751,48 @@ public class ProfileActivity extends Activity {
 			mPwTask = null;
 		}
 	}
+	
+	
+	public class CheckPasswordTask extends AsyncTask<Void, Void, Boolean> {
+
+		private final int mId;
+		private final String mPassword;
+
+		CheckPasswordTask(int id, String password) {
+			mId = id;
+			mPassword = password;
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			
+			boolean result = false;
+
+					// Check if the password matches, retrieve further user info
+					String content = HttpManager.getData("http://gb3it.pickworth.info:3000/users/" + mId + "/" + mPassword);
+					
+					User authUser;
+					authUser = UserJSONParser.AuthenticateUser(content);
+							
+					if((authUser) != null)
+					{
+						result = true;
+					}
+					else
+					{
+						result = false;
+					}
+				
+			
+			
+			return result;		
+		}
+
+		@Override
+		protected void onPostExecute(final Boolean success) {
+			pwMatches = success;
+		}
+
+	}
+
 }
