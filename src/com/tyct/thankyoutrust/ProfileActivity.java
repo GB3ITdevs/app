@@ -128,6 +128,10 @@ public class ProfileActivity extends Activity {
 			goTo = new Intent(ProfileActivity.this, HomeActivity.class);
 			startActivity(goTo);
 			return true;
+		case R.id.admin:
+			goTo = new Intent(ProfileActivity.this, AdminHomePage.class);
+			startActivity(goTo);
+			return true;
 		case R.id.action_profile:
 			goTo = new Intent(ProfileActivity.this, ProfileActivity.class);
 			startActivity(goTo);
@@ -523,7 +527,8 @@ public class ProfileActivity extends Activity {
 							if (user.getUserID() == (usID)) {
 								// Check if the current password matches stored
 								// password
-								CheckPasswordTask mAuthTask = new CheckPasswordTask(usID, pw);
+								CheckPasswordTask mAuthTask = new CheckPasswordTask(
+										usID, pw);
 								mAuthTask.execute();
 
 								if (!pwMatches) {
@@ -648,9 +653,8 @@ public class ProfileActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 
 			// update details here
-			HttpManager.updateData(
-					"http://gb3it.pickworth.info:3000/users/" + usID,
-					mInfo);
+			HttpManager.updateData("http://gb3it.pickworth.info:3000/users/"
+					+ usID, mInfo);
 			return true;
 		}
 
@@ -698,9 +702,8 @@ public class ProfileActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 
 			// update details here
-			HttpManager.updateData(
-					"http://gb3it.pickworth.info:3000/users/" + usID,
-					mInfo);
+			HttpManager.updateData("http://gb3it.pickworth.info:3000/users/"
+					+ usID, mInfo);
 			return true;
 		}
 
@@ -734,9 +737,8 @@ public class ProfileActivity extends Activity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// update details here
-			HttpManager.updateData(
-					"http://gb3it.pickworth.info:3000/users/" + usID,
-					mPassword);
+			HttpManager.updateData("http://gb3it.pickworth.info:3000/users/"
+					+ usID, mPassword);
 			return true;
 		}
 
@@ -751,8 +753,7 @@ public class ProfileActivity extends Activity {
 			mPwTask = null;
 		}
 	}
-	
-	
+
 	public class CheckPasswordTask extends AsyncTask<Void, Void, Boolean> {
 
 		private final int mId;
@@ -765,27 +766,24 @@ public class ProfileActivity extends Activity {
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			
+
 			boolean result = false;
 
-					// Check if the password matches, retrieve further user info
-					String content = HttpManager.getData("http://gb3it.pickworth.info:3000/users/" + mId + "/" + mPassword);
-					
-					User authUser;
-					authUser = UserJSONParser.AuthenticateUser(content);
-							
-					if((authUser) != null)
-					{
-						result = true;
-					}
-					else
-					{
-						result = false;
-					}
-				
-			
-			
-			return result;		
+			// Check if the password matches, retrieve further user info
+			String content = HttpManager
+					.getData("http://gb3it.pickworth.info:3000/users/" + mId
+							+ "/" + mPassword);
+
+			User authUser;
+			authUser = UserJSONParser.AuthenticateUser(content);
+
+			if ((authUser) != null) {
+				result = true;
+			} else {
+				result = false;
+			}
+
+			return result;
 		}
 
 		@Override

@@ -61,6 +61,9 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.item_message, parent, false);
 
+		// get user data from session
+		HashMap<String, String> userStored = session.getUserDetails();
+
 		// Reverse order the messageList.
 		Comment message = getItem(position);
 		// Old Code that worked fine but did not reverse order anything
@@ -113,16 +116,16 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 				String lastName = user.getLastName();
 				// get first name from user list
 				String firstName = user.getFirstName();
-				// store firstname and last name in a string
+				// If not admin, just store firstname and last name in a
+				// string
 				displayName = firstName + " " + lastName;
 			}
 		}
 
-		// get user data from session
-		HashMap<String, String> userStored = session.getUserDetails();
-		
-		// If message was posted by the logged in user OR the logged in user is an admin
-		if (message.getUserID() == Integer.parseInt(userStored.get("id")) || userStored.get("admin").equals("1")) {
+		// If message was posted by the logged in user OR the logged in user is
+		// an admin
+		if (message.getUserID() == Integer.parseInt(userStored.get("id"))
+				|| userStored.get("admin").equals("1")) {
 			// display the delete button
 			deleteMsg.setVisibility(View.VISIBLE);
 		}
@@ -205,7 +208,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 		}
 
 		@Override
-		protected void onPostExecute(String result) {		
+		protected void onPostExecute(String result) {
 			((Activity) context).finish();
 			Intent goTo = new Intent(context, HomeActivity.class);
 			context.startActivity(goTo);

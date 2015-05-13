@@ -24,8 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tyct.thankyoutrust.model.Comment;
+import com.tyct.thankyoutrust.model.Community;
 import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.parsers.CommentJSONParser;
+import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
 import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
 public class HomeActivity extends ListActivity {
@@ -33,17 +35,21 @@ public class HomeActivity extends ListActivity {
 	TextView output;
 	ProgressBar pb;
 	List<MyTask> tasks;
-	List<damnUserTask> userTask;
+	List<UserTask> userTask;
+	List<CommunityTask> communityTask;
 	List<PostTask> posttasks;
 	Comment commentEntity;
 
 	List<Comment> commentList;
 	List<Comment> commentListUnsorted;
-	
+
 	List<User> userList;
 	
+	List<Community> communityList;
+
 	int userID;
 	int communityID;
+	String communityName;
 
 	// User Session Manager Class
 	SessionManager session;
@@ -58,19 +64,6 @@ public class HomeActivity extends ListActivity {
 		// Session class instance
 		session = new SessionManager(getApplicationContext());
 
-		// Progress Bar
-		pb = (ProgressBar) findViewById(R.id.progressBar1);
-		pb.setVisibility(View.INVISIBLE);
-
-		tasks = new ArrayList<>();
-
-		display();
-		userDisplay();
-
-		// Button to post to comments
-		Button postCommentButton = (Button) findViewById(R.id.button_Post_Comments);
-		postCommentButton.setOnClickListener(new postCommentHandler());
-
 		// Check user login (this is the important point)
 		// If User is not logged in , This will redirect user to LoginActivity
 		// and finish current activity from activity stack.
@@ -79,27 +72,39 @@ public class HomeActivity extends ListActivity {
 
 		// get user data from session
 		HashMap<String, String> userStored = session.getUserDetails();
-
 		// get email
 		String userEmail = userStored.get("email");
-
 		// get user id
 		userID = Integer.parseInt(userStored.get("id"));
-
 		// get admin
 		int adminStatus = Integer.parseInt(userStored.get("admin"));
-		
- 		//Retrieve the logged in users communityID
- 		communityID = Integer.parseInt(userStored.get("communityID"));
+		// Retrieve the logged in users communityID
+		communityID = Integer.parseInt(userStored.get("communityID"));
+
+		// Progress Bar
+		pb = (ProgressBar) findViewById(R.id.progressBar1);
+		pb.setVisibility(View.INVISIBLE);
+
+		tasks = new ArrayList<>();
+
+		// get data from database
+		display();
+		userDisplay();
+		getCommunities();
+
+		// Button to post to comments
+		Button postCommentButton = (Button) findViewById(R.id.button_Post_Comments);
+		postCommentButton.setOnClickListener(new postCommentHandler());
 
 		// set admin
 		if (adminStatus == 1) {
 			admin = true;
 		}
-		//Toast message used for development**************************************
-//		Toast.makeText(this,
-//				userEmail + ", usid: " + userId + " admin = " + adminStatus,
-//				Toast.LENGTH_LONG).show();
+		// Toast message used for
+		// development**************************************
+		// Toast.makeText(this,
+		// userEmail + ", usid: " + userId + " admin = " + adminStatus,
+		// Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -154,7 +159,12 @@ public class HomeActivity extends ListActivity {
 	}
 
 	private void requestUserData(String uri) {
-		damnUserTask task = new damnUserTask();
+		UserTask task = new UserTask();
+		task.execute(uri);
+	}
+	
+	private void requestCommunityData(String uri) {
+		CommunityTask task = new CommunityTask();
 		task.execute(uri);
 	}
 
@@ -177,6 +187,15 @@ public class HomeActivity extends ListActivity {
 	public void userDisplay() {
 		if (isOnline()) {
 			requestUserData("http://gb3it.pickworth.info:3000/users");
+		} else {
+			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
+					.show();
+		}
+	}
+	
+	public void getCommunities() {
+		if (isOnline()) {
+			requestCommunityData("http://gb3it.pickworth.info:3000/communities");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -219,13 +238,11 @@ public class HomeActivity extends ListActivity {
 		protected void onPostExecute(String result) {
 
 			commentListUnsorted = CommentJSONParser.parseFeed(result);
-			
+
 			commentList = new ArrayList<>();
-			
-			for (Comment comment : commentListUnsorted) 
-			{
-				if(comment.getCommunityID() == communityID)
-				{
+
+			for (Comment comment : commentListUnsorted) {
+				if (comment.getCommunityID() == communityID) {
 					commentList.add(comment);
 				}
 			}
@@ -244,8 +261,8 @@ public class HomeActivity extends ListActivity {
 
 	}
 
-	// Async task for the Comment board to display
-	private class damnUserTask extends AsyncTask<String, String, String> {
+	// Async task for the Comment board to display users
+	private class UserTask extends AsyncTask<String, String, String> {
 
 		@Override
 		protected void onPreExecute() {
@@ -284,6 +301,34 @@ public class HomeActivity extends ListActivity {
 		}
 
 	}
+	
+	// Async task to get community name
+		private class CommunityTask extends AsyncTask<String, String, String> {
+
+			@Override
+			protected String doInBackground(String... params) {
+
+				String content = HttpManager.getData(params[0]);
+				return content;
+
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+
+				communityList = CommunityJSONParser.parseFeed(result);
+
+				for (Community community : communityList) {
+					if (community.getCommunityID() == communityID) {
+						communityName = community.getCommunityName();
+					}
+				}
+				// Header Text
+				TextView header = (TextView) findViewById(R.id.tvMsgboardHeader);
+				header.setText(communityName + " Community Messageboard");
+				updateDisplay();
+			}
+		}
 
 	// Class to handle posting comments
 	public class postCommentHandler implements OnClickListener {
