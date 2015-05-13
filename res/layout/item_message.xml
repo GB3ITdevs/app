@@ -47,4 +47,12 @@
         android:textSize="14sp"
         android:layout_toRightOf="@+id/tvName" />
 
+    <ImageView
+        android:id="@+id/btn_comment_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:scaleType="fitXY"
+        android:src="@android:drawable/ic_menu_close_clear_cancel" />
+
 </RelativeLayout>
