@@ -411,7 +411,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 				if (user.getEmail().equals(mEmail)) {
 					// if the password matches, retrieve further user info
 					User authUser;
-					if((mPassword.isEmpty()) || (mPassword != null) || (mPassword.equals("")))
+					if((mPassword.isEmpty()) || (mPassword == null) || (mPassword.equals("")))
 					{
 						result = false;
 					}
