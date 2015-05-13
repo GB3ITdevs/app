@@ -163,7 +163,6 @@ public class HomeActivity extends ListActivity {
 		CommentAdapter adapter = new CommentAdapter(this,
 				R.layout.item_message, commentList, userList);
 		setListAdapter(adapter);
-
 	}
 
 	public void display() {
@@ -228,17 +227,6 @@ public class HomeActivity extends ListActivity {
 				if(comment.getCommunityID() == communityID)
 				{
 					commentList.add(comment);
-				}
-				
-				if (comment.getUserID() == userID) {
-					ImageView delete = (ImageView) findViewById(R.id.btn_comment_delete);
-					delete.setOnClickListener(new OnClickListener() {
-						
-						@Override
-						public void onClick(View v) {
-							Toast.makeText(HomeActivity.this, "delete", Toast.LENGTH_LONG);
-						}
-					});
 				}
 			}
 
