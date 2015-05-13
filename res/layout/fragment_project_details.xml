@@ -136,12 +136,12 @@
         android:weightSum="1" >
         
       <EditText
-        android:id="@+id/textProjectNotes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/edit_project_notes" 
-        android:layout_weight="1"
-        />
+          android:id="@+id/textProjectNotes"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:hint="@string/edit_project_notes"
+          android:inputType="textCapSentences" />
 
       <Button
           android:id="@+id/btnPostNotes"

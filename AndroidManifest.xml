@@ -37,19 +37,22 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".Projects"
             android:label="@string/app_name"
-            android:parentActivityName=".HomeActivity" >
+            android:parentActivityName=".HomeActivity"
+            android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tyct.thankyoutrust.HomeActivity" />
         </activity>
         <activity
             android:name=".SingleProject"
-            android:label="@string/title_activity_single_project" >
+            android:label="@string/title_activity_single_project"
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".WelcomeScreen"
@@ -67,12 +70,14 @@
         </activity>
         <activity
             android:name=".ProfileActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".ProjectDetailsActivity"
             android:label="@string/title_activity_project_details"
-            android:parentActivityName=".Projects" >
+            android:parentActivityName=".Projects"
+            android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tyct.thankyoutrust.Projects" />
@@ -80,7 +85,8 @@
         <activity
             android:name=".AdminHomePage"
             android:label="@string/title_activity_admin_home_page"
-            android:parentActivityName=".HomeActivity" >
+            android:parentActivityName=".HomeActivity"
+            android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tyct.thankyoutrust.HomeActivity" />
@@ -88,7 +94,8 @@
         <activity
             android:name=".AdminAllUsers"
             android:label="@string/title_activity_admin_all_users"
-            android:parentActivityName=".AdminHomePage" >
+            android:parentActivityName=".AdminHomePage"
+            android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tyct.thankyoutrust.AdminHomePage" />
@@ -96,7 +103,8 @@
         <activity
             android:name=".AdminAllCommunities"
             android:label="@string/title_activity_admin_all_communities"
-            android:parentActivityName=".AdminHomePage" >
+            android:parentActivityName=".AdminHomePage"
+            android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tyct.thankyoutrust.AdminHomePage" />
@@ -104,7 +112,8 @@
         <activity
             android:name=".AdminReports"
             android:label="@string/title_activity_admin_reports"
-            android:parentActivityName=".AdminHomePage" >
+            android:parentActivityName=".AdminHomePage"
+            android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tyct.thankyoutrust.AdminHomePage" />
@@ -116,7 +125,8 @@
         <activity
             android:name=".AdminUsersProfile"
             android:label="@string/title_activity_admin_users_profile"
-            android:parentActivityName=".AdminAllUsers" >
+            android:parentActivityName=".AdminAllUsers"
+            android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tyct.thankyoutrust.AdminAllUsers" />
@@ -124,7 +134,8 @@
         <activity
             android:name=".AdminMessageBoard"
             android:label="@string/title_activity_admin_message_board"
-            android:parentActivityName=".AdminHomePage" >
+            android:parentActivityName=".AdminHomePage"
+            android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tyct.thankyoutrust.AdminHomePage" />
