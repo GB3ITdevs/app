@@ -63,5 +63,10 @@
     <string name="fragment_project_details_notes_placeholder">You have no notes on this project yet.</string>
     <string name="edit_project_notes">Enter your personal notes on this project</string>
     <string name="title_activity_admin_message_board">AdminMessageBoard</string>
+    <string name="community_post_code">Community Post Code</string>
+    <string name="all_users">All Users</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="st_address">Street Address</string>
+    <string name="community">Community</string>
 
 </resources>
