@@ -5,33 +5,33 @@
     <item
         android:id="@+id/action_home"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/home"/>
     <item
         android:id="@+id/action_projects"
         android:orderInCategory="300"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/projects"/>
     <item
         android:id="@+id/action_profile"
         android:orderInCategory="400"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/profile"/>
     <item
         android:id="@+id/action_about_us"
         android:orderInCategory="200"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/about_us"/>       
     <item 
     	android:id="@+id/admin"
         android:title="@string/admin"
         android:orderInCategory="300"
         android:visible="true"
-        android:showAsAction="ifRoom"/>    
+        android:showAsAction="always"/>    
     <item
         android:id="@+id/action_logout"
         android:orderInCategory="500"
-        android:showAsAction="never"
+        android:showAsAction="always"
         android:title="@string/logout"/>
 
 </menu>

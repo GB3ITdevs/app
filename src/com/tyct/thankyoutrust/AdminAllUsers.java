@@ -87,7 +87,7 @@ public class AdminAllUsers extends Activity {
 	// Top menu
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.admin_home_page, menu);
+		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
