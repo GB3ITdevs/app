@@ -411,33 +411,40 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 				if (user.getEmail().equals(mEmail)) {
 					// if the password matches, retrieve further user info
 					User authUser;
-					String content = HttpManager.getData("http://gb3it.pickworth.info:3000/users/" + user.getUserID() + "/" + mPassword);
-					if(content != null)
+					if((mPassword.isEmpty()) || (mPassword == null) || (mPassword.equals("")))
 					{
-						if((authUser = UserJSONParser.AuthenticateUser(content)) != null)
+						result = false;
+					}
+					else
+					{
+						String content = HttpManager.getData("http://gb3it.pickworth.info:3000/users/" + user.getUserID() + "/" + mPassword);
+						if(content != null)
 						{
-							loggedInUserId = authUser.getUserID();
-							uName = authUser.getFirstName();
-							uSurname = authUser.getLastName();
-							uAddress = authUser.getStreetAddress();
-							uSuburb = authUser.getSuburb();
-							uCity = authUser.getCity();
-							uPostcode = Integer.toString(authUser.getPostalCode());
-							uCommunityID = Integer.toString(authUser.getCommunityID());
-							
-							//Admin 
-							//If info id is in admin page make string a 1, otherwise a 0
-							uAdmin = "0";
-							for (AdminID adm : adminList) {
-								if(adm.getUserID() == loggedInUserId){
-									uAdmin ="1";
-								}					
+							if((authUser = UserJSONParser.AuthenticateUser(content)) != null)
+							{
+								loggedInUserId = authUser.getUserID();
+								uName = authUser.getFirstName();
+								uSurname = authUser.getLastName();
+								uAddress = authUser.getStreetAddress();
+								uSuburb = authUser.getSuburb();
+								uCity = authUser.getCity();
+								uPostcode = Integer.toString(authUser.getPostalCode());
+								uCommunityID = Integer.toString(authUser.getCommunityID());
+								
+								//Admin 
+								//If info id is in admin page make string a 1, otherwise a 0
+								uAdmin = "0";
+								for (AdminID adm : adminList) {
+									if(adm.getUserID() == loggedInUserId){
+										uAdmin ="1";
+									}					
+								}
+								result = true;
 							}
-							result = true;
-						}
-						else
-						{
-							result = false;
+							else
+							{
+								result = false;
+							}
 						}
 					}
 				}
