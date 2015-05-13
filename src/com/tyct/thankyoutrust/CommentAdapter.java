@@ -86,7 +86,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 		}
 		// Set up new format ("WeekDay, Day, Month ' Year Hour:Mintues M")
 		SimpleDateFormat newFormat = new SimpleDateFormat(
-				"EEE, d MMM, ''yy H:mm aaa");
+				"EEE, d MMM, ''yy h:mm aaa");
 		// reformat date and put back into a string
 		String formattedDate = newFormat.format(formatInDateFrom);
 
