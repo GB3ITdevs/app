@@ -613,6 +613,8 @@ public class ProjectDetailsFragment extends Fragment {
 						if (postProjectTasks.size() == 0) {
 							
 						}
+						
+						checkForExistingNotes();
 					}
 
 					@Override
