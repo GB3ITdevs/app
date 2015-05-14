@@ -16,20 +16,19 @@
         android:id="@+id/action_profile"
         android:orderInCategory="300"
         android:showAsAction="ifRoom"
-        android:title="@string/profile"/>     
+        android:title="@string/profile"/>         
+    <item
+        android:id="@+id/action_about_us"
+        android:orderInCategory="500"
+        android:showAsAction="ifRoom"
+        android:title="@string/about_us"/>  
     <item 
     	android:id="@+id/admin"
         android:title="@string/admin"
         android:orderInCategory="400"
         android:visible="false"
         android:showAsAction="ifRoom"/>  
-             
-     <item
-        android:id="@+id/action_about_us"
-        android:orderInCategory="500"
-        android:showAsAction="ifRoom"
-        android:title="@string/about_us"/>  
-        
+    
     <item
         android:id="@+id/action_logout"
         android:orderInCategory="600"
