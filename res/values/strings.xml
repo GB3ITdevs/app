@@ -65,8 +65,10 @@
     <string name="title_activity_admin_message_board">AdminMessageBoard</string>
     <string name="community_post_code">Community Post Code</string>
     <string name="all_users">All Users</string>
-    <string name="phone_number">Phone Number</string>
-    <string name="st_address">Street Address</string>
-    <string name="community">Community</string>
+    <string name="phone_number">Phone Number:</string>
+    <string name="st_address">Address:</string>
+    <string name="community">Community:</string>
+    <string name="city">City:</string>
+    <string name="suburb">Suburb:</string>
 
 </resources>
