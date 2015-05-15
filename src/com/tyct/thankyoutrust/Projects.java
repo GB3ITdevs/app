@@ -270,7 +270,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		
  		return selectedProject;
  	}
- 
+ 	 	
  	//Method to check if the phone is connected to a network and online
  	protected boolean isOnline() 
  	{
@@ -410,6 +410,5 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  	 //			updateDisplay(values[0]);
  	 		}
  	 		
- 	 	}
- 
+ 	 	} 
  }
