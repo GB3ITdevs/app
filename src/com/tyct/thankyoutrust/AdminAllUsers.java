@@ -1,6 +1,8 @@
 package com.tyct.thankyoutrust;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.tyct.thankyoutrust.model.AdminID;
@@ -329,10 +331,18 @@ private class PhoneNumberTask extends AsyncTask<String, String, String> {
 			
 			// Get reference to the listView
 			ListView userNameListView = (ListView) findViewById(R.id.lstvewuser);
-			
+			Collections.sort(userList, new Comparator<User>()
+					{
+				@Override
+				public int compare(User us1, User us2)
+				{
+					return us1.getLastName().compareToIgnoreCase(us2.getLastName());
+				}
+					});
 			UserListAdapter adapter = new UserListAdapter(this, R.layout.admin_allusers_layout, userList, communityList);
 			// Bind the ListView to the above adapter
 			userNameListView.setAdapter(adapter);
 		
 		}
+		
 }
