@@ -70,5 +70,6 @@
     <string name="community">Community:</string>
     <string name="city">City:</string>
     <string name="suburb">Suburb:</string>
+    <string name="prompt_phone">Primary Phone Number</string>
 
 </resources>
