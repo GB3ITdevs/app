@@ -421,6 +421,9 @@ public class ProjectDetailsFragment extends Fragment {
 			// pb.setVisibility(View.INVISIBLE);
 			// }
 			ratingBar.setIsIndicator(true);
+			
+			Intent intent = new Intent(ma, Projects.class);
+			startActivity(intent);
 		}
 
 		@Override
@@ -623,6 +626,8 @@ public class ProjectDetailsFragment extends Fragment {
 						if (postProjectTasks.size() == 0) {
 							
 						}
+						
+						checkForExistingNotes();
 					}
 
 					@Override

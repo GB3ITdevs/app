@@ -37,11 +37,8 @@ public class AdminCommunityDialog extends android.app.DialogFragment {
 		builder.setTitle("Select an Option " + communityName);
 	
 		builder.setSingleChoiceItems(optionsArray, -1, new OnMultiChoiceClickListener());
-		builder.setPositiveButton("Submit", new positiveListener());
-		builder.setNegativeButton("No", new negativeListener());
-		
-		builder.setPositiveButton("Yes", new positiveListener());
-		builder.setNegativeButton("No", new negativeListener());
+		builder.setPositiveButton("Ok", new positiveListener());
+		builder.setNegativeButton("Cancel", new negativeListener());
 		
 		Dialog dialog = builder.create();
 		

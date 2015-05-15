@@ -177,7 +177,14 @@ public class AdminUsersProfile extends Activity {
 			adminDialog.dismiss();
 
 			if (result == true) {
+				if(option == null)
+				{
+				Toast.makeText(this, "No option selected", Toast.LENGTH_LONG).show();
+				}
+				else
+				{
 				setOptionIntents(option);
+				}
 			}
 		}
 		
@@ -206,7 +213,7 @@ public class AdminUsersProfile extends Activity {
 			for (AdminID adm : adminList) {
 				if (userId == adm.getUserID()) {
 					isAdmin = true;
-					Toast.makeText(this, "User is already an admin",
+					Toast.makeText(this, userName +" is already an admin",
 							Toast.LENGTH_LONG).show();
 					break;
 				}
@@ -224,17 +231,38 @@ public class AdminUsersProfile extends Activity {
 		
 		// method to delete an administrator
 		public void deleteAdmin() {
-
+			
+			boolean isAdmin = false;
 			adminTask = new ArrayList<>();
-
+			
+			//check to see if user is an admin
 			for (AdminID adm : adminList) {
 				if (userId == adm.getUserID()) {
-					adminId = adm.getAdminID();
-					deleteAdminTask = new ArrayList<>();
-					DeleteAdminTask task = new DeleteAdminTask();
-					task.execute();
+					isAdmin = true;
+					break;
 				}
+			}
+			
+			//if user is an admin then start Async task to delete user
+			if(isAdmin)
+			{
+				for (AdminID adm : adminList)
+				{
+					if (userId == adm.getUserID())
+					{
+						adminId = adm.getAdminID();
+						deleteAdminTask = new ArrayList<>();
+						DeleteAdminTask task = new DeleteAdminTask();
+						task.execute();
+						break;
+					}
+				}				
 			}	
+			else //if user not an admin then display a toast
+			{
+				Toast.makeText(this, userName +" is not an admin",
+						Toast.LENGTH_LONG).show();
+			}
 		}
 		
 		// method to change community of selected user
@@ -384,7 +412,7 @@ public class AdminUsersProfile extends Activity {
 			@Override
 			protected String doInBackground(String... params) {
 				HttpManager.deleteData(deleteAdmin + adminId);
-				String result = "Admin Deleted";
+				String result = "Admin Removed";
 				return result;
 			}
 

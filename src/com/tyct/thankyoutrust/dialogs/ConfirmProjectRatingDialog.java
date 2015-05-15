@@ -29,8 +29,8 @@ public class ConfirmProjectRatingDialog extends android.app.DialogFragment
 		
 		builder.setTitle("Are you sure?");
 		builder.setMessage("Is a rating of " + myActivity.getProjectRating() + " stars what you wanted to rate this project? This cannot be changed once submitted.");
-		builder.setPositiveButton("Yes", new positiveListener());
-		builder.setNegativeButton("No", new negativeListener());
+		builder.setPositiveButton("Ok", new positiveListener());
+		builder.setNegativeButton("Cancel", new negativeListener());
 		
 		Dialog dialog = builder.create();
 		

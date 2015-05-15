@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tyct.thankyoutrust.model.Community;
+import com.tyct.thankyoutrust.model.PhoneNumber;
 import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
 import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
+import com.tyct.thankyoutrust.parsers.PhoneNumberJSONParser;
 import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
 import android.animation.Animator;
@@ -51,6 +53,8 @@ public class RegisterActivity extends Activity implements
 	List<PostTask> tasks;
 	List<CommunityTask> communityTask;
 	User newUser;
+	PhoneNumber newPhone;
+	String email;
 
 	List<User> userList;
 	List<Community> communityList;
@@ -60,11 +64,13 @@ public class RegisterActivity extends Activity implements
 	 * requested.
 	 */
 	private UserRegisterTask mAuthTask = null;
+	private PhoneRegisterTask mPhoneTask = null;
 
 	// UI references.
 	private EditText mNameView;
 	private EditText mSurnameView;
 	private AutoCompleteTextView mEmailView;
+	private EditText mPhoneView;
 	private EditText mAddressView;
 	private EditText mSuburbView;
 	private EditText mCityView;
@@ -94,6 +100,8 @@ public class RegisterActivity extends Activity implements
 		mEmailView = (AutoCompleteTextView) findViewById(R.id.reg_email);
 		populateAutoComplete();
 		mEmailView.setText(userEmail);
+		
+		mPhoneView = (EditText) findViewById(R.id.reg_phone);
 
 		mAddressView = (EditText) findViewById(R.id.reg_address);
 
@@ -194,7 +202,8 @@ public class RegisterActivity extends Activity implements
 		// Store values at the time of the registration attempt.
 		String fName = mNameView.getText().toString();
 		String lName = mSurnameView.getText().toString();
-		String email = mEmailView.getText().toString();
+		email = mEmailView.getText().toString();
+		String phone = mPhoneView.getText().toString();
 		String address = mAddressView.getText().toString();
 		String suburb = mSuburbView.getText().toString();
 		String city = mCityView.getText().toString();
@@ -276,6 +285,10 @@ public class RegisterActivity extends Activity implements
 			newUser.setCity(city);
 			newUser.setPostalCode(Integer.parseInt(postcode));
 			newUser.setPassword(password);
+			
+			//Create new PhoneNumber Object
+			newPhone = new PhoneNumber();
+			newPhone.setPhoneNumber(phone);
 
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
@@ -438,7 +451,7 @@ public class RegisterActivity extends Activity implements
 	}
 
 	/**
-	 * Represents an asynchronous register task used to authenticate the user.
+	 * Represents an asynchronous register task used to add user data to database.
 	 */
 	public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -462,13 +475,14 @@ public class RegisterActivity extends Activity implements
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			mAuthTask = null;
-			showProgress(false);
 
 			if (success) {
-				Intent i = new Intent(RegisterActivity.this,
-						LoginActivity.class);
-				startActivity(i);
-				finish();
+				// retrieve the new user's user id by updating userList
+				personInfo();
+				
+				// kick off phone number registration task
+				mPhoneTask = new PhoneRegisterTask();
+				mPhoneTask.execute((Void) null);
 			} else {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));
@@ -479,6 +493,57 @@ public class RegisterActivity extends Activity implements
 		@Override
 		protected void onCancelled() {
 			mAuthTask = null;
+			showProgress(false);
+		}
+	}
+	
+	/**
+	 * Represents an asynchronous register task used to add user phone number to database.
+	 */
+	public class PhoneRegisterTask extends AsyncTask<Void, Void, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(Void... params) {		
+			
+			try {
+				// Simulate network access.
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				return false;
+			}
+			
+			for (User user : userList) {
+				if (user.getEmail().equals(email)) {
+					int usID = user.getUserID();
+					newPhone.setUserID(usID);
+					break;
+				}
+			}
+			
+			String newPhoneString = PhoneNumberJSONParser.POST(newPhone);
+			
+			// register the new phone number here.
+			HttpManager.postData("http://gb3it.pickworth.info:3000/phone_numbers",
+					newPhoneString);
+			return true;
+		}
+
+		@Override
+		protected void onPostExecute(final Boolean success) {
+			mPhoneTask = null;
+			showProgress(false);
+
+			if (success) {
+				Intent i = new Intent(RegisterActivity.this,
+						LoginActivity.class);
+				startActivity(i);
+				finish();
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			mPhoneTask = null;
 			showProgress(false);
 		}
 	}
@@ -502,7 +567,6 @@ public class RegisterActivity extends Activity implements
 		protected void onPostExecute(String result) {
 			userList = UserJSONParser.parseFeed(result);
 			tasks.remove(this);
-
 		}
 	}
 

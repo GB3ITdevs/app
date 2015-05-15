@@ -3,89 +3,138 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.tyct.thankyoutrust.ProfileActivity" >
-
     <LinearLayout
-        android:id="@+id/llProfileTop"
-        android:layout_width="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TableLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_vertical_margin" >
+        android:shrinkColumns="1,2"
+        android:stretchColumns="1,2"
+        android:orientation="vertical" >
 
-        <ImageView
-            android:id="@+id/imageViewProfile"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:src="@drawable/profile_place_holder"
-            android:contentDescription="@string/message_name_placeholder"/>
-
-        <LinearLayout
-            android:id="@+id/details"
-            android:layout_width="match_parent"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical" >
+            android:gravity="center_horizontal"
+            android:padding="10dp" >
 
             <TextView
                 android:id="@+id/tvProfName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:text="@string/placeholderName" />
+                android:gravity="center"
+                android:text="Name"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+        </TableRow>
 
-            <TextView
-                android:id="@+id/tvProfEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center"
-                android:text="@string/prompt_email" />
+       <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:padding="2dp"
+            android:layout_height="wrap_content">
+             
+               <TextView
+                android:id="@+id/textView1"
+                 android:textColor="#699ffc"
+                android:text="Email:" />
 
-            <TextView
-                android:id="@+id/tvPPhoneNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:gravity="end"
-                android:text="Phone Number" />
+             <TextView
+                 android:id="@+id/tvProfEmail"
+                 android:gravity="left"
+                 android:text="Email" />
+            
+        </TableRow>
 
-        </LinearLayout>
-    </LinearLayout>
+        <TableRow
+            android:id="@+id/tableRow3"
+             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp" >
+             
+              <TextView
+                android:id="@+id/textView10"
+                 android:textColor="#699ffc"
+                 android:paddingEnd="3dp"
+                android:text="@string/phone_number" />
+
+             <TextView
+                 android:id="@+id/tvPPhoneNumber"
+                 android:gravity="left"
+                 android:text="@string/phone_number" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp" >
+             
+              <TextView
+                android:id="@+id/textView11"
+                 android:textColor="#699ffc"
+                android:text="@string/st_address" />
+
+             <TextView
+                 android:id="@+id/tvPStreetAddress"
+                 android:gravity="left"
+                 android:text="@string/st_address" />
+        </TableRow>
+        
+         <TableRow
+            android:id="@+id/tableRow5"
+             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp">
+             
+               <TextView
+                android:id="@+id/textView12"
+                 android:textColor="#699ffc"
+                android:text="@string/suburb" />
+
+             <TextView
+                 android:id="@+id/tvPSuburb"
+                 android:gravity="left"
+                 android:text="@string/suburb" />
+        </TableRow>
+        
+          <TableRow
+            android:id="@+id/tableRow6"
+             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp">
+             
+                <TextView
+                android:id="@+id/textView13"
+                 android:textColor="#699ffc"
+                android:text="@string/city" />
+
+             <TextView
+                 android:id="@+id/tvPCity"
+                 android:gravity="left"
+                 android:text="@string/city" />
+        </TableRow>
+        
+           <TableRow
+            android:id="@+id/tableRow7"
+             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp">
+             
+                 <TextView
+                android:id="@+id/textView14"
+                 android:textColor="#699ffc"
+                android:text="@string/community" />
+
+             <TextView
+                 android:id="@+id/tvPCommunity"
+                 android:gravity="left"
+                 android:text="@string/community" />
+        </TableRow>
+    </TableLayout>
     
-      <TextView
-                android:id="@+id/tvPStreetAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Street Address" />
-  <TextView
-                android:id="@+id/tvPSuburb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/prompt_suburb" />
-  
-  <TextView
-                android:id="@+id/tvPCity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/prompt_city" />
-  
-  <TextView
-                android:id="@+id/tvPCommunity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Community" />
-  
     <Button
         android:id="@+id/btnOptions"
         style="@style/blue_button"
@@ -93,5 +142,5 @@
         android:background="@drawable/blue_button"
         android:text="@string/options" />
 
-</LinearLayout>
+    </LinearLayout>
 </ScrollView>
