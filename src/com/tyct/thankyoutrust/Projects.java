@@ -135,6 +135,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
 			case R.id.action_profile:
 				goTo = new Intent(this, ProfileActivity.class);
 				startActivity(goTo);
+				return true;
 			case R.id.action_about_us:
 				goTo = new Intent(this, AboutUs.class);
 				startActivity(goTo);

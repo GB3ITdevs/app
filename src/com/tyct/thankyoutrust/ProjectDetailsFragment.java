@@ -16,8 +16,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
@@ -56,8 +58,7 @@ public class ProjectDetailsFragment extends Fragment {
 	int userID;
 	RatingBar ratingBar;
 	
-	TextView tvPostalCode;
-	TextView tvProjectNotes;
+	ListView tvProjectNotes;
 	
 	Button viewWebsite;
 	
@@ -87,12 +88,10 @@ public class ProjectDetailsFragment extends Fragment {
 				false);
 		// Initialize the layout vies
 		TextView tvProjectTitle = (TextView) v.findViewById(R.id.projectName);
-		tvPostalCode = (TextView) v.findViewById(R.id.postalCode);
 		TextView tvApplicantName = (TextView) v
 				.findViewById(R.id.applicantName);
 		TextView tvFundsRequested = (TextView) v
 				.findViewById(R.id.fundsRequested);
-		TextView tvUseOfFunds = (TextView) v.findViewById(R.id.useOfFunds);
 		TextView tvProjectBlurb = (TextView) v.findViewById(R.id.projectBlurb);
 		ratingBar = (RatingBar) v.findViewById(R.id.projectRatingBar);
 		Button postNote = (Button) v.findViewById(R.id.btnPostNotes);
@@ -107,7 +106,7 @@ public class ProjectDetailsFragment extends Fragment {
 		viewWebsite.setOnClickListener(websiteListener);
 		
 		//ProjectNotes textview
-		tvProjectNotes = (TextView) v.findViewById(R.id.projectDetailsNotes);
+		tvProjectNotes = (ListView) v.findViewById(R.id.projectDetailsNotes);
 				
 		// Retrieve the project selected from the activity
 		ma = (ProjectDetailsActivity) getActivity();
@@ -120,7 +119,8 @@ public class ProjectDetailsFragment extends Fragment {
 		tvApplicantName.setText(projectDisplayed.getApplicantName());
 		tvFundsRequested.setText(Integer.toString(projectDisplayed
 				.getFundsRequested()));
-		tvUseOfFunds.setText(projectDisplayed.getUseOfFunds());
+		tvFundsRequested.append(" Needed For: ");
+		tvFundsRequested.append(projectDisplayed.getUseOfFunds());
 		tvProjectBlurb.setText(projectDisplayed.getProjectBlurb());
 		ratingBar.setOnRatingBarChangeListener(ratingChangeListener);
 		
@@ -194,17 +194,30 @@ public class ProjectDetailsFragment extends Fragment {
 	}
 
 	public void checkRetrievedNotes() {
-		tvProjectNotes.setText("");
-		int count = 1;
-		for (int i = 0; i < noteList.size(); i++) {
-			if ((noteList.get(i).getUserID() == userID)
-					&& (noteList.get(i).getProjectID() == projectDisplayed
-							.getProjectID())) {
-				//Set the notes to the textview in the details layout	
-				tvProjectNotes.append(" " + count + "." + " " + noteList.get(i).getNote());
-				count++;
+		List<ProjectNote> sortedNotes = new ArrayList<ProjectNote>();
+		
+		for(ProjectNote note : noteList)
+		{
+			if ((note.getUserID() == userID)&& (note.getProjectID() == projectDisplayed.getProjectID())) 
+			{
+				sortedNotes.add(note);
 			}
 		}
+		
+		String[] noteArray = new String[sortedNotes.size()];
+		int count = 0;
+		
+		for(ProjectNote note : sortedNotes)
+		{
+				noteArray[count] = note.getNote();
+				count++;
+		}
+		
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(ma, android.R.layout.simple_list_item_1, noteArray);
+		
+		tvProjectNotes.setAdapter(adapter);
+
+		
 	}
 	
 	public void checkForWebsite() {
@@ -250,7 +263,7 @@ public class ProjectDetailsFragment extends Fragment {
 		{
 			if(projectDisplayed.getCommunityID() == community.getCommunityID())
 			{
-				tvPostalCode.setText(Integer.toString(community.getPostalCode()));
+				//tvPostalCode.setText(Integer.toString(community.getPostalCode()));
 			}
 		}
 	}

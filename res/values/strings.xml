@@ -24,7 +24,7 @@
     <string name="title_activity_projects">ProjectsActivity</string>
     <string name="postalCodeTitle">Postal Code:</string>
     <string name="applicantNameTitle">Applicant Name:</string>
-    <string name="fundsRequestedTitle">Funds Requested:</string>
+    <string name="fundsRequestedTitle">Funds:</string>
     <string name="useOfFundsTitles">Use Of Funds:</string>
     <string name="projects">Projects</string>
     <string name="title_activity_project_details">ProjectDetailsActivity</string>
@@ -61,12 +61,14 @@
     <string name="select_community">Choose a community to register for:</string>
     <string name="fragment_project_details_notes_title">Project Notes:</string>
     <string name="fragment_project_details_notes_placeholder">You have no notes on this project yet.</string>
-    <string name="edit_project_notes">Enter your personal notes on this project</string>
+    <string name="edit_project_notes">Add a Personal Note</string>
     <string name="title_activity_admin_message_board">AdminMessageBoard</string>
     <string name="community_post_code">Community Post Code</string>
     <string name="all_users">All Users</string>
     <string name="phone_number">Phone Number</string>
     <string name="st_address">Street Address</string>
     <string name="community">Community</string>
+    <string name="title_activity_admin_single_project_report">AdminSingleProjectReport</string>
+    <string name="title_admin_single_report_not_rated">Not Yet Rated By:</string>
 
 </resources>

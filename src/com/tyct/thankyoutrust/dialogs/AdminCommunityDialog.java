@@ -16,7 +16,7 @@ import com.tyct.thankyoutrust.dialogs.AdminChangeCommunitiesDialog.positiveListe
 
 public class AdminCommunityDialog extends android.app.DialogFragment {
 	AdminAllCommunities myActivity;
-	String[] optionsArray = { "Post a message in community"};
+	String[] optionsArray = { "Post a message in community", "View Reports"};
 	String selectedItem;
 	boolean result;
 	String communityName;

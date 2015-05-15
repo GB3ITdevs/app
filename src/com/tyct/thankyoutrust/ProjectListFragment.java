@@ -4,17 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.tyct.thankyoutrust.model.Community;
 import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.ProjectRating;
+import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
 
 public class ProjectListFragment extends Fragment {
 	// Declare the class fields
@@ -22,9 +25,13 @@ public class ProjectListFragment extends Fragment {
 	List<Project> projectListUnsorted;
 	List<Project> projectList;
 	List<ProjectRating> ratings;
+	List<Community> communities;
 	//String[] projectNames;
 	Projects ma;
 	ListView projectListView;
+	int commID;
+	TextView tvCommunityName;
+	
 	private Callbacks mCallbacks = sCallbacks;
 
 	public interface Callbacks {
@@ -45,6 +52,8 @@ public class ProjectListFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_project_list, container,
 				false);
+		
+		requestData();
 
 		ma = (Projects) getActivity();
 		
@@ -54,7 +63,7 @@ public class ProjectListFragment extends Fragment {
 		ratings = ma.getProjectRatingList();
 		
 		int userID = ma.userID;
-		int commID = ma.userCommunityID;
+		commID = ma.userCommunityID;
 		
 		for (Project project : projectListUnsorted) 
 		{
@@ -64,6 +73,8 @@ public class ProjectListFragment extends Fragment {
 			}
 		}
 
+		tvCommunityName = (TextView) v.findViewById(R.id.projectListCommunityTitle);
+		
 		projectListView = (ListView) v.findViewById(R.id.projectListView);
 
 		ProjectItemAdapter projectAdapter = new ProjectItemAdapter(getActivity(), R.layout.item_project, projectList ,ratings, userID);
@@ -77,6 +88,17 @@ public class ProjectListFragment extends Fragment {
 
 		return v;
 	}
+	
+ 	//Method to create a and start a new task
+ 	private void requestData() 
+ 	{
+ 		//Set the uri string
+ 		String uri = "http://gb3it.pickworth.info:3000/communities";
+ 		//Create the new async task
+ 		GetCommunitiesTask ratingTask = new GetCommunitiesTask();
+ 		//Start it using the url that has been passed into the method
+ 		ratingTask.execute(uri);
+ 	}
 
 	public class onListItemClick implements OnItemClickListener {
 
@@ -94,4 +116,52 @@ public class ProjectListFragment extends Fragment {
 		}
 
 	}
+	
+	public void setCommunityTitle()
+	{
+		for (Community com : communities)
+		{
+			if(com.getCommunityID() == commID)
+			{
+				tvCommunityName.setText(com.getCommunityName() + " Projects");
+			}
+		}
+	}
+	
+ 	//Inner class for performing network activity - getting and setting project list from the database
+	 	private class GetCommunitiesTask extends AsyncTask<String, String, String> 
+	 	{
+	 		
+	 		//Tasks pre-execute method
+	 		@Override
+	 		protected void onPreExecute() 
+	 		{
+
+	 		}
+	 		
+	 		//Tasks do in background method
+	 		@Override
+	 		protected String doInBackground(String... params) 
+	 		{
+	 			//Create a new string from the http managers get data method and return it
+	 			String content = HttpManager.getData(params[0]);
+	 			return content;
+	 		}
+	 		
+	 		//Tasks post-execute method
+	 		@Override
+	 		protected void onPostExecute(String result) 
+	 		{
+				//Create a new list of communities from the JSON parser using the passed in string from the http manager
+				communities = CommunityJSONParser.parseFeed(result);
+				setCommunityTitle();
+	 		}
+	 		
+	 		@Override
+	 		protected void onProgressUpdate(String... values) 
+	 		{
+
+	 		}
+	 		
+	 	}
 }

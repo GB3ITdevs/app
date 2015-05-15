@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tyct.thankyoutrust"
-    android:versionCode="2"
-    android:versionName="0.2" >
+    android:versionCode="3"
+    android:versionName="0.3" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -112,7 +112,7 @@
         <activity
             android:name=".AdminReports"
             android:label="@string/title_activity_admin_reports"
-            android:parentActivityName=".AdminHomePage"
+            android:parentActivityName=".AdminAllCommunities"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -140,5 +140,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tyct.thankyoutrust.AdminHomePage" />
         </activity>
+        <activity
+            android:name=".AdminSingleProjectReport"
+            android:label="@string/title_activity_admin_single_project_report" >
+        </activity>
     </application>
+
 </manifest>

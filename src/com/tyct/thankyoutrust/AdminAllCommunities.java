@@ -115,6 +115,13 @@ public class AdminAllCommunities extends Activity {
 					intent.putExtra("CommunityName", selectedCommuntiyName);
 					startActivity(intent);
 				}
+				
+				if (options == "View Reports") {
+					Intent intent = new Intent(AdminAllCommunities.this, AdminReports.class);
+					intent.putExtra("CommunityId", selectedCommunityId);
+					intent.putExtra("CommunityName", selectedCommuntiyName);
+					startActivity(intent);
+				}
 			}
 
 	public void display() {

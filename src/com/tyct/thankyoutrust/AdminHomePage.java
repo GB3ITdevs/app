@@ -68,8 +68,7 @@ public class AdminHomePage extends Activity {
 	}
 
 	public void setUpAdminOptionsList() {
-		String[] adminListOptions = { "View All Users", "View All Communities",
-				"Reports" };
+		String[] adminListOptions = { "View All Users", "View All Communities"};
 
 		ArrayAdapter<String> adminOptionsAdapter = new ArrayAdapter<String>(
 				AdminHomePage.this, android.R.layout.simple_list_item_1,
@@ -98,9 +97,6 @@ public class AdminHomePage extends Activity {
 			case "View All Communities":
 				goToIntent = new Intent(AdminHomePage.this,
 						AdminAllCommunities.class);
-				break;
-			case "Reports":
-				goToIntent = new Intent(AdminHomePage.this, AdminReports.class);
 				break;
 			default:
 				goToIntent = null;
