@@ -57,7 +57,7 @@ public class UserListAdapter extends ArrayAdapter<User> {
 			
 		}
 
-		nameTxtView.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
+		nameTxtView.setText(currentUser.getLastName()+", "  + currentUser.getFirstName());
 
 		// Return customview
 		return customView;
