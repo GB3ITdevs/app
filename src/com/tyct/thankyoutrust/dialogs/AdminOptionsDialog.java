@@ -36,7 +36,7 @@ public class AdminOptionsDialog extends android.app.DialogFragment{
 			// Set single choice options (radio buttons)
 			builder.setSingleChoiceItems(optionsArray, -1, new OnMultiChoiceClickListener());
 			// set Submit Button
-			builder.setPositiveButton("Submit", new positiveListener());
+			builder.setPositiveButton("Ok", new positiveListener());
 			// set Cancel Button
 			builder.setNegativeButton("Cancel", new negativeListener());
 

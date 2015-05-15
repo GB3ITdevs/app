@@ -38,8 +38,8 @@ public class AdminChangeCommunitiesDialog extends android.app.DialogFragment{
 		builder.setTitle("Choose a Community to change to:");
 		// Set single choice options (radio buttons)
 		builder.setSingleChoiceItems(communityNames, -1, new OnMultiChoiceClickListener());
-		builder.setPositiveButton("Submit", new positiveListener());
-		builder.setNegativeButton("No", new negativeListener());
+		builder.setPositiveButton("Ok", new positiveListener());
+		builder.setNegativeButton("Cancel", new negativeListener());
 		
 		Dialog dialog = builder.create();
 		
