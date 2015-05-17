@@ -117,7 +117,8 @@ public class ProjectDetailsFragment extends Fragment {
 		tvProjectTitle.setText(projectDisplayed.getProjectName());
 		
 		tvApplicantName.setText(projectDisplayed.getApplicantName());
-		tvFundsRequested.setText(Integer.toString(projectDisplayed
+		tvFundsRequested.setText("$");
+		tvFundsRequested.append(Integer.toString(projectDisplayed
 				.getFundsRequested()));
 		tvFundsRequested.append(" Needed For: ");
 		tvFundsRequested.append(projectDisplayed.getUseOfFunds());
