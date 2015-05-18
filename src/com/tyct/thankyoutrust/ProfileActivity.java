@@ -304,8 +304,13 @@ public class ProfileActivity extends Activity {
 							if (user.getUserID() == (usID)) {
 								// Check if the current password matches stored
 								// password
-								if (!user.getPassword().equals(pw)) {
-									eiPassw.setError(getString(R.string.error_incorrect_password));
+								CheckPasswordTask mAuthTask = new CheckPasswordTask(
+										usID, pw);
+								mAuthTask.execute();
+
+								if (!pwMatches) {
+									eiPassw
+											.setError(getString(R.string.error_incorrect_password));
 									focusView = eiPassw;
 									cancel = true;
 								}
@@ -435,8 +440,13 @@ public class ProfileActivity extends Activity {
 							if (user.getUserID() == (usID)) {
 								// Check if the current password matches stored
 								// password
-								if (!user.getPassword().equals(pw)) {
-									eaPassw.setError(getString(R.string.error_incorrect_password));
+								CheckPasswordTask mAuthTask = new CheckPasswordTask(
+										usID, pw);
+								mAuthTask.execute();
+
+								if (!pwMatches) {
+									eaPassw
+											.setError(getString(R.string.error_incorrect_password));
 									focusView = eaPassw;
 									cancel = true;
 								}
