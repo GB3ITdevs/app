@@ -1,15 +1,13 @@
 package com.tyct.thankyoutrust;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-import com.tyct.thankyoutrust.AdminAllUsers.ListViewUserClickHandler;
-import com.tyct.thankyoutrust.dialogs.AdminChangeCommunitiesDialog;
+import com.tyct.thankyoutrust.dialogs.AdminAddNewCommunity;
 import com.tyct.thankyoutrust.dialogs.AdminCommunityDialog;
-import com.tyct.thankyoutrust.dialogs.AdminOptionsDialog;
 import com.tyct.thankyoutrust.model.Community;
-import com.tyct.thankyoutrust.model.PhoneNumber;
-import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
 
 import android.app.Activity;
@@ -25,7 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -36,10 +34,14 @@ public class AdminAllCommunities extends Activity {
 	
 	List<Community> communityList;
 	List<MyTask> tasks;
+	List<AddCommunityTask> addCommunityTask;
 	
 	//Dialog Fragments
 	AdminCommunityDialog adminDialog;
+	AdminAddNewCommunity newCommunityDialog;
 	boolean dialogResult;
+	
+	Community newCommunityEntity;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,10 @@ public class AdminAllCommunities extends Activity {
 		//Clickable ListView
 		ListView groupAct = (ListView) findViewById(R.id.ListViewCommunities);
 		groupAct.setOnItemClickListener(new ListViewUserClickHandler());
+		
+		//add a communtiy button
+		ImageView addButton = (ImageView) findViewById(R.id.addImageButton);
+		addButton.setOnClickListener(new AddCommunityButton());
 
 	}
 
@@ -105,6 +111,26 @@ public class AdminAllCommunities extends Activity {
 				}
 			}
 			
+			// Method to return data to the Dialog Fragment
+			public void addNewCommunity(boolean result, String communityName, int postCode) {
+				newCommunityDialog.dismiss();
+
+				if (result == true) {
+					//addCommunity = new ArrayList<>();
+					newCommunityEntity = new Community();
+					newCommunityEntity.setCommunityName(communityName);
+					newCommunityEntity.setPostalCode(postCode);
+					
+					addCommunityTask = new ArrayList<>();
+					AddCommunityTask task = new AddCommunityTask();
+					task.execute();
+					//Toast.makeText(AdminAllCommunities.this, communityName + ", " + postCode +" added.", Toast.LENGTH_LONG).show();
+				}
+				if(result == false) {
+					Toast.makeText(AdminAllCommunities.this, "Cancelled", Toast.LENGTH_LONG).show();
+				}
+			}
+			
 			// Method where selected options are implemented
 			public void setOptionIntents(String options, int selectedCommunityId, String selectedCommuntiyName) {
 				if (options == "Post a message in community") {
@@ -149,6 +175,65 @@ public class AdminAllCommunities extends Activity {
 		}
 	}
 
+	
+	// Handles the ListView clicks
+	public class ListViewUserClickHandler implements OnItemClickListener {
+
+		@Override
+		public void onItemClick(AdapterView<?> list, View itemview,
+				int position, long id) {
+		
+			Community selectedCommunity = (Community) list.getItemAtPosition(position);
+			
+			String	communityName = selectedCommunity.getCommunityName();
+			int communityId = selectedCommunity.getCommunityID();
+		
+			adminDialog = new AdminCommunityDialog(communityName, communityId);
+			FragmentManager fm = getFragmentManager();
+			adminDialog.show(fm, "confirm");				
+		}
+	}
+	
+	private void setListView() {
+		// Get reference to the listView
+		ListView communityNameListView = (ListView) findViewById(R.id.ListViewCommunities);		
+		
+		//Sorting list
+		//call Collections.sort, load with userlist and comparator
+		Collections.sort(communityList, new Comparator<Community>()
+				{
+			public int compare(Community c1, Community c2)
+			{
+				//Sort alphabetically by community name and return the new order.
+				return c1.getCommunityName().compareToIgnoreCase(c2.getCommunityName());
+			}
+				});
+		//set adapter
+		CommunityListAdapter adapter = new CommunityListAdapter(this, R.layout.admin_allusers_layout, communityList);
+		// Bind the ListView to the above adapter
+		communityNameListView.setAdapter(adapter);
+	
+	}
+	
+	//Once plus symbol clicked opens a dialogue fragment.
+	public class AddCommunityButton implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			newCommunityDialog = new AdminAddNewCommunity();
+			FragmentManager fm = getFragmentManager();
+			newCommunityDialog.show(fm, "confirm");	
+			
+		}
+		
+	}
+	/**************************************************************************************************************************************************************
+	 * 										ASYNC TASKS
+	 **************************************************************************************************************************************************************/
+	
+	/** 
+	 * Get community list
+	 */
 	private class MyTask extends AsyncTask<String, String, String> {
 
 		@Override
@@ -178,32 +263,42 @@ public class AdminAllCommunities extends Activity {
 		}
 	}
 	
-	// Handles the ListView clicks
-	public class ListViewUserClickHandler implements OnItemClickListener {
+	
+	/** 
+	 * Add an admin (POST)
+	 */
+	private class AddCommunityTask extends AsyncTask<String, String, String> {
+
+		String newCommunityString = CommunityJSONParser.POST(newCommunityEntity);
+		
 
 		@Override
-		public void onItemClick(AdapterView<?> list, View itemview,
-				int position, long id) {
-		
-			Community selectedCommunity = (Community) list.getItemAtPosition(position);
-			
-			String	communityName = selectedCommunity.getCommunityName();
-			int communityId = selectedCommunity.getCommunityID();
-		
-			adminDialog = new AdminCommunityDialog(communityName, communityId);
-			FragmentManager fm = getFragmentManager();
-			adminDialog.show(fm, "confirm");				
+		protected void onPreExecute() {
+			addCommunityTask.add(this);
 		}
-	}
-	
-	private void setListView() {
-		// Get reference to the listView
-		ListView communityNameListView = (ListView) findViewById(R.id.ListViewCommunities);		
-		//set adapter
-		CommunityListAdapter adapter = new CommunityListAdapter(this, R.layout.admin_allusers_layout, communityList);
-		// Bind the ListView to the above adapter
-		communityNameListView.setAdapter(adapter);
-	
+
+		@Override
+		protected String doInBackground(String... params) {
+			HttpManager.postData("http://gb3it.pickworth.info:3000/communities", newCommunityString);
+			String result = "new community added";
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+
+			String messageResult = (result);
+
+			addCommunityTask.remove(this);
+			Toast.makeText(AdminAllCommunities.this, messageResult, Toast.LENGTH_LONG)
+			.show();
+			//start communites task
+			display();
+		}
+
+		@Override
+		protected void onProgressUpdate(String... values) {
+		}
 	}
 	
 }

@@ -16,12 +16,19 @@
         android:text="All Communities"
         android:gravity="center_horizontal"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <ImageButton
+    android:id="@+id/addImageButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:contentDescription="add button"
+    android:src="@android:drawable/ic_input_add" />
 
     <ListView
         android:id="@+id/ListViewCommunities"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
-        android:paddingTop="20dp">
+        android:paddingTop="10dp">
     </ListView>
 
 </LinearLayout>
