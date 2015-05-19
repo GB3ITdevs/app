@@ -49,6 +49,7 @@ public class ProfileActivity extends Activity {
 
 	boolean admin = false;
 	boolean pwMatches;
+	boolean taskCompleted = false;
 
 	/**
 	 * Keep track of the tasks to ensure we can cancel it if requested.
@@ -443,6 +444,16 @@ public class ProfileActivity extends Activity {
 								CheckPasswordTask mAuthTask = new CheckPasswordTask(
 										usID, pw);
 								mAuthTask.execute();
+								
+								while(taskCompleted == false)
+								{
+									try {
+										Thread.sleep(500);
+									} catch (InterruptedException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}
 
 								if (!pwMatches) {
 									eaPassw
@@ -799,6 +810,7 @@ public class ProfileActivity extends Activity {
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			pwMatches = success;
+			taskCompleted = true;
 		}
 
 	}
