@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.tyct.thankyoutrust.LoginActivity.UserLoginTask;
-import com.tyct.thankyoutrust.model.AdminID;
 import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
@@ -49,6 +47,7 @@ public class ProfileActivity extends Activity {
 
 	boolean admin = false;
 	boolean pwMatches;
+	boolean taskDone;
 
 	/**
 	 * Keep track of the tasks to ensure we can cancel it if requested.
@@ -240,8 +239,6 @@ public class ProfileActivity extends Activity {
 				.findViewById(R.id.editTextEditLName);
 		final EditText eEmail = (EditText) textEntryView
 				.findViewById(R.id.editTextEditEmail);
-		final EditText eiPassw = (EditText) textEntryView
-				.findViewById(R.id.editTextInfoPw);
 
 		// Display name
 		if (userStored.get("fName") != null) {
@@ -287,7 +284,6 @@ public class ProfileActivity extends Activity {
 						eFName.setError(null);
 						eLName.setError(null);
 						eEmail.setError(null);
-						eiPassw.setError(null);
 
 						// Deal with input errors
 						boolean cancel = false;
@@ -297,33 +293,6 @@ public class ProfileActivity extends Activity {
 						String fName = eFName.getText().toString();
 						String lName = eLName.getText().toString();
 						String email = eEmail.getText().toString();
-						String pw = eiPassw.getText().toString();
-
-						// Check current password is correct
-						for (User user : userList) {
-							if (user.getUserID() == (usID)) {
-								// Check if the current password matches stored
-								// password
-								CheckPasswordTask mAuthTask = new CheckPasswordTask(
-										usID, pw);
-								mAuthTask.execute();
-
-								if (!pwMatches) {
-									eiPassw
-											.setError(getString(R.string.error_incorrect_password));
-									focusView = eiPassw;
-									cancel = true;
-								}
-								break;
-							}
-						}
-
-						// Check for a valid email
-						if (!isEmailValid(email)) {
-							eEmail.setError(getString(R.string.error_invalid_email));
-							focusView = eEmail;
-							cancel = true;
-						}
 
 						if (cancel) {
 							// There was an error; don't attempt update
@@ -336,6 +305,7 @@ public class ProfileActivity extends Activity {
 									email);
 							mPersonTask.execute((Void) null);
 							alertDialog.dismiss();
+							Toast.makeText(getApplicationContext(), "Changes Saved", Toast.LENGTH_SHORT).show();
 						}
 					}
 				});
@@ -353,6 +323,8 @@ public class ProfileActivity extends Activity {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 				ProfileActivity.this);
 
+		taskDone = false;
+		
 		LayoutInflater factory = LayoutInflater.from(this);
 
 		// edit_address is a Layout XML file containing text fields to display
@@ -368,8 +340,6 @@ public class ProfileActivity extends Activity {
 				.findViewById(R.id.editTextEditCity);
 		final EditText ePostcode = (EditText) textEntryView
 				.findViewById(R.id.editTextEditPostcode);
-		final EditText eaPassw = (EditText) textEntryView
-				.findViewById(R.id.editTextLocPw);
 
 		// Display address
 		if (userStored.get("address") != null) {
@@ -422,7 +392,6 @@ public class ProfileActivity extends Activity {
 						eSuburb.setError(null);
 						eCity.setError(null);
 						ePostcode.setError(null);
-						eaPassw.setError(null);
 
 						// Deal with input errors
 						boolean cancel = false;
@@ -433,26 +402,6 @@ public class ProfileActivity extends Activity {
 						String suburb = eSuburb.getText().toString();
 						String city = eCity.getText().toString();
 						String postcode = ePostcode.getText().toString();
-						String pw = eaPassw.getText().toString();
-
-						// Check current password is correct
-						for (User user : userList) {
-							if (user.getUserID() == (usID)) {
-								// Check if the current password matches stored
-								// password
-								CheckPasswordTask mAuthTask = new CheckPasswordTask(
-										usID, pw);
-								mAuthTask.execute();
-
-								if (!pwMatches) {
-									eaPassw
-											.setError(getString(R.string.error_incorrect_password));
-									focusView = eaPassw;
-									cancel = true;
-								}
-								break;
-							}
-						}
 
 						if (cancel) {
 							// There was an error; don't attempt update
@@ -465,6 +414,7 @@ public class ProfileActivity extends Activity {
 									suburb, city, postcode);
 							mAddressTask.execute((Void) null);
 							alertDialog.dismiss();
+							Toast.makeText(getApplicationContext(), "Changes Saved", Toast.LENGTH_SHORT).show();
 						}
 					}
 				});
@@ -577,6 +527,7 @@ public class ProfileActivity extends Activity {
 							mPwTask = new UpdatePwTask(newPw);
 							mPwTask.execute((Void) null);
 							alertDialog.dismiss();
+							Toast.makeText(getApplicationContext(), "Password Updated", Toast.LENGTH_SHORT).show();
 						}
 					}
 				});
@@ -799,6 +750,7 @@ public class ProfileActivity extends Activity {
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			pwMatches = success;
+			taskDone = true;
 		}
 
 	}

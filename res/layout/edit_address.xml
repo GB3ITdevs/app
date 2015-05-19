@@ -80,25 +80,5 @@
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:ems="10"
         android:hint="@string/prompt_postcode" />
-    
-    <TextView
-        android:id="@+id/textViewLocPw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:text="@string/enter_pw"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/holo_blue_light" />
-
-    <EditText
-        android:id="@+id/editTextLocPw"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_marginRight="@dimen/activity_vertical_margin"
-        android:ems="10"
-        android:hint="@string/prompt_password"
-        android:inputType="textPassword" />
 
 </LinearLayout>
