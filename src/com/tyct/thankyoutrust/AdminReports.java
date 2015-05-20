@@ -180,13 +180,13 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  		detailIntent.putExtra("currApplicantName", selectedProject.getApplicantName());
  		detailIntent.putExtra("currUseOfFunds", selectedProject.getUseOfFunds());
  		detailIntent.putExtra("currFundsRequested", selectedProject.getFundsRequested());
- 		detailIntent.putExtra("currCommunityID", selectedProject.getCommunityID());
+ 		detailIntent.putExtra("currCommunityID", selectedProject.getRoundID());
  		detailIntent.putExtra("currProjectID", selectedProject.getProjectID());
  		startActivity(detailIntent);
  		
  	}
  	
- 	
+ 	//*********************************************************************************************Need to display form the grant round not comm id
  	//Method to setup the project name list and display the project list fragment
  	public void setProjectList(List<Project> projectList)
  	{
@@ -197,7 +197,7 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  		for(Project project : projectList)
  		{
  			//If the project belongs to the same community as the logged in user, add it to the list to display
- 			if (project.getCommunityID() == userCommunityID)
+ 			if (project.getRoundID() == userCommunityID)
  			{
  				projectNames[i] = project.getProjectName();
  				i++;
@@ -293,7 +293,7 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  		detailIntent.putExtra(AdminSingleProjectFragment.currApplicantName, selectedProject.getApplicantName());
  		detailIntent.putExtra(AdminSingleProjectFragment.currUseOfFunds, selectedProject.getUseOfFunds());
  		detailIntent.putExtra(AdminSingleProjectFragment.currFundsRequested, selectedProject.getFundsRequested());
- 		detailIntent.putExtra(AdminSingleProjectFragment.currCommunityID, selectedProject.getCommunityID());
+ 		detailIntent.putExtra(AdminSingleProjectFragment.currCommunityID, selectedProject.getRoundID());
  		detailIntent.putExtra(AdminSingleProjectFragment.currProjectID, selectedProject.getProjectID());
  		startActivity(detailIntent);
  	}	

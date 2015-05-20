@@ -262,7 +262,7 @@ public class ProjectDetailsFragment extends Fragment {
 		
 		for (Community community : communities) 
 		{
-			if(projectDisplayed.getCommunityID() == community.getCommunityID())
+			if(projectDisplayed.getRoundID() == community.getCommunityID())//***********************************************************************
 			{
 				//tvPostalCode.setText(Integer.toString(community.getPostalCode()));
 			}

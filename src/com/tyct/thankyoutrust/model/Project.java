@@ -2,12 +2,13 @@ package com.tyct.thankyoutrust.model;
 
 public class Project {
 	private int projectID;
-	private int communityID;
+	private int roundID;
 	private String applicantName;
 	private String projectName;
 	private String projectBlurb;
 	private int fundsRequested;
 	private String useOfFunds;
+	private String status;
 	
 	
 	public int getProjectID() {
@@ -62,11 +63,19 @@ public class Project {
 		this.useOfFunds = useOfFunds;
 	}
 
-	public int getCommunityID() {
-		return communityID;
+	public int getRoundID() {
+		return roundID;
 	}
 
-	public void setCommunityID(int communityID) {
-		this.communityID = communityID;
+	public void setRoundID(int communityID) {
+		this.roundID = communityID;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

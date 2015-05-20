@@ -142,7 +142,7 @@ public class AdminSingleProjectFragment extends Fragment {
 
 	}
 
-
+//**************************************************************************************************************user community from grant round not project
 	//Method to organise whether user have rated the current project or not
 	public void organiseUsers(List<User> allUsers)
 	{
@@ -150,7 +150,7 @@ public class AdminSingleProjectFragment extends Fragment {
 		for (User user : allUsers)
 		{
 			//If the current users community ID is the same as the displayed project...
-			if (user.getCommunityID() == projectDisplayed.getCommunityID())
+			if (user.getCommunityID() == projectDisplayed.getRoundID())
 			{
 				//Add the user to the list of users in the community
 				usersInCommunity.add(user);
