@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.support.v4.util.ArrayMap;
+
 import com.tyct.thankyoutrust.model.Community;
 
 public class CommunityJSONParser 
@@ -81,5 +83,22 @@ public class CommunityJSONParser
 			//Return the JSON String
 			return json;
 		}
+		
+		// Put user data to database
+		public static String PUTCommunity(ArrayMap<String, String> fields) {
+			String json = "";
+			JSONObject jsonUser = new JSONObject();
+			try {
+				for (int i = 0; i < fields.size(); i++) {
+					jsonUser.accumulate(fields.keyAt(i), fields.valueAt(i));
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			json = "{\"community\":" + jsonUser.toString() + "}";
+			return json;
+		}
+	
 
 }

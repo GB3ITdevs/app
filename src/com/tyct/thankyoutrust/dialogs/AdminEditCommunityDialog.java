@@ -1,41 +1,55 @@
 package com.tyct.thankyoutrust.dialogs;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.tyct.thankyoutrust.AdminAllCommunities;
 import com.tyct.thankyoutrust.R;
 
-public class AdminAddNewCommunity extends android.app.DialogFragment{
+import com.tyct.thankyoutrust.AdminAllCommunities;
+
+public class AdminEditCommunityDialog extends android.app.DialogFragment{
 	boolean result;
 	AdminAllCommunities myActivity;
+	String communityName;
+	int communityId;
+	int postalCode;
 
-	public AdminAddNewCommunity() {
-		// TODO Auto-generated constructor stub
+	public AdminEditCommunityDialog(String comName, int postCode, int communityID) {
+		communityName = comName;
+		postalCode = postCode;
+		communityId = communityID;
+		
 	}
 
 	public Dialog onCreateDialog(Bundle savedInstanceState)
 	{
 		myActivity = (AdminAllCommunities) getActivity();
 		
-		Builder builder = new AlertDialog.Builder(getActivity());
+		LayoutInflater inflater = getActivity().getLayoutInflater();
 		
-		// Get the layout inflater
-	    LayoutInflater inflater = getActivity().getLayoutInflater();
-   
-	    // Pass null as the parent view because its going in the dialog layout
-	    builder.setView(inflater.inflate(R.layout.add_community_dialog, null));
-		builder.setTitle("Add New Community");
+		final View textEntryView = inflater.inflate(R.layout.add_community_dialog, null);
+
+		final EditText et = (EditText) textEntryView.findViewById(R.id.editTextEditCName);
+		final EditText etpc = (EditText) textEntryView.findViewById(R.id.editTextPostCodeEdit);
+	
+		et.setText(communityName);
+		etpc.setText(Integer.toString(postalCode));
+		
+		Builder builder = new AlertDialog.Builder(getActivity());
+
+	    builder.setView(textEntryView);
+    
+		builder.setTitle("Edit "+ communityName);
+
 		builder.setPositiveButton("Ok", new positiveListener());
 		builder.setNegativeButton("Cancel", new negativeListener());
-		
+
 		Dialog dialog = builder.create();
 		
 		return dialog;		
@@ -48,27 +62,19 @@ public class AdminAddNewCommunity extends android.app.DialogFragment{
 		public void onClick(DialogInterface dialog, int which) 
 		{
 			result = true;
-	
+			
 			// Get Text from editText field
 			EditText communityNamedEditTextField = (EditText) getDialog().findViewById(R.id.editTextEditCName);
-			// Get Text from editText field
-			EditText pcEditTextField = (EditText) getDialog().findViewById(R.id.editTextPostCodeEdit);
-			
-			if(communityNamedEditTextField.getText().toString().equals("") || pcEditTextField.getText().toString().equals(""))
-			{
-				Toast.makeText(myActivity, "All fields must be entered", Toast.LENGTH_LONG).show();
-			}
-			else
-			{
 			// Put Text into string form
 			String communityName = communityNamedEditTextField .getText().toString();
+			
+			// Get Text from editText field
+			EditText pcEditTextField = (EditText) getDialog().findViewById(R.id.editTextPostCodeEdit);
 			// Put Text into string form
 			String postCodeString = pcEditTextField.getText().toString();
-			//convert post code to int
 			int postCode = Integer.parseInt(postCodeString);
-
+		
 			returnToTarget(result, communityName, postCode);
-			}
 		}
 		
 	}
@@ -91,7 +97,7 @@ public class AdminAddNewCommunity extends android.app.DialogFragment{
 		
         if (myActivity != null) 
         {
-            myActivity.addNewCommunity(result, communityName, postCode);
+            myActivity.editCommunity(result, communityName, postCode, communityId);
         }
 	}
 }

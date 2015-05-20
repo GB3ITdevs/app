@@ -7,16 +7,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.tyct.thankyoutrust.AdminAllCommunities;
-import com.tyct.thankyoutrust.AdminUsersProfile;
-import com.tyct.thankyoutrust.ProjectDetailsActivity;
-import com.tyct.thankyoutrust.ProjectDetailsFragment;
-import com.tyct.thankyoutrust.dialogs.AdminChangeCommunitiesDialog.OnMultiChoiceClickListener;
-import com.tyct.thankyoutrust.dialogs.AdminChangeCommunitiesDialog.negativeListener;
-import com.tyct.thankyoutrust.dialogs.AdminChangeCommunitiesDialog.positiveListener;
 
 public class AdminCommunityDialog extends android.app.DialogFragment {
 	AdminAllCommunities myActivity;
-	String[] optionsArray = { "Post a message in community", "View Reports"};
+	String[] optionsArray = { "Post a message in community", "View Reports", "Edit Community"};
 	String selectedItem;
 	boolean result;
 	String communityName;
@@ -34,7 +28,7 @@ public class AdminCommunityDialog extends android.app.DialogFragment {
 		
 		Builder builder = new AlertDialog.Builder(getActivity());
 		
-		builder.setTitle("Select an Option " + communityName);
+		builder.setTitle("Select an Option for " + communityName);
 	
 		builder.setSingleChoiceItems(optionsArray, -1, new OnMultiChoiceClickListener());
 		builder.setPositiveButton("Ok", new positiveListener());

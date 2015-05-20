@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.tyct.thankyoutrust.dialogs.AdminAddNewCommunity;
 import com.tyct.thankyoutrust.dialogs.AdminCommunityDialog;
+import com.tyct.thankyoutrust.dialogs.AdminEditCommunityDialog;
 import com.tyct.thankyoutrust.model.Community;
 import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
 
@@ -18,6 +19,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.util.ArrayMap;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,13 +37,17 @@ public class AdminAllCommunities extends Activity {
 	List<Community> communityList;
 	List<MyTask> tasks;
 	List<AddCommunityTask> addCommunityTask;
+	List<EditCommunityTask> editCommunityTask;
 	
 	//Dialog Fragments
 	AdminCommunityDialog adminDialog;
 	AdminAddNewCommunity newCommunityDialog;
+	AdminEditCommunityDialog editCommunityDialog;
+	
 	boolean dialogResult;
 	
 	Community newCommunityEntity;
+	int selectedPostalCode;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +91,10 @@ public class AdminAllCommunities extends Activity {
 			startActivity(goTo);
 			finish();
 			return true;
+		case R.id.admin:
+			goTo = new Intent(AdminAllCommunities.this, AdminHomePage.class);
+			startActivity(goTo);
+			return true;
 		case R.id.action_profile:
 			goTo = new Intent(AdminAllCommunities.this, ProfileActivity.class);
 			startActivity(goTo);
@@ -116,7 +126,6 @@ public class AdminAllCommunities extends Activity {
 				newCommunityDialog.dismiss();
 
 				if (result == true) {
-					//addCommunity = new ArrayList<>();
 					newCommunityEntity = new Community();
 					newCommunityEntity.setCommunityName(communityName);
 					newCommunityEntity.setPostalCode(postCode);
@@ -124,12 +133,39 @@ public class AdminAllCommunities extends Activity {
 					addCommunityTask = new ArrayList<>();
 					AddCommunityTask task = new AddCommunityTask();
 					task.execute();
-					//Toast.makeText(AdminAllCommunities.this, communityName + ", " + postCode +" added.", Toast.LENGTH_LONG).show();
+					Toast.makeText(AdminAllCommunities.this, communityName + ", " + postCode +" added.", Toast.LENGTH_LONG).show();
 				}
 				if(result == false) {
 					Toast.makeText(AdminAllCommunities.this, "Cancelled", Toast.LENGTH_LONG).show();
 				}
 			}
+			
+			// Method to return data to the Dialog Fragment
+						public void addNewCommunityToast(boolean result, String communityName, int postCode) {
+
+							if (result == true) {
+								if(communityName == null)
+								{
+								Toast.makeText(AdminAllCommunities.this, "Community Name missing", Toast.LENGTH_LONG).show();
+								}
+							}
+							
+						}
+			
+			// Method to return data to the Dialog Fragment
+			public void editCommunity(boolean result, String communityName, int postCode, int communityId) {
+			editCommunityDialog.dismiss();
+
+			if (result == true) {
+								editCommunityTask = new ArrayList<>();
+								EditCommunityTask task = new EditCommunityTask(communityId, communityName, postCode);
+								task.execute();
+			//Toast.makeText(AdminAllCommunities.this, "community id: " + communityId + "; " +communityName + ", " + postCode +" updated.", Toast.LENGTH_LONG).show();
+							}
+							if(result == false) {
+								Toast.makeText(AdminAllCommunities.this, "Cancelled", Toast.LENGTH_LONG).show();
+							}
+						}
 			
 			// Method where selected options are implemented
 			public void setOptionIntents(String options, int selectedCommunityId, String selectedCommuntiyName) {
@@ -147,6 +183,13 @@ public class AdminAllCommunities extends Activity {
 					intent.putExtra("CommunityId", selectedCommunityId);
 					intent.putExtra("CommunityName", selectedCommuntiyName);
 					startActivity(intent);
+				}
+				
+				if (options == "Edit Community") {
+					
+					editCommunityDialog = new AdminEditCommunityDialog(selectedCommuntiyName, selectedPostalCode, selectedCommunityId);
+					FragmentManager fm = getFragmentManager();
+					editCommunityDialog.show(fm, "confirm");
 				}
 			}
 
@@ -187,6 +230,7 @@ public class AdminAllCommunities extends Activity {
 			
 			String	communityName = selectedCommunity.getCommunityName();
 			int communityId = selectedCommunity.getCommunityID();
+			selectedPostalCode = selectedCommunity.getPostalCode();
 		
 			adminDialog = new AdminCommunityDialog(communityName, communityId);
 			FragmentManager fm = getFragmentManager();
@@ -293,6 +337,57 @@ public class AdminAllCommunities extends Activity {
 			Toast.makeText(AdminAllCommunities.this, messageResult, Toast.LENGTH_LONG)
 			.show();
 			//start communites task
+			display();
+		}
+
+		@Override
+		protected void onProgressUpdate(String... values) {
+		}
+	}
+	
+	/** 
+	 * Edit an admin (PUT)
+	 */
+	private class EditCommunityTask extends AsyncTask<String, String, String> {
+
+		private final String updateCommunityInfo;
+		private final String communityID;
+		private final String displayCommunityName;
+		
+		public EditCommunityTask(int communityId, String communityName, int postalCode)
+		{
+			ArrayMap<String, String> community = new ArrayMap<String, String>();
+			String postCode = Integer.toString(postalCode);
+			community.put("postalCode", postCode);
+			community.put("communityName", communityName);
+			communityID = Integer.toString(communityId);
+			displayCommunityName = communityName;
+			updateCommunityInfo = CommunityJSONParser.PUTCommunity(community);
+		}
+		
+
+		@Override
+		protected void onPreExecute() {
+			editCommunityTask.add(this);
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			HttpManager.updateData("http://gb3it.pickworth.info:3000/communities/"+ communityID, updateCommunityInfo);
+			String result = displayCommunityName +" updated";
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			selectedPostalCode = 0;
+
+			String messageResult = (result);
+
+			editCommunityTask.remove(this);
+			Toast.makeText(AdminAllCommunities.this, messageResult, Toast.LENGTH_LONG)
+			.show();
+			//refresh
 			display();
 		}
 
