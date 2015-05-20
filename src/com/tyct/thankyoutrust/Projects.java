@@ -185,7 +185,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		detailIntent.putExtra("currApplicantName", selectedProject.getApplicantName());
  		detailIntent.putExtra("currUseOfFunds", selectedProject.getUseOfFunds());
  		detailIntent.putExtra("currFundsRequested", selectedProject.getFundsRequested());
- 		detailIntent.putExtra("currCommunityID", selectedProject.getCommunityID());
+ 		detailIntent.putExtra("currCommunityID", selectedProject.getRoundID());
  		detailIntent.putExtra("currProjectID", selectedProject.getProjectID());
  		startActivity(detailIntent);
  		
@@ -202,7 +202,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		for(Project project : projectList)
  		{
  			//If the project belongs to the same community as the logged in user, add it to the list to display
- 			if (project.getCommunityID() == userCommunityID)
+ 			if (project.getRoundID() == userCommunityID)//*****************************************************************************************
  			{
  				projectNames[i] = project.getProjectName();
  				i++;
@@ -298,7 +298,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		detailIntent.putExtra(ProjectDetailsFragment.currApplicantName, selectedProject.getApplicantName());
  		detailIntent.putExtra(ProjectDetailsFragment.currUseOfFunds, selectedProject.getUseOfFunds());
  		detailIntent.putExtra(ProjectDetailsFragment.currFundsRequested, selectedProject.getFundsRequested());
- 		detailIntent.putExtra(ProjectDetailsFragment.currCommunityID, selectedProject.getCommunityID());
+ 		detailIntent.putExtra(ProjectDetailsFragment.currCommunityID, selectedProject.getRoundID());
  		detailIntent.putExtra(ProjectDetailsFragment.currProjectID, selectedProject.getProjectID());
  		startActivity(detailIntent);
  	}	

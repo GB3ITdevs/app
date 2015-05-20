@@ -29,7 +29,7 @@ public class ProjectListFragment extends Fragment {
 	//String[] projectNames;
 	Projects ma;
 	ListView projectListView;
-	int commID;
+	int roundID;
 	TextView tvCommunityName;
 	
 	private Callbacks mCallbacks = sCallbacks;
@@ -63,11 +63,11 @@ public class ProjectListFragment extends Fragment {
 		ratings = ma.getProjectRatingList();
 		
 		int userID = ma.userID;
-		commID = ma.userCommunityID;
+		roundID = ma.userCommunityID;//**********************************************************************************************
 		
 		for (Project project : projectListUnsorted) 
 		{
-			if(project.getCommunityID() == commID)
+			if(project.getRoundID() == roundID)
 			{
 				projectList.add(project);
 			}
@@ -121,7 +121,7 @@ public class ProjectListFragment extends Fragment {
 	{
 		for (Community com : communities)
 		{
-			if(com.getCommunityID() == commID)
+			if(com.getCommunityID() == roundID)
 			{
 				tvCommunityName.setText(com.getCommunityName() + " Projects");
 			}

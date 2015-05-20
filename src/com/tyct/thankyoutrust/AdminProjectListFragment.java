@@ -53,7 +53,7 @@ public class AdminProjectListFragment extends Fragment {
 		Bundle allData = intent.getExtras();
 
 		//get data
-		int commID = allData.getInt("CommunityId");
+		int roundID = allData.getInt("CommunityId");//*********************************************************************Replace with round ID
 		//String communityName = allData.getString("CommunityName");
 		
 		projectListUnsorted = ma.getProjectList();
@@ -63,7 +63,7 @@ public class AdminProjectListFragment extends Fragment {
 		
 		for (Project project : projectListUnsorted) 
 		{
-			if(project.getCommunityID() == commID)
+			if(project.getRoundID() == roundID)
 			{
 				projectList.add(project);
 			}

@@ -67,7 +67,7 @@ public class ProjectDetailsActivity extends Activity {
 		projectDisplayed.setProjectBlurb(currProjectBlurb);
 		projectDisplayed.setApplicantName(currApplicantName);
 		projectDisplayed.setFundsRequested(currFundsRequested);
-		projectDisplayed.setCommunityID(currCommunityID);
+		projectDisplayed.setRoundID(currCommunityID);
 		projectDisplayed.setUseOfFunds(currUseOfFunds);
 
 		// Create new Fragments
