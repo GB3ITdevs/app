@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.support.v4.util.ArrayMap;
+
 import com.tyct.thankyoutrust.model.Project;
 
 //Class to parse JSON Project data to and from the Android Project object
@@ -90,6 +92,22 @@ public class ProjectsJSONParser
 		//Return the JSON String
 		return json;
 		
+	}
+	
+	// Update project data in the database
+	public static String PUTProject(ArrayMap<String, String> fields) {
+		String json = "";
+		JSONObject jsonProject = new JSONObject();
+		try {
+			for (int i = 0; i < fields.size(); i++) {
+				jsonProject.accumulate(fields.keyAt(i), fields.valueAt(i));
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		json = "{\"project\":" + jsonProject.toString() + "}";
+		return json;
 	}
 
 }

@@ -103,11 +103,7 @@ public class AdminMessageBoard extends ListActivity {
 		// set admin
 		if (adminStatus == 1) {
 			admin = true;
-	}
-		
-				
-		//Toast message used for development**************************************
-		Toast.makeText(this, "communityId: " + communityID, Toast.LENGTH_LONG).show();
+		}
 	}
 
 	@Override

@@ -178,7 +178,7 @@ public class AdminAllCommunities extends Activity {
 					startActivity(intent);
 				}
 				
-				if (options == "View Reports") {
+				if (options == "View Projects") {
 					Intent intent = new Intent(AdminAllCommunities.this, AdminReports.class);
 					intent.putExtra("CommunityId", selectedCommunityId);
 					intent.putExtra("CommunityName", selectedCommuntiyName);

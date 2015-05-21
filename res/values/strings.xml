@@ -48,7 +48,7 @@
     <string name="action_back">Back</string>
     <string name="title_activity_admin_home_page">AdminHomePage</string>
     <string name="title_activity_admin_all_users">AdminAllUsers</string>
-    <string name="admin">Admin</string>
+    <string name="admin">Administrative</string>
     <string name="action_logout">Log out</string>
     <string name="title_activity_admin_all_communities">AdminAllCommunities</string>
     <string name="title_activity_admin_reports">AdminReports</string>
@@ -73,5 +73,6 @@
     <string name="prompt_phone">Primary Phone Number</string>
     <string name="title_activity_admin_single_project_report">AdminSingleProjectReport</string>
     <string name="title_admin_single_report_not_rated">Not Yet Rated By:</string>
+    <string name="empty_string"/>
 
 </resources>

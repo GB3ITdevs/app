@@ -28,7 +28,7 @@
         </activity>
         <activity
             android:name=".RegisterActivity"
-            android:label="@string/app_name"
+            android:label="@string/empty_string"
             android:parentActivityName=".LoginActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -36,13 +36,13 @@
         </activity>
         <activity
             android:name=".HomeActivity"
-            android:label="@string/app_name"
+            android:label="@string/empty_string"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".Projects"
-            android:label="@string/app_name"
+            android:label="@string/empty_string"
             android:parentActivityName=".HomeActivity"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
@@ -51,12 +51,12 @@
         </activity>
         <activity
             android:name=".SingleProject"
-            android:label="@string/title_activity_single_project"
+            android:label="@string/empty_string"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".WelcomeScreen"
-            android:label="@string/app_name"
+            android:label="@string/empty_string"
             android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -66,16 +66,17 @@
         </activity>
         <activity
             android:name=".AboutUs"
-            android:label="@string/title_activity_about_us" >
+            android:label="@string/empty_string" >
         </activity>
         <activity
             android:name=".ProfileActivity"
-            android:label="@string/app_name"
+            android:parentActivityName=".HomeActivity"
+            android:label="@string/empty_string"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".ProjectDetailsActivity"
-            android:label="@string/title_activity_project_details"
+            android:label="@string/empty_string"
             android:parentActivityName=".Projects"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
@@ -84,7 +85,7 @@
         </activity>
         <activity
             android:name=".AdminHomePage"
-            android:label="@string/title_activity_admin_home_page"
+            android:label="@string/empty_string"
             android:parentActivityName=".HomeActivity"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
@@ -93,7 +94,7 @@
         </activity>
         <activity
             android:name=".AdminAllUsers"
-            android:label="@string/title_activity_admin_all_users"
+            android:label="@string/empty_string"
             android:parentActivityName=".AdminHomePage"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
@@ -102,7 +103,7 @@
         </activity>
         <activity
             android:name=".AdminAllCommunities"
-            android:label="@string/title_activity_admin_all_communities"
+            android:label="@string/empty_string"
             android:parentActivityName=".AdminHomePage"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
@@ -111,7 +112,7 @@
         </activity>
         <activity
             android:name=".AdminReports"
-            android:label="@string/title_activity_admin_reports"
+            android:label="@string/empty_string"
             android:parentActivityName=".AdminAllCommunities"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
@@ -120,11 +121,11 @@
         </activity>
         <activity
             android:name=".ConfirmDialog"
-            android:label="@string/title_activity_confirm_dialog" >
+            android:label="@string/empty_string" >
         </activity>
         <activity
             android:name=".AdminUsersProfile"
-            android:label="@string/title_activity_admin_users_profile"
+            android:label="@string/empty_string"
             android:parentActivityName=".AdminAllUsers"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
@@ -133,7 +134,7 @@
         </activity>
         <activity
             android:name=".AdminMessageBoard"
-            android:label="@string/title_activity_admin_message_board"
+            android:label="@string/empty_string"
             android:parentActivityName=".AdminHomePage"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
@@ -142,7 +143,7 @@
         </activity>
         <activity
             android:name=".AdminSingleProjectReport"
-            android:label="@string/title_activity_admin_single_project_report" >
+            android:label="@string/empty_string" >
         </activity>
     </application>
 

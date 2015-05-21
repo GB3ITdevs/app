@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.tyct.thankyoutrust.model.Project;
-import com.tyct.thankyoutrust.model.ProjectRating;
-import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
-import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -19,11 +14,20 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.util.ArrayMap;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.tyct.thankyoutrust.dialogs.AdminProjectOptionsDialog;
+import com.tyct.thankyoutrust.dialogs.AdminSetProjectStateDialog;
+import com.tyct.thankyoutrust.model.Project;
+import com.tyct.thankyoutrust.model.ProjectRating;
+import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
+import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
+import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
 public class AdminReports extends Activity implements AdminProjectListFragment.Callbacks{
 
@@ -44,6 +48,12 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
 	
 	int userCommunityID;
 	int userID;
+	
+	
+	AdminProjectOptionsDialog optionsDialog;
+	boolean dialogResult;
+	
+	AdminSetProjectStateDialog setState;
  	
  	@Override
  	protected void onCreate(Bundle savedInstanceState) 
@@ -238,6 +248,7 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
 //		//Commit the transaction changes
 //		ft.commit();	
 //	}
+ 	
 	
  	//Method to retrieve the array of projects for use in the fragments
  	public List<Project> getProjectList()
@@ -283,6 +294,63 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  			return false;
  		}
  	}
+ 	
+ 	//Method for the options dialog when a project is clicked**********************************************************************************
+ 	
+	// Method to return data to the Dialog Fragment
+	public void setDialogResults(boolean result, String option, Project clickedProject) {
+		optionsDialog.dismiss();
+
+		if (result == true) {
+			if(option == null)
+			{
+			Toast.makeText(this, "No option selected", Toast.LENGTH_LONG).show();
+			}
+			else
+			{
+			setOptionIntents(option, clickedProject);
+			}
+		}
+	}
+	
+	// Method where selected options are implemented
+	public void setOptionIntents(String options, Project selectedProject) {
+		if (options == "View Report") {
+			changeProjectDetails(selectedProject.getProjectID());
+		}
+
+		if (options == "Set Project Outcome") {
+			setState = new AdminSetProjectStateDialog(selectedProject);
+			FragmentManager fm = getFragmentManager();
+			setState.show(fm, "setState");
+		}
+	}
+	
+	//Method for the options dialog when the admin requests to change the state of the project************************************************
+	// Method to return data to the status Dialog Fragment
+	public void setStatusDialogResults(boolean result, String option, Project clickedProject) {
+		setState.dismiss();
+
+		if (result == true) {
+			if(option == null)
+			{
+				Toast.makeText(this, "No option selected", Toast.LENGTH_LONG).show();
+			}
+			else
+			{
+				selectedProject = clickedProject;
+				selectedProject.setStatus(option);
+				
+				ArrayMap<String, String> updatedProject = new ArrayMap<String, String>();
+				updatedProject.put("status", clickedProject.getStatus());
+				String newStatus = ProjectsJSONParser.PUTProject(updatedProject);
+				
+				UpdateProjectStatusTask updateTask = new UpdateProjectStatusTask(newStatus);
+				updateTask.execute();		
+			}
+		}
+	}
+	
  	
  	@Override
  	public void onItemSelected(String id) 
@@ -407,5 +475,54 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  	 		}
  	 		
  	 	}
+ 	 	
+ 	 //Inner class for performing network activity - getting and setting project list from the database
+ 	 	private class UpdateProjectStatusTask extends AsyncTask<Void, Void, Boolean> 
+ 	 	{
+ 	 		String uri;
+ 	 		String jsonString;
+ 	 		
+ 	 	    public UpdateProjectStatusTask(String jsonData) {
+ 	 	        super();
+ 	 	 		uri = "http://gb3it.pickworth.info:3000/projects/" + selectedProject.getProjectID();
+ 	 	 		jsonString = jsonData;
+ 	 	    }
+ 	 		
+ 	 		
+ 	 		//Tasks do in background method
+ 	 		@Override
+ 	 		protected Boolean doInBackground(Void... params) 
+ 	 		{
+	 	 			HttpManager.updateData(uri, jsonString);
+	 	 			return true;
+ 	 		}
+ 	 		
+ 	 		//Tasks post-execute method
+ 	 		@Override
+ 	 		protected void onPostExecute(Boolean result) 
+ 	 		{
+ 	 			if(result == true)
+ 	 			{
+ 	 				Toast.makeText(AdminReports.this, "Project Status changed to " + selectedProject.getStatus(), Toast.LENGTH_LONG).show();
+ 	 				
+ 	 		 		//Create new Fragments
+ 	 		 		Fragment projectListFrag = new AdminProjectListFragment();
+ 	 		 		
+ 	 		 		//Create a fragment manager
+ 	 		 		FragmentManager fm = getFragmentManager();
+ 	 		 		
+ 	 		 		//Create a new fragment transaction
+ 	 		 		FragmentTransaction ft = fm.beginTransaction();
+ 	 		 		
+ 	 		 		//Replace the empty container with the fragment
+ 	 		 		ft.replace(R.id.fragment_container1, projectListFrag);
+ 	 		 		
+ 	 		 		//Commit the transaction changes
+ 	 		 		ft.commit();	
+ 	 			}
+ 	 		}
+
+ 	 	}
+ 
  
 }
