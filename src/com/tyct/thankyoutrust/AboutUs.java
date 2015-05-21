@@ -2,9 +2,11 @@ package com.tyct.thankyoutrust;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class AboutUs extends Activity {
 
@@ -22,6 +24,12 @@ public class AboutUs extends Activity {
 		 // Session class instance
         session = new SessionManager(getApplicationContext());
         userIsLoggedIn = session.isUserLoggedIn();
+        
+        //Make background image transparent
+        View backgroundimage = findViewById(R.id.about_us);
+        Drawable background = backgroundimage.getBackground();
+        background.setAlpha(70);
+        
 	}
 
 	@Override
@@ -59,7 +67,7 @@ public class AboutUs extends Activity {
 				startActivity(goTo);
 				return true;
 			case R.id.admin:
-				goTo = new Intent(this, AdminReports.class);
+				goTo = new Intent(this, AdminHomePage.class);
 				startActivity(goTo);
 				return true;
 			case R.id.action_about_us:

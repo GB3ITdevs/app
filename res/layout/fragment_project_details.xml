@@ -9,8 +9,7 @@
 
     <TextView
         android:id="@+id/projectName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/page_headings"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 

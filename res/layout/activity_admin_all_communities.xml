@@ -11,10 +11,8 @@
 
     <TextView
         android:id="@+id/reg_community"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="All Communities"
-        android:gravity="center_horizontal"
+        android:text="@string/all_communities"
+        style="@style/page_headings"
         android:textAppearance="?android:attr/textAppearanceLarge" />
     
     <ImageButton
