@@ -27,7 +27,6 @@ import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.ProjectRating;
 import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
-import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
 public class AdminReports extends Activity implements AdminProjectListFragment.Callbacks{
 

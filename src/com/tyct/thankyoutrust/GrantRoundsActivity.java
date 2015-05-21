@@ -220,7 +220,7 @@ public class GrantRoundsActivity extends Activity {
 			}
 			
 			TextView title = (TextView) findViewById(R.id.textViewGrantRounds);
-			title.setText(communityName + "Community Grant Rounds");
+			title.setText(communityName + "Community Grant Round Reports");
 		}
 	}
 }

@@ -38,14 +38,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:text="@string/placeholderName" />
+                android:text="@string/placeholderName"
+                android:textColor="#84A961" />
 
             <TextView
                 android:id="@+id/textViewProfEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center"
-                android:text="@string/prompt_email" />
+                android:text="@string/prompt_email"
+                android:textColor="#699ffc" />
 
             <TextView
                 android:id="@+id/textViewProfLocation"
@@ -54,7 +56,8 @@
                 android:layout_gravity="end|center"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:gravity="end"
-                android:text="@string/location" />
+                android:text="@string/location"
+                android:textColor="#84A961" />
 
         </LinearLayout>
     </LinearLayout>

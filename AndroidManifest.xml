@@ -117,7 +117,7 @@
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.tyct.thankyoutrust.AdminHomePage" />
+                android:value="com.tyct.thankyoutrust.GrantRoundsActivity" />
         </activity>
         <activity
             android:name=".ConfirmDialog"
