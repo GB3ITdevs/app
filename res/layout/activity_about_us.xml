@@ -41,7 +41,7 @@
 	        android:id="@+id/about_para_three"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/imageView2"
+	        android:layout_below="@+id/about_para_two"
 	        android:layout_marginTop="10dp"
 	        android:textColor="#000000"
 	        android:text="A major point of difference is the “Pay-It-Forward” funding model. The funding model we are trialing is place-based, restricted to geographic locations defined by postcode areas. We will return to these postcode areas every 6-8 months (depending on income availability)."/>  
@@ -50,7 +50,7 @@
 	        android:id="@+id/about_para_four"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/about_para_three"
+	        android:layout_below="@+id/imageView2"
 	        android:layout_marginTop="10dp"
 	        android:textColor="#000000"
 	        android:text="Our first funding round was in the 9023 post-code area in April 2014. Our trustees received grant applications and allocated grants to six different organisations and groups based on their perceptions of need and the quality of the requests."/>
@@ -85,20 +85,20 @@
 	       <ImageView
 	           android:id="@+id/imageView1"
 	           android:layout_width="wrap_content"
-	           android:layout_height="75dp"
-	           android:layout_alignParentLeft="true"
-	           android:layout_alignParentTop="true"
+	           android:layout_height="wrap_content"
 	           android:textColor="#000000"
+	           android:background="@drawable/simple_rectangle"
 	           android:src="@drawable/tyct_kaibosh" />
 
 	       <ImageView
 	           android:id="@+id/imageView2"
 	           android:layout_width="wrap_content"
-	           android:layout_height="75dp"
-	           android:layout_alignParentRight="true"
-	           android:layout_below="@+id/about_para_two"
+	           android:layout_height="wrap_content"
+	           android:layout_marginTop="10dp"
+	           android:layout_below="@+id/about_para_three"
 	           android:textColor="#000000"
-	           android:src="@drawable/graffiti" />
+	           android:background="@drawable/simple_rectangle"
+	           android:src="@drawable/wallart" />
 	        
     	</RelativeLayout>
 	</ScrollView>
