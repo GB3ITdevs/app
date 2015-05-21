@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.tyct.thankyoutrust.dialogs.AdminOptionsDialog;
+import com.tyct.thankyoutrust.dialogs.AdminProjectOptionsDialog;
 import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.ProjectRating;
 
@@ -25,6 +29,11 @@ public class AdminProjectListFragment extends Fragment {
 	//String[] projectNames;
 	AdminReports ma;
 	ListView projectListView;
+	
+	
+	//AdminProjectOptionsDialog optionsDialog;
+	boolean dialogResult;
+	
 	private Callbacks mCallbacks = sCallbacks;
 
 	public interface Callbacks {
@@ -82,6 +91,7 @@ public class AdminProjectListFragment extends Fragment {
 
 		return v;
 	}
+	
 
 	public class onListItemClick implements OnItemClickListener {
 
@@ -91,10 +101,12 @@ public class AdminProjectListFragment extends Fragment {
 			Project clickedItem = (Project) projectListView.getItemAtPosition(
 					position);
 			
-			// Project selectedProject = projectList.get(position);
-			ma.changeProjectDetails(clickedItem.getProjectID());
+			//ma.changeProjectDetails(clickedItem.getProjectID());
+			
+			ma.optionsDialog = new AdminProjectOptionsDialog(clickedItem);
+			FragmentManager fm = getFragmentManager();
+			ma.optionsDialog.show(fm, "projectOptions");
 
-			// mCallbacks.onItemSelected(clickedItem);
 
 		}
 

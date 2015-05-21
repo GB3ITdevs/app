@@ -77,5 +77,6 @@
     <string name="title_activity_grant_rounds">Grant Rounds</string>
     <string name="all_communities">All Communities</string>
     <string name="admin_options">Admin Applications:</string>
+    <string name="empty_string"/>
 
 </resources>

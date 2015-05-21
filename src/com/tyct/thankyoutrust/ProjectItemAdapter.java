@@ -5,6 +5,9 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,11 +54,28 @@ public class ProjectItemAdapter extends ArrayAdapter<Project>
 			
 			//Text View that displays the comments
 			TextView tvProjectName = (TextView) view.findViewById(R.id.tvItemProjectName);
+			
 			tvProjectName.setText(currentProject.getProjectName());
 
 			RatingBar itemRating = (RatingBar) view.findViewById(R.id.itemRatingBar);
 			
-			//for users in the userlist where user info id equals message get name
+			 GradientDrawable shape = (GradientDrawable) view.findViewById(R.id.backgroundShape).getBackground();
+			
+			 if(currentProject.getStatus().equals("In Progress"))
+			 {
+				 if(currentProject.getStatus().equals("In Progress"))
+				 {
+					 shape.setColor(Color.LTGRAY);
+				 }
+			 }
+			 else
+			 {
+				 shape.setColor(Color.argb(190, 83, 158, 228));
+			 }
+			 
+			 
+			
+			//for users in the userlist where user id equals message get name
 			for(ProjectRating rating : ratingList)
 			{
 				if((rating.getUserID()== userID) && (rating.getProjectID() == currentProject.getProjectID()))
