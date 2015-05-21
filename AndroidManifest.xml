@@ -144,6 +144,10 @@
             android:name=".AdminSingleProjectReport"
             android:label="@string/title_activity_admin_single_project_report" >
         </activity>
+        <activity
+            android:name=".GrantRoundsActivity"
+            android:label="@string/title_activity_grant_rounds" >
+        </activity>
     </application>
 
 </manifest>

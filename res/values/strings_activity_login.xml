@@ -11,6 +11,7 @@
     <string name="action_sign_in">Sign in</string>
     <string name="action_register">Register account</string>
     <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_registered_email">This email address is already registered</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_nonmatching_password">The passwords do not match</string>

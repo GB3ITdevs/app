@@ -100,7 +100,7 @@ public class RegisterActivity extends Activity implements
 		mEmailView = (AutoCompleteTextView) findViewById(R.id.reg_email);
 		populateAutoComplete();
 		mEmailView.setText(userEmail);
-		
+
 		mPhoneView = (EditText) findViewById(R.id.reg_phone);
 
 		mAddressView = (EditText) findViewById(R.id.reg_address);
@@ -108,7 +108,7 @@ public class RegisterActivity extends Activity implements
 		mSuburbView = (EditText) findViewById(R.id.reg_suburb);
 
 		mCityView = (EditText) findViewById(R.id.reg_city);
-		
+
 		mPostcodeView = (EditText) findViewById(R.id.reg_postcode);
 
 		mPasswordView = (EditText) findViewById(R.id.reg_password);
@@ -188,16 +188,23 @@ public class RegisterActivity extends Activity implements
 			return;
 		}
 
+		// Add EditText fields to list
+		ArrayList<EditText> textFields = new ArrayList<EditText>();
+		textFields.add(mNameView);
+		textFields.add(mSurnameView);
+		textFields.add(mEmailView);
+		textFields.add(mPhoneView);
+		textFields.add(mAddressView);
+		textFields.add(mSuburbView);
+		textFields.add(mCityView);
+		textFields.add(mPostcodeView);
+		textFields.add(mPasswordView);
+		textFields.add(mPasswordCheckView);
+
 		// Reset errors.
-		mNameView.setError(null);
-		mSurnameView.setError(null);
-		mEmailView.setError(null);
-		mAddressView.setError(null);
-		mSuburbView.setError(null);
-		mCityView.setError(null);
-		mPostcodeView.setError(null);
-		mPasswordView.setError(null);
-		mPasswordCheckView.setError(null);
+		for (EditText editText : textFields) {
+			editText.setError(null);
+		}
 
 		// Store values at the time of the registration attempt.
 		String fName = mNameView.getText().toString();
@@ -215,8 +222,17 @@ public class RegisterActivity extends Activity implements
 		boolean userExists = false;
 		View focusView = null;
 
+		// Check for empty EditText fields.
+		for (EditText editText : textFields) {
+			if (checkEmptyEditTextFields(editText)) {
+				editText.setError(getString(R.string.error_field_required));
+				focusView = editText;
+				cancel = true;
+			}
+		}
+
 		// Check for a valid password, if the user entered one.
-		if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+		if (!isPasswordValid(password)) {
 			mPasswordView.setError(getString(R.string.error_invalid_password));
 			focusView = mPasswordView;
 			cancel = true;
@@ -231,11 +247,7 @@ public class RegisterActivity extends Activity implements
 		}
 
 		// Check for a valid email address.
-		if (TextUtils.isEmpty(email)) {
-			mEmailView.setError(getString(R.string.error_field_required));
-			focusView = mEmailView;
-			cancel = true;
-		} else if (!isEmailValid(email)) {
+		if (!isEmailValid(email)) {
 			mEmailView.setError(getString(R.string.error_invalid_email));
 			focusView = mEmailView;
 			cancel = true;
@@ -248,23 +260,25 @@ public class RegisterActivity extends Activity implements
 				userExists = true;
 			}
 		}
-
+		// If email already exists in database
 		if (userExists) {
-			mEmailView.setError(getString(R.string.error_invalid_email));
+			mEmailView.setError(getString(R.string.error_registered_email));
 			focusView = mEmailView;
 			cancel = true;
 		}
 
 		if (cancel) {
-			// There was an error; don't attempt login and focus the first
+			// There was an error; don't attempt registration and focus the
+			// first
 			// form field with an error.
-			Toast.makeText(this, "Unsuccessful login", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(this, "Unsuccessful registration",
+					Toast.LENGTH_SHORT).show();
 			focusView.requestFocus();
 		} else {
 			// Get the selected community to assign its id to user
 			Spinner communitySpinner = (Spinner) findViewById(R.id.spinnerCommunity);
-			String selectedCommunity = (String) communitySpinner.getSelectedItem();
+			String selectedCommunity = (String) communitySpinner
+					.getSelectedItem();
 
 			// Find id of selected community
 			int communityID = 0;
@@ -273,7 +287,7 @@ public class RegisterActivity extends Activity implements
 					communityID = community.getCommunityID();
 				}
 			}
-			
+
 			// Create new User Object, passing the data into sets
 			newUser = new User();
 			newUser.setCommunityID(communityID);
@@ -285,8 +299,8 @@ public class RegisterActivity extends Activity implements
 			newUser.setCity(city);
 			newUser.setPostalCode(Integer.parseInt(postcode));
 			newUser.setPassword(password);
-			
-			//Create new PhoneNumber Object
+
+			// Create new PhoneNumber Object
 			newPhone = new PhoneNumber();
 			newPhone.setPhoneNumber(phone);
 
@@ -296,6 +310,14 @@ public class RegisterActivity extends Activity implements
 			mAuthTask = new UserRegisterTask();
 			mAuthTask.execute((Void) null);
 		}
+	}
+
+	private boolean checkEmptyEditTextFields(EditText field) {
+		boolean result = false;
+		if (field.getText().toString().trim().equals("")) {
+			result = true;
+		}
+		return result;
 	}
 
 	private boolean isEmailValid(String email) {
@@ -346,23 +368,28 @@ public class RegisterActivity extends Activity implements
 	}
 
 	/**
-	 * Shows the progress UI and hides the login form.
+	 * Shows the progress UI and hides the registration form.
 	 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 	public void showProgress(final boolean show) {
 		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
 		// for very easy animations. If available, use these APIs to fade-in
 		// the progress spinner.
+		final TextView note = (TextView) findViewById(R.id.tvRegRequired);
+		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
 			int shortAnimTime = getResources().getInteger(
 					android.R.integer.config_shortAnimTime);
-
+			
+			note.setVisibility(show ? View.GONE : View.VISIBLE);
 			mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+			note.animate().setDuration(shortAnimTime);
 			mRegisterFormView.animate().setDuration(shortAnimTime)
 					.alpha(show ? 0 : 1)
 					.setListener(new AnimatorListenerAdapter() {
 						@Override
 						public void onAnimationEnd(Animator animation) {
+							note.setVisibility(show ? View.GONE : View.VISIBLE);
 							mRegisterFormView.setVisibility(show ? View.GONE
 									: View.VISIBLE);
 						}
@@ -381,6 +408,7 @@ public class RegisterActivity extends Activity implements
 		} else {
 			// The ViewPropertyAnimator APIs are not available, so simply show
 			// and hide the relevant UI components.
+			note.setVisibility(show ? View.GONE : View.VISIBLE);
 			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
 			mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
@@ -451,7 +479,8 @@ public class RegisterActivity extends Activity implements
 	}
 
 	/**
-	 * Represents an asynchronous register task used to add user data to database.
+	 * Represents an asynchronous register task used to add user data to
+	 * database.
 	 */
 	public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -479,7 +508,7 @@ public class RegisterActivity extends Activity implements
 			if (success) {
 				// retrieve the new user's user id by updating userList
 				personInfo();
-				
+
 				// kick off phone number registration task
 				mPhoneTask = new PhoneRegisterTask();
 				mPhoneTask.execute((Void) null);
@@ -496,22 +525,23 @@ public class RegisterActivity extends Activity implements
 			showProgress(false);
 		}
 	}
-	
+
 	/**
-	 * Represents an asynchronous register task used to add user phone number to database.
+	 * Represents an asynchronous register task used to add user phone number to
+	 * database.
 	 */
 	public class PhoneRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
 		@Override
-		protected Boolean doInBackground(Void... params) {		
-			
+		protected Boolean doInBackground(Void... params) {
+
 			try {
 				// Simulate network access.
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				return false;
 			}
-			
+
 			for (User user : userList) {
 				if (user.getEmail().equals(email)) {
 					int usID = user.getUserID();
@@ -519,11 +549,12 @@ public class RegisterActivity extends Activity implements
 					break;
 				}
 			}
-			
+
 			String newPhoneString = PhoneNumberJSONParser.POST(newPhone);
-			
+
 			// register the new phone number here.
-			HttpManager.postData("http://gb3it.pickworth.info:3000/phone_numbers",
+			HttpManager.postData(
+					"http://gb3it.pickworth.info:3000/phone_numbers",
 					newPhoneString);
 			return true;
 		}
