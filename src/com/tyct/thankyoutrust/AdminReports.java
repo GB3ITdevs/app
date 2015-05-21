@@ -131,6 +131,7 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
 			case R.id.action_profile:
 				goTo = new Intent(this, ProfileActivity.class);
 				startActivity(goTo);
+				return true;
 			case R.id.action_about_us:
 				goTo = new Intent(this, AboutUs.class);
 				startActivity(goTo);
