@@ -135,12 +135,12 @@ public class AdminAllUsers extends Activity {
 		MyTask task = new MyTask();
 		task.execute(uri);
 	}
-	
+
 	private void requestPhoneNumberData(String uri) {
 		PhoneNumberTask task = new PhoneNumberTask();
 		task.execute(uri);
 	}
-	
+
 	private void requestCommunityData(String uri) {
 		CommunityTask task = new CommunityTask();
 		task.execute(uri);
@@ -155,7 +155,7 @@ public class AdminAllUsers extends Activity {
 					.show();
 		}
 	}
-	
+
 	public void phoneNumberInfo() {
 		if (isOnline()) {
 			requestPhoneNumberData("http://gb3it.pickworth.info:3000/phone_numbers");
@@ -164,7 +164,7 @@ public class AdminAllUsers extends Activity {
 					.show();
 		}
 	}
-	
+
 	public void communityInfo() {
 		if (isOnline()) {
 			requestCommunityData("http://gb3it.pickworth.info:3000/communities");
@@ -184,7 +184,7 @@ public class AdminAllUsers extends Activity {
 			return false;
 		}
 	}
-	
+
 	private class CommunityTask extends AsyncTask<String, String, String> {
 
 		@Override
@@ -211,9 +211,9 @@ public class AdminAllUsers extends Activity {
 	}
 
 	/**
-    	 * 
-    	 * Populates userList
-    	 */
+	 * 
+	 * Populates userList
+	 */
 	private class MyTask extends AsyncTask<String, String, String> {
 
 		@Override
@@ -235,7 +235,7 @@ public class AdminAllUsers extends Activity {
 		protected void onPostExecute(String result) {
 			// populates userlist from parser
 			userList = UserJSONParser.parseFeed(result);
-	
+
 			setListView();
 		}
 
@@ -245,114 +245,115 @@ public class AdminAllUsers extends Activity {
 		}
 
 	}
-		
+
 	/**
 	 * 
 	 * Gets phone List
 	 */
-private class PhoneNumberTask extends AsyncTask<String, String, String> {
+	private class PhoneNumberTask extends AsyncTask<String, String, String> {
 
-	@Override
-	protected void onPreExecute() {
-		phoneNumbertask.add(this);
+		@Override
+		protected void onPreExecute() {
+			phoneNumbertask.add(this);
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			String content = HttpManager.getData(params[0]);
+			return content;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			phoneNumberList = PhoneNumberJSONParser.parseFeed(result);
+			phoneNumbertask.remove(this);
+		}
+
+		@Override
+		protected void onProgressUpdate(String... values) {
+			// updateDisplay(values[0]);
+		}
+
 	}
 
-	@Override
-	protected String doInBackground(String... params) {
-		String content = HttpManager.getData(params[0]);
-		return content;
-	}
-
-	@Override
-	protected void onPostExecute(String result) {
-		phoneNumberList = PhoneNumberJSONParser.parseFeed(result);
-		phoneNumbertask.remove(this);
-	}
-
-	@Override
-	protected void onProgressUpdate(String... values) {
-		// updateDisplay(values[0]);
-	}
-
-}
-	
 	// Handles the ListView clicks
-		public class ListViewUserClickHandler implements OnItemClickListener {
+	public class ListViewUserClickHandler implements OnItemClickListener {
 
-			@Override
-			public void onItemClick(AdapterView<?> list, View itemview,
-					int posistion, long id) {
-				
-				User selectedUser = (User) list.getItemAtPosition(posistion);
+		@Override
+		public void onItemClick(AdapterView<?> list, View itemview,
+				int posistion, long id) {
 
-				int theUsersID = selectedUser.getUserID();
-				String name = selectedUser.getFirstName() + " " + selectedUser.getLastName();
-				String	email = selectedUser.getEmail();
-				String	address = selectedUser.getStreetAddress();
-				String	suburb = selectedUser.getSuburb();
-				String	city = selectedUser.getCity();
-				int	communityId = selectedUser.getCommunityID();
-				String communityName = null;
-				String phoneNumber = null;
-				
-				for(Community com : communityList) {
-					if(communityId == com.getCommunityID())
-					{
-						communityName = com.getCommunityName();
-					}
+			User selectedUser = (User) list.getItemAtPosition(posistion);
+
+			int theUsersID = selectedUser.getUserID();
+			String name = selectedUser.getFirstName() + " "
+					+ selectedUser.getLastName();
+			String email = selectedUser.getEmail();
+			String address = selectedUser.getStreetAddress();
+			String suburb = selectedUser.getSuburb();
+			String city = selectedUser.getCity();
+			int communityId = selectedUser.getCommunityID();
+			String communityName = null;
+			String phoneNumber = null;
+
+			for (Community com : communityList) {
+				if (communityId == com.getCommunityID()) {
+					communityName = com.getCommunityName();
 				}
-				
-				for(PhoneNumber phone : phoneNumberList)
-				{
-					if(theUsersID == phone.getUserID())
-					{
-						phoneNumber = phone.getPhoneNumber();
-					}
-				}
-				
-				Intent detailIntent = new Intent(AdminAllUsers.this, AdminUsersProfile.class);
-				
-				detailIntent.putExtra("name", name);
-				detailIntent.putExtra("userId", theUsersID);
-				detailIntent.putExtra("email", email);
-				detailIntent.putExtra("address", address);
-				detailIntent.putExtra("suburb", suburb);
-				detailIntent.putExtra("city", city);
-				detailIntent.putExtra("communityName", communityName);
-				detailIntent.putExtra("phoneNumber", phoneNumber);
-				detailIntent.putExtra("communityID", communityId);
-				startActivity(detailIntent);
-				
 			}
 
-		}
-		
-		private void setListView() {
-			
-			// Get reference to the listView
-			ListView userNameListView = (ListView) findViewById(R.id.lstvewuser);
-			
-			//Sorting list
-			//call Collections.sort, load with userlist and comparator
-			Collections.sort(userList, new Comparator<User>()
-					{
-				@Override
-				public int compare(User us1, User us2)
-				{
-					int c;
-					c= us1.getCommunityID() - us2.getCommunityID(); //sort by community id
-					if (c==0) //if community id is same then sort by last name
-					{
-						c= us1.getLastName().compareToIgnoreCase(us2.getLastName());
-					}
-					return c; //return sorted list
+			for (PhoneNumber phone : phoneNumberList) {
+				if (theUsersID == phone.getUserID()) {
+					phoneNumber = phone.getPhoneNumber();
 				}
-					});
-			
-			UserListAdapter adapter = new UserListAdapter(this, R.layout.admin_allusers_layout, userList, communityList);
-			// Bind the ListView to the above adapter
-			userNameListView.setAdapter(adapter);
-		
+			}
+
+			Intent detailIntent = new Intent(AdminAllUsers.this,
+					AdminUsersProfile.class);
+
+			detailIntent.putExtra("name", name);
+			detailIntent.putExtra("userId", theUsersID);
+			detailIntent.putExtra("email", email);
+			detailIntent.putExtra("address", address);
+			detailIntent.putExtra("suburb", suburb);
+			detailIntent.putExtra("city", city);
+			detailIntent.putExtra("communityName", communityName);
+			detailIntent.putExtra("phoneNumber", phoneNumber);
+			detailIntent.putExtra("communityID", communityId);
+			startActivity(detailIntent);
+
 		}
-		
+
+	}
+
+	private void setListView() {
+
+		// Get reference to the listView
+		ListView userNameListView = (ListView) findViewById(R.id.lstvewuser);
+
+		// Sorting list
+		// call Collections.sort, load with userlist and comparator
+		Collections.sort(userList, new Comparator<User>() {
+			@Override
+			public int compare(User us1, User us2) {
+				int c;
+				c = us1.getCommunityID() - us2.getCommunityID(); // sort by
+																	// community
+																	// id
+				if (c == 0) // if community id is same then sort by last name
+				{
+					c = us1.getLastName()
+							.compareToIgnoreCase(us2.getLastName());
+				}
+				return c; // return sorted list
+			}
+		});
+
+		UserListAdapter adapter = new UserListAdapter(this,
+				R.layout.admin_allusers_layout, userList, communityList);
+		// Bind the ListView to the above adapter
+		userNameListView.setAdapter(adapter);
+
+	}
+
 }
