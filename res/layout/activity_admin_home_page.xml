@@ -14,9 +14,12 @@
 
     <TextView
         android1:id="@+id/reg_community"
-        android1:layout_width="wrap_content"
-        android1:layout_height="wrap_content"
-        android1:text="Current User Applications:"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/admin_options"
+        android:gravity="center"
+        android:textColor="#699ffc"
+        android:textStyle="bold"
         android1:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView

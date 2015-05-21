@@ -6,11 +6,8 @@
 
     <TextView
         android:id="@+id/tvMsgboardHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="7dp"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        style="@style/page_headings"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView
         android:id="@android:id/list"

@@ -74,5 +74,7 @@
     <string name="title_activity_admin_single_project_report">AdminSingleProjectReport</string>
     <string name="title_admin_single_report_not_rated">Not Yet Rated By:</string>
     <string name="empty_string"/>
+    <string name="all_communities">All Communities</string>
+    <string name="admin_options">Admin Applications:</string>
 
 </resources>

@@ -325,7 +325,7 @@ public class HomeActivity extends ListActivity {
 				}
 				// Header Text
 				TextView header = (TextView) findViewById(R.id.tvMsgboardHeader);
-				header.setText(communityName + " Community Messageboard");
+				header.setText(communityName + " Messageboard");
 				updateDisplay();
 			}
 		}

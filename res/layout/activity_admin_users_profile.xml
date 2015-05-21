@@ -24,7 +24,7 @@
 
             <TextView
                 android:id="@+id/tvProfName"
-                android:gravity="center"
+                style="@style/page_headings"
                 android:text="Name"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
             
