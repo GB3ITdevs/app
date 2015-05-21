@@ -54,28 +54,18 @@ public class ProjectItemAdapter extends ArrayAdapter<Project>
 			
 			//Text View that displays the comments
 			TextView tvProjectName = (TextView) view.findViewById(R.id.tvItemProjectName);
-			TextView tvStatus = (TextView) view.findViewById(R.id.statusText);
 			
 			tvProjectName.setText(currentProject.getProjectName());
-			tvStatus.setText("(" + currentProject.getStatus() + ")");
 
 			RatingBar itemRating = (RatingBar) view.findViewById(R.id.itemRatingBar);
 			
 			 GradientDrawable shape = (GradientDrawable) view.findViewById(R.id.backgroundShape).getBackground();
 			
-			 if(currentProject.getStatus().equals("In Progress") || currentProject.getStatus().equals("Successful") || currentProject.getStatus().equals("Unsuccessful"))
+			 if(currentProject.getStatus().equals("In Progress"))
 			 {
 				 if(currentProject.getStatus().equals("In Progress"))
 				 {
 					 shape.setColor(Color.LTGRAY);
-				 }
-				 if(currentProject.getStatus().equals("Successful"))
-				 {
-					 shape.setColor(Color.argb(190, 160, 230, 50));
-				 }
-				 if(currentProject.getStatus().equals("Unsuccessful"))
-				 {
-					 shape.setColor(Color.argb(190, 200, 60, 45));
 				 }
 			 }
 			 else

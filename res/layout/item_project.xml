@@ -15,17 +15,6 @@
         android:textStyle = "bold"
         android:text="@string/placeholder"/>
     
-    <TextView
-        android:id="@+id/statusText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvItemProjectName"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginBottom="3dp"
-        android:text="@string/placeholder"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-    
     <RatingBar
         android:id="@+id/itemRatingBar"
         android:layout_width="wrap_content"
