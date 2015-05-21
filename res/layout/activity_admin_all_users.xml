@@ -11,11 +11,13 @@
 
     <TextView
         android:id="@+id/reg_community"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/all_users"
         android:gravity="center"
         android:paddingBottom="10dp"
+        android:textColor="#699ffc"
+        android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceLarge" />
     
         <LinearLayout

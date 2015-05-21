@@ -75,5 +75,7 @@
     <string name="title_admin_single_report_not_rated">Not Yet Rated By:</string>
     <string name="all_fields_required">Note: All fields are required</string>
     <string name="title_activity_grant_rounds">Grant Rounds</string>
+    <string name="all_communities">All Communities</string>
+    <string name="admin_options">Admin Applications:</string>
 
 </resources>
