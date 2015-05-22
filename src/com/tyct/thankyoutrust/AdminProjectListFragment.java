@@ -1,6 +1,9 @@
 package com.tyct.thankyoutrust;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Fragment;
@@ -17,6 +20,7 @@ import android.widget.ListView;
 
 import com.tyct.thankyoutrust.dialogs.AdminOptionsDialog;
 import com.tyct.thankyoutrust.dialogs.AdminProjectOptionsDialog;
+import com.tyct.thankyoutrust.model.GrantRound;
 import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.ProjectRating;
 
@@ -29,6 +33,7 @@ public class AdminProjectListFragment extends Fragment {
 	//String[] projectNames;
 	AdminReports ma;
 	ListView projectListView;
+	List<GrantRound> grantRounds;
 	
 	
 	//AdminProjectOptionsDialog optionsDialog;
@@ -62,21 +67,22 @@ public class AdminProjectListFragment extends Fragment {
 		Bundle allData = intent.getExtras();
 
 		//get data
-		int roundID = allData.getInt("CommunityId");//*********************************************************************Replace with round ID
-		//String communityName = allData.getString("CommunityName");
+		int roundID = allData.getInt("RoundId");
 		
 		projectListUnsorted = ma.getProjectList();
 		projectList = new ArrayList<>();
 		
 		ratings = ma.getProjectRatingList();
-		
-		for (Project project : projectListUnsorted) 
-		{
-			if(project.getRoundID() == roundID)
-			{
-				projectList.add(project);
-			}
-		}
+ 		
+ 		//Add each project name from the project list to the array of strings
+ 		for(Project project : projectListUnsorted)
+ 		{
+ 			//If the project belongs to the same community as the logged in user, add it to the list to display
+ 			if (project.getRoundID() == roundID)
+ 			{
+					projectList.add(project);
+ 			}
+ 		}
 
 		projectListView = (ListView) v.findViewById(R.id.projectListView);
 
