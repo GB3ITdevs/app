@@ -103,7 +103,7 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  		
  	}
  
- 	//To do: create the top menu
+ 	//TODO: create the top menu
  	@Override
  	public boolean onCreateOptionsMenu(Menu menu) 
  	{
@@ -196,7 +196,7 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  		
  	}
  	
- 	//*********************************************************************************************Need to display form the grant round not comm id
+ 	//*********************************************************************************************Need to display from the grant round not comm id
  	//Method to setup the project name list and display the project list fragment
  	public void setProjectList(List<Project> projectList)
  	{

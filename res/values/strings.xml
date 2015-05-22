@@ -78,5 +78,6 @@
     <string name="all_communities">All Communities</string>
     <string name="admin_options">Admin Applications:</string>
     <string name="empty_string"/>
+    <string name="community_name">Community Name</string>
 
 </resources>

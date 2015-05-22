@@ -283,7 +283,6 @@ public class AdminAllCommunities extends Activity {
 			newCommunityDialog = new AdminAddNewCommunity();
 			FragmentManager fm = getFragmentManager();
 			newCommunityDialog.show(fm, "confirm");
-
 		}
 
 	}
