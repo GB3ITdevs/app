@@ -1,6 +1,9 @@
  package com.tyct.thankyoutrust;
  
- import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
  
@@ -20,9 +23,11 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
  
+import com.tyct.thankyoutrust.model.GrantRound;
 //import com.tyct.thankyoutrust.model.PhoneNumber;
 import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.ProjectRating;
+import com.tyct.thankyoutrust.parsers.GrantRoundJSONParser;
 //import com.tyct.thankyoutrust.model.ProjectWebsite;
 import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
 //import com.tyct.thankyoutrust.parsers.PhoneNumberJSONParser;
@@ -36,6 +41,8 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  	
  	List<Project> projectList;
  	List<ProjectRating> projectRatingList;
+ 	
+	List<GrantRound> grantRounds;
  	
  	String[] projectNames;
  	ProgressBar pb;
@@ -58,6 +65,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		//Create a new list of tasks
  		projectTasks = new ArrayList<>();
  		ratingTasks = new ArrayList<>();
+		grantRounds = new ArrayList<>();
  		
  		//Initialize the progress bar and set it to not be visible
  		pb = (ProgressBar) findViewById(R.id.progressBar1);
@@ -153,8 +161,13 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  	//Method to create a and start a new task
  	private void requestData() 
  	{
+ 		
+ 		String uri = "http://gb3it.pickworth.info:3000/grant_rounds";	
+ 		GetRoundsTask roundTask = new GetRoundsTask();
+ 		roundTask.execute(uri);
+ 		
  		//Set the uri string
- 		String uri = "http://gb3it.pickworth.info:3000/ratings";
+ 		uri = "http://gb3it.pickworth.info:3000/ratings";
  		//Create the new async task
  		GetProjectRatingsTask ratingTask = new GetProjectRatingsTask();
  		//Start it using the url that has been passed into the method
@@ -166,6 +179,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		GetProjectsTask task = new GetProjectsTask();
  		//Start it using the url that has been passed into the method
  		task.execute(uri);
+ 	
  	}
  	
  	//Method to replace the list fragment with the details fragment
@@ -195,17 +209,49 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  	//Method to setup the project name list and display the project list fragment
  	public void setProjectList(List<Project> projectList)
  	{
- 
+ 		GrantRound currentRound = new GrantRound();
+ 		
+ 		for(GrantRound gR : grantRounds)
+ 		{
+ 			if (gR.getCommunityID() == userCommunityID)
+ 			{
+ 				currentRound = gR;
+ 			}
+ 		}
+ 		
+ 		SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+ 		
+ 		String startDate = currentRound.getStartDate();
+ 		String endDate = currentRound.getEndDate();
+ 		String todayString = timeFormat.format(new Date());
+ 		
+ 		Date today = new Date();
+ 		Date roundStart = new Date();		
+ 		Date roundEnd = new Date();
+ 		
+		try {
+			
+			today = (Date) timeFormat.parse(todayString);	
+			roundStart = (Date) timeFormat.parse(startDate);
+			roundEnd = (Date) timeFormat.parse(endDate);
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+ 		
  		projectNames = new String[projectList.size()];
  		int i = 0;
  		//Add each project name from the project list to the array of strings
  		for(Project project : projectList)
  		{
  			//If the project belongs to the same community as the logged in user, add it to the list to display
- 			if (project.getRoundID() == userCommunityID)//*****************************************************************************************
+ 			if (project.getRoundID() == currentRound.getRoundID())
  			{
- 				projectNames[i] = project.getProjectName();
- 				i++;
+ 				if((today.before(roundEnd))&& (today.after(roundStart)))
+ 				{
+	 				projectNames[i] = project.getProjectName();
+	 				i++;
+ 				}
  			}
  		}
  		
@@ -412,4 +458,41 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  	 		}
  	 		
  	 	} 
+ 	 	
+	 	//Inner class for performing network activity - getting and setting project list from the database
+	 	private class GetRoundsTask extends AsyncTask<String, String, String> 
+	 	{
+	 		
+	 		//Tasks pre-execute method
+	 		@Override
+	 		protected void onPreExecute() 
+	 		{
+
+	 		}
+	 		
+	 		//Tasks do in background method
+	 		@Override
+	 		protected String doInBackground(String... params) 
+	 		{
+	 			//Create a new string from the http managers get data method and return it
+	 			String content = HttpManager.getData(params[0]);
+	 			return content;
+	 		}
+	 		
+	 		//Tasks post-execute method
+	 		@Override
+	 		protected void onPostExecute(String result) 
+	 		{
+				//Create a new list of communities from the JSON parser using the passed in string from the http manager
+				grantRounds = GrantRoundJSONParser.parseFeed(result);
+				
+	 		}
+	 		
+	 		@Override
+	 		protected void onProgressUpdate(String... values) 
+	 		{
+
+	 		}
+	 		
+	 	}
  }
