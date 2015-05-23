@@ -9,18 +9,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.tyct.thankyoutrust.AdminAllUsers" >
 
-    <TextView
-        android:id="@+id/reg_community"
-        android:text="@string/all_communities"
-        style="@style/page_headings"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-    
-    <ImageButton
-    android:id="@+id/addImageButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:contentDescription="add button"
-    android:src="@android:drawable/ic_input_add" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/reg_community"
+            style="@style/page_headings"
+            android:layout_width="wrap_content"
+            android:text="@string/all_communities"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <ImageView
+            android:id="@+id/addImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@android:drawable/ic_input_add" />
+
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/ListViewCommunities"

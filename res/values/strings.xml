@@ -79,5 +79,12 @@
     <string name="admin_options">Admin Applications:</string>
     <string name="empty_string"/>
     <string name="community_name">Community Name</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="grant_round_start_date">Grant round start date</string>
+    <string name="grant_round_end_date">Grant round end date</string>
+    <string name="dd">dd</string>
+    <string name="mm">mm</string>
+    <string name="yyyy">yyyy</string>
 
 </resources>
