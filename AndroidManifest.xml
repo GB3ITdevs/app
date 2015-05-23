@@ -147,6 +147,7 @@
         </activity>
         <activity
             android:name=".GrantRoundsActivity"
+            android:parentActivityName=".AdminAllCommunities"
             android:label="@string/empty_string" >
         </activity>
     </application>

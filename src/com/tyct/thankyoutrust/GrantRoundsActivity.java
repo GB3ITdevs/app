@@ -199,7 +199,7 @@ public class GrantRoundsActivity extends Activity {
 
 			Intent intent = new Intent(GrantRoundsActivity.this,
 					AdminReports.class);
-			intent.putExtra("CommunityId", selectedRound.getCommunityID());
+			intent.putExtra("RoundId", selectedRound.getRoundID());
 			startActivity(intent);
 		}
 	}

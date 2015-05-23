@@ -15,9 +15,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tyct.thankyoutrust.model.Community;
+import com.tyct.thankyoutrust.model.GrantRound;
 import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.ProjectRating;
 import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
+import com.tyct.thankyoutrust.parsers.GrantRoundJSONParser;
 
 public class ProjectListFragment extends Fragment {
 	// Declare the class fields
@@ -26,7 +28,7 @@ public class ProjectListFragment extends Fragment {
 	List<Project> projectList;
 	List<ProjectRating> ratings;
 	List<Community> communities;
-	//String[] projectNames;
+
 	Projects ma;
 	ListView projectListView;
 	int roundID;
@@ -59,6 +61,7 @@ public class ProjectListFragment extends Fragment {
 		
 		projectListUnsorted = ma.getProjectList();
 		projectList = new ArrayList<>();
+
 		
 		ratings = ma.getProjectRatingList();
 		
@@ -164,4 +167,5 @@ public class ProjectListFragment extends Fragment {
 	 		}
 	 		
 	 	}
+	 	
 }
