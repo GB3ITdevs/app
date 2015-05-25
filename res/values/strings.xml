@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ThankYou C.T.</string>
+    <string name="app_name">ThankYou Trust</string>
     <string name="title_activity_register">Thankyou Charitable Trust</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -76,7 +76,7 @@
     <string name="all_fields_required">Note: All fields are required</string>
     <string name="title_activity_grant_rounds">Grant Rounds</string>
     <string name="all_communities">All Communities</string>
-    <string name="admin_options">Admin Applications:</string>
+    <string name="admin_options">Administrative Tools:</string>
     <string name="empty_string"/>
     <string name="community_name">Community Name</string>
     <string name="start_date">Start Date</string>
