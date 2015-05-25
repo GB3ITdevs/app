@@ -100,6 +100,10 @@ public class AdminUsersProfile extends Activity {
 			startActivity(goTo);
 			finish();
 			return true;
+		case R.id.admin:
+			goTo = new Intent(AdminUsersProfile.this, AdminHomePage.class);
+			startActivity(goTo);
+			return true;
 		case R.id.action_profile:
 			goTo = new Intent(AdminUsersProfile.this, ProfileActivity.class);
 			startActivity(goTo);
@@ -299,11 +303,11 @@ public class AdminUsersProfile extends Activity {
 				}
 			} 
 			
-			//if clicked cancel
-			else 
-			{
-				Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-			}
+//			//if clicked cancel
+//			else 
+//			{
+//				Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+//			}
 		}
 		
 		//Method to set CommunityNames
