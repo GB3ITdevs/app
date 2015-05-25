@@ -35,8 +35,8 @@ public class GrantRoundJSONParser {
 				//Set each JSON Grant Round field to the appropriate Grant Round object field
 				grantRound.setRoundID(obj.getInt("roundID"));	
 				grantRound.setCommunityID(obj.getInt("communityID"));	
-				grantRound.setEndDate(obj.getString("startDate"));
-				grantRound.setStartDate(obj.getString("endDate"));
+				grantRound.setEndDate(obj.getString("endDate"));
+				grantRound.setStartDate(obj.getString("startDate"));
 			
 				//Add the Grant Round object to the list of Grant Rounds
 				grantRoundList.add(grantRound);

@@ -11,7 +11,7 @@ import com.tyct.thankyoutrust.AdminAllCommunities;
 public class AdminCommunityDialog extends android.app.DialogFragment {
 	AdminAllCommunities myActivity;
 	String[] optionsArray = { "Post a message in community",
-			"View Grant Round History", "Edit Community" };
+			"View Grant Round Reports", "Edit Community" };
 	String selectedItem;
 	boolean result;
 	String communityName;

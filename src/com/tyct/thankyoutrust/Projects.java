@@ -178,8 +178,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		//Create the new async task
  		GetProjectsTask task = new GetProjectsTask();
  		//Start it using the url that has been passed into the method
- 		task.execute(uri);
- 	
+ 		task.execute(uri);	
  	}
  	
  	//Method to replace the list fragment with the details fragment

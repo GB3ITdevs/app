@@ -9,12 +9,28 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.tyct.thankyoutrust.GrantRoundsActivity" >
 
-    <TextView
-        android:id="@+id/textViewGrantRounds"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/page_headings"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/imageBtnAddGrantRound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/textViewGrantRounds"
+            android:src="@android:drawable/ic_input_add" />
+
+        <TextView
+            android:id="@+id/textViewGrantRounds"
+            style="@style/page_headings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/imageBtnAddGrantRound"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/listViewGrantRounds"

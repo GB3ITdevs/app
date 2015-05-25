@@ -37,7 +37,7 @@
             android:layout_height="wrap_content">
              
                <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/textViewStartDate"
                  android:textColor="#699ffc"
                 android:text="Email:" />
 

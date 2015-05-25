@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -54,3 +55,58 @@
 	</LinearLayout>
 </RelativeLayout>
 
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/backgroundAdminShape"
+    android:background="@layout/project_item_rounded_corners" >
+	
+
+    <TextView
+        android:id="@+id/tvItemAdminProjectName"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="3dp"
+        android:textStyle = "bold"
+        android:text="@string/placeholder" />
+    <LinearLayout
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+        android:layout_below="@+id/tvItemAdminProjectName" 
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/adminStatusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+        	android:layout_marginStart="5dp"
+        	android:layout_marginBottom="3dp"
+            android:text="@string/placeholder"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+	    <RatingBar
+	        android:id="@+id/itemAdminRatingBar"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="5dp"
+	        android:layout_marginStart="2dp"
+	        android:isIndicator="true"
+	        android:numStars="5" />
+	    
+	    <TextView
+	        android:id="@+id/tvAverageRatingTitle"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	        android:layout_marginLeft="5dp"
+	        android:layout_marginStart="5dp"
+	        android:layout_marginBottom="3dp"
+	        android:text="Rating on Average" />
+	</LinearLayout>
+</RelativeLayout>
+
+>>>>>>> branch 'development' of https://github.com/GB3ITdevs/app
