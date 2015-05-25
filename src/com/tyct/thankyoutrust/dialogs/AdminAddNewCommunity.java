@@ -87,7 +87,7 @@ public class AdminAddNewCommunity extends android.app.DialogFragment {
 									.toString();
 							// convert post code to int
 							int postCode = Integer.parseInt(postCodeString);
-							
+
 							Toast.makeText(myActivity, "Community created",
 									Toast.LENGTH_SHORT).show();
 
@@ -101,7 +101,7 @@ public class AdminAddNewCommunity extends android.app.DialogFragment {
 		return dialog;
 	}
 
-	public class positiveListener implements DialogInterface.OnClickListener {
+/*	public class positiveListener implements DialogInterface.OnClickListener {
 
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
@@ -160,8 +160,7 @@ public class AdminAddNewCommunity extends android.app.DialogFragment {
 			result = false;
 			returnToTarget(result, null, 0);
 		}
-
-	}
+	}*/
 
 	private void returnToTarget(boolean result, String communityName,
 			int postCode) {

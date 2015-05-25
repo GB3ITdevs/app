@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -139,10 +140,6 @@ public class AdminAllCommunities extends Activity {
 					communityName + ", " + postCode + " added.",
 					Toast.LENGTH_LONG).show();
 		}
-		if (result == false) {
-			Toast.makeText(AdminAllCommunities.this, "Cancelled",
-					Toast.LENGTH_LONG).show();
-		}
 	}
 
 	// Method to return data to the Dialog Fragment
@@ -191,7 +188,7 @@ public class AdminAllCommunities extends Activity {
 			startActivity(intent);
 		}
 
-		if (options == "View Grant Round History") {
+		if (options == "View Grant Round Reports") {
 			Intent intent = new Intent(AdminAllCommunities.this,
 					GrantRoundsActivity.class);
 			intent.putExtra("CommunityId", selectedCommunityId);

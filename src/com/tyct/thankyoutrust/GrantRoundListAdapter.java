@@ -53,12 +53,14 @@ public class GrantRoundListAdapter extends ArrayAdapter<GrantRound> {
 		// Set up date formatter
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		
-		// Variable to hold new date
-		Date formatInDateFrom = null;
+		// Variables to hold new date
+		Date formatStartDate = null;
+		Date formatEndDate = null;
 
 		// Parse String date to Date
 		try {
-			formatInDateFrom = (Date) formatter.parse(endDate);
+			formatEndDate = (Date) formatter.parse(endDate);
+			formatStartDate = (Date) formatter.parse(startDate);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -67,17 +69,23 @@ public class GrantRoundListAdapter extends ArrayAdapter<GrantRound> {
 		// Set up new format
 		SimpleDateFormat newFormat = new SimpleDateFormat("dd/MM/yyyy");
 		
-		String formattedDate = endDate;
-		if (formatInDateFrom != null) {
+		String formattedEndDate = endDate;
+		if (formatEndDate != null) {
 			// reformat date and put back into a string
-			formattedDate = newFormat.format(formatInDateFrom);
-		}		
+			formattedEndDate = newFormat.format(formatEndDate);
+		}
+		
+		String formattedStartDate = startDate;
+		if (formatStartDate != null) {
+			// reformat date and put back into a string
+			formattedStartDate = newFormat.format(formatStartDate);
+		}
 
 		// Get references to the controls in two_column_list.
 		TextView tvDate = (TextView) customView
 				.findViewById(android.R.id.text1);
 
-		tvDate.setText("Round Ended: " + formattedDate);
+		tvDate.setText("Round: " + formattedStartDate + " - " + formattedEndDate);
 
 		// Return customview
 		return customView;

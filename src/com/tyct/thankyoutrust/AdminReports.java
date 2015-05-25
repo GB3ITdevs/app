@@ -23,8 +23,10 @@ import android.widget.Toast;
 
 import com.tyct.thankyoutrust.dialogs.AdminProjectOptionsDialog;
 import com.tyct.thankyoutrust.dialogs.AdminSetProjectStateDialog;
+import com.tyct.thankyoutrust.model.GrantRound;
 import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.ProjectRating;
+import com.tyct.thankyoutrust.parsers.GrantRoundJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
 
@@ -35,6 +37,8 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  	
  	List<Project> projectList;
  	List<ProjectRating> projectRatingList;
+ 	
+	List<GrantRound> grantRounds;
  	
  	String[] projectNames;
  	ProgressBar pb;
@@ -158,8 +162,13 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  	//Method to create a and start a new task
  	private void requestData() 
  	{
+ 		
+ 		String uri = "http://gb3it.pickworth.info:3000/grant_rounds";	
+ 		GetRoundsTask roundTask = new GetRoundsTask();
+ 		roundTask.execute(uri);
+ 		
  		//Set the uri string
- 		String uri = "http://gb3it.pickworth.info:3000/ratings";
+ 		uri = "http://gb3it.pickworth.info:3000/ratings";
  		//Create the new async task
  		GetProjectRatingsTask ratingTask = new GetProjectRatingsTask();
  		//Start it using the url that has been passed into the method
@@ -248,6 +257,13 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
 //		//Commit the transaction changes
 //		ft.commit();	
 //	}
+ 	
+ 	//Method to retrieve the array of grant rounds for use in the fragments
+ 	public List<GrantRound> getGrantRounds()
+ 	{
+ 		
+ 		return grantRounds;
+ 	}
  	
 	
  	//Method to retrieve the array of projects for use in the fragments
@@ -525,4 +541,40 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  	 	}
  
  
+ 	 //Inner class for performing network activity - getting and setting project list from the database
+	 	private class GetRoundsTask extends AsyncTask<String, String, String> 
+	 	{
+	 		
+	 		//Tasks pre-execute method
+	 		@Override
+	 		protected void onPreExecute() 
+	 		{
+
+	 		}
+	 		
+	 		//Tasks do in background method
+	 		@Override
+	 		protected String doInBackground(String... params) 
+	 		{
+	 			//Create a new string from the http managers get data method and return it
+	 			String content = HttpManager.getData(params[0]);
+	 			return content;
+	 		}
+	 		
+	 		//Tasks post-execute method
+	 		@Override
+	 		protected void onPostExecute(String result) 
+	 		{
+				//Create a new list of communities from the JSON parser using the passed in string from the http manager
+				grantRounds = GrantRoundJSONParser.parseFeed(result);
+				
+	 		}
+	 		
+	 		@Override
+	 		protected void onProgressUpdate(String... values) 
+	 		{
+
+	 		}
+	 		
+	 	}
 }

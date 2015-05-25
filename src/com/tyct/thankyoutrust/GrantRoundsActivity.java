@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -13,13 +14,16 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tyct.thankyoutrust.dialogs.AdminAddGrantRoundDialog;
 import com.tyct.thankyoutrust.model.Community;
 import com.tyct.thankyoutrust.model.GrantRound;
 import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
@@ -28,12 +32,19 @@ import com.tyct.thankyoutrust.parsers.GrantRoundJSONParser;
 public class GrantRoundsActivity extends Activity {
 	// Session Manager Class
 	SessionManager session;
-	
+
 	private int mCommunityID;
 
 	private List<GrantRound> grantRoundList;
 	private List<GrantRound> communityRoundList;
 	private List<Community> communityList;
+
+	// Dialog Fragments
+	AdminAddGrantRoundDialog newGrantRoundDialog;
+
+	boolean dialogResult;
+	
+	GrantRound newGrantRoundEntity;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +70,10 @@ public class GrantRoundsActivity extends Activity {
 		// Clickable ListView of grant rounds for this community
 		ListView roundList = (ListView) findViewById(R.id.listViewGrantRounds);
 		roundList.setOnItemClickListener(new ListViewUserClickHandler());
+
+		// add a community button
+		ImageView addButton = (ImageView) findViewById(R.id.imageBtnAddGrantRound);
+		addButton.setOnClickListener(new AddGrantRoundButton());
 	}
 
 	@Override
@@ -121,7 +136,7 @@ public class GrantRoundsActivity extends Activity {
 					.show();
 		}
 	}
-	
+
 	public void retrieveCommunities() {
 		if (isOnline()) {
 			requestCommunityData("http://gb3it.pickworth.info:3000/communities");
@@ -135,10 +150,29 @@ public class GrantRoundsActivity extends Activity {
 		GrantRoundTask task = new GrantRoundTask();
 		task.execute(uri);
 	}
-	
+
 	private void requestCommunityData(String uri) {
 		CommunityTask task = new CommunityTask();
 		task.execute(uri);
+	}
+
+	// Method to return data to the Dialog Fragment
+	public void addNewGrantRound(boolean result, String startDate,
+			String endDate) {
+		newGrantRoundDialog.dismiss();
+
+		if (result == true) {
+			newGrantRoundEntity = new GrantRound();
+			newGrantRoundEntity.setCommunityID(mCommunityID);
+			newGrantRoundEntity.setStartDate(startDate);
+			newGrantRoundEntity.setEndDate(endDate);
+
+			AddGrantRoundTask task = new AddGrantRoundTask();
+			task.execute();
+			Toast.makeText(GrantRoundsActivity.this,
+					"Grant round starting " + startDate + ", ending " + endDate + " added.",
+					Toast.LENGTH_LONG).show();
+		}
 	}
 
 	private void setListView() {
@@ -165,15 +199,32 @@ public class GrantRoundsActivity extends Activity {
 
 			Intent intent = new Intent(GrantRoundsActivity.this,
 					AdminReports.class);
-			intent.putExtra("CommunityId", selectedRound.getCommunityID());
+			intent.putExtra("RoundId", selectedRound.getRoundID());
 			startActivity(intent);
 		}
+	}
+
+	// Once plus symbol clicked opens a dialogue fragment.
+	public class AddGrantRoundButton implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			newGrantRoundDialog = new AdminAddGrantRoundDialog();
+			FragmentManager fm = getFragmentManager();
+			newGrantRoundDialog.show(fm, "confirm");
+		}
+
 	}
 
 	/**
 	 * Get list of grant rounds
 	 */
 	private class GrantRoundTask extends AsyncTask<String, String, String> {
+
+		@Override
+		protected void onPreExecute() {
+			communityRoundList.clear();
+		}
 
 		@Override
 		protected String doInBackground(String... params) {
@@ -185,7 +236,7 @@ public class GrantRoundsActivity extends Activity {
 		protected void onPostExecute(String result) {
 
 			grantRoundList = GrantRoundJSONParser.parseFeed(result);
-			
+
 			for (GrantRound grantRound : grantRoundList) {
 				if (grantRound.getCommunityID() == mCommunityID) {
 					communityRoundList.add(grantRound);
@@ -195,7 +246,7 @@ public class GrantRoundsActivity extends Activity {
 			setListView();
 		}
 	}
-	
+
 	/**
 	 * Get list of communities
 	 */
@@ -210,7 +261,7 @@ public class GrantRoundsActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 			communityList = CommunityJSONParser.parseFeed(result);
-			
+
 			String communityName = "";
 			for (Community community : communityList) {
 				if (community.getCommunityID() == mCommunityID) {
@@ -218,9 +269,33 @@ public class GrantRoundsActivity extends Activity {
 					break;
 				}
 			}
-			
+
 			TextView title = (TextView) findViewById(R.id.textViewGrantRounds);
 			title.setText(communityName + "Community Grant Round Reports");
+		}
+	}
+	
+	/**
+	 * Add a grant round (POST)
+	 */
+	private class AddGrantRoundTask extends AsyncTask<String, String, String> {
+
+		String newGrantRoundString = GrantRoundJSONParser
+				.POST(newGrantRoundEntity);
+
+		@Override
+		protected String doInBackground(String... params) {
+			HttpManager.postData(
+					"http://gb3it.pickworth.info:3000/grant_rounds",
+					newGrantRoundString);
+			String result = "success";
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {			
+			// refresh
+			retrieveGrantRounds();
 		}
 	}
 }
