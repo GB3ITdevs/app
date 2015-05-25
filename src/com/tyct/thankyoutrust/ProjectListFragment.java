@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -33,6 +35,8 @@ public class ProjectListFragment extends Fragment {
 	ListView projectListView;
 	int roundID;
 	TextView tvCommunityName;
+	
+	Animation anim;
 	
 	private Callbacks mCallbacks = sCallbacks;
 
@@ -75,6 +79,9 @@ public class ProjectListFragment extends Fragment {
 				projectList.add(project);
 			}
 		}
+		
+		// Load animation
+		anim = AnimationUtils.loadAnimation(ma, R.anim.fade_anim);
 
 		tvCommunityName = (TextView) v.findViewById(R.id.projectListCommunityTitle);
 		
@@ -108,6 +115,8 @@ public class ProjectListFragment extends Fragment {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
+			view.startAnimation(anim);
+			
 			Project clickedItem = (Project) projectListView.getItemAtPosition(
 					position);
 			

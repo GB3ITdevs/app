@@ -6,13 +6,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -34,6 +38,8 @@ public class AdminProjectListFragment extends Fragment {
 	AdminReports ma;
 	ListView projectListView;
 	List<GrantRound> grantRounds;
+	
+	Animation anim;
 	
 	
 	//AdminProjectOptionsDialog optionsDialog;
@@ -83,6 +89,9 @@ public class AdminProjectListFragment extends Fragment {
 					projectList.add(project);
  			}
  		}
+ 		
+ 		// Load animation
+ 		anim = AnimationUtils.loadAnimation(ma, R.anim.scale_anim);
 
 		projectListView = (ListView) v.findViewById(R.id.projectListView);
 
@@ -104,15 +113,16 @@ public class AdminProjectListFragment extends Fragment {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			Project clickedItem = (Project) projectListView.getItemAtPosition(
-					position);
+			
+			view.startAnimation(anim);
+			
+			Project clickedItem = (Project) projectListView.getItemAtPosition(position);         
+			
+	   		ma.optionsDialog = new AdminProjectOptionsDialog(clickedItem);
+	   		FragmentManager fm = getFragmentManager();
+			ma.optionsDialog.show(fm, "projectOptions");			
 			
 			//ma.changeProjectDetails(clickedItem.getProjectID());
-			
-			ma.optionsDialog = new AdminProjectOptionsDialog(clickedItem);
-			FragmentManager fm = getFragmentManager();
-			ma.optionsDialog.show(fm, "projectOptions");
-
 
 		}
 

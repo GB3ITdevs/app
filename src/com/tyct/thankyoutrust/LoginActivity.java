@@ -112,7 +112,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		mEmailSignInButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				attemptLogin();
+				if(userList != null)
+				{
+					attemptLogin();
+				}
+				else
+				{
+					Toast.makeText(LoginActivity.this, "Error: There is a problem with your internet connection.", Toast.LENGTH_LONG).show();
+				}
+
 			}
 		});
 
@@ -136,8 +144,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
-		if (mAuthTask != null) {
-			return;
+				if (mAuthTask != null) {
+				return;
 		}
 
 		// Reset errors.

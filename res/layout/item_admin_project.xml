@@ -38,7 +38,10 @@
 	        android:layout_marginLeft="5dp"
 	        android:layout_marginStart="2dp"
 	        android:isIndicator="true"
-	        android:numStars="5" />
+	        android:numStars="5" 
+	        android:clickable="false"     
+			android:focusableInTouchMode="false"    
+			android:focusable="false"/>
 	    
 	    <TextView
 	        android:id="@+id/tvAverageRatingTitle"
