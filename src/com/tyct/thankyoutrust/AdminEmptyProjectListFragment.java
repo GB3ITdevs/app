@@ -81,7 +81,7 @@ public class AdminEmptyProjectListFragment extends Fragment {
  		
  		TextView communityTitle = (TextView) v.findViewById(R.id.adminEmptyProjectListCommunityTitle);
  		
- 		communityTitle.setText(communityName + " Projects For " + formattedStartDate + " - " + formattedEndDate);
+ 		communityTitle.setText(communityName + "Projects For " + formattedStartDate + " - " + formattedEndDate);
 
 		return v;
 	}

@@ -416,7 +416,7 @@ public class ProjectDetailsFragment extends Fragment {
 		protected void onPostExecute(String result) {
 
 			// String messageResult = (result);
-			Toast.makeText(ma, result, Toast.LENGTH_LONG).show();
+			//Toast.makeText(ma, result, Toast.LENGTH_LONG).show();
 			posttasks.remove(this);
 			// if (posttasks.size() == 0) {
 			// pb.setVisibility(View.INVISIBLE);
