@@ -38,6 +38,8 @@ public class GrantRoundsActivity extends Activity {
 	private List<GrantRound> grantRoundList;
 	private List<GrantRound> communityRoundList;
 	private List<Community> communityList;
+	
+	String communityName;
 
 	// Dialog Fragments
 	AdminAddGrantRoundDialog newGrantRoundDialog;
@@ -200,6 +202,9 @@ public class GrantRoundsActivity extends Activity {
 			Intent intent = new Intent(GrantRoundsActivity.this,
 					AdminReports.class);
 			intent.putExtra("RoundId", selectedRound.getRoundID());
+			intent.putExtra("CommunityName", communityName);
+			intent.putExtra("startDate", selectedRound.getStartDate());
+			intent.putExtra("endDate", selectedRound.getEndDate());
 			startActivity(intent);
 		}
 	}
@@ -262,7 +267,7 @@ public class GrantRoundsActivity extends Activity {
 		protected void onPostExecute(String result) {
 			communityList = CommunityJSONParser.parseFeed(result);
 
-			String communityName = "";
+			communityName = "";
 			for (Community community : communityList) {
 				if (community.getCommunityID() == mCommunityID) {
 					communityName = community.getCommunityName() + " ";

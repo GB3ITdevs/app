@@ -86,5 +86,6 @@
     <string name="dd">dd</string>
     <string name="mm">mm</string>
     <string name="yyyy">yyyy</string>
+    <string name="adminEmptyProjectListText">There have been no projects submitted for this grant round.</string>
 
 </resources>
