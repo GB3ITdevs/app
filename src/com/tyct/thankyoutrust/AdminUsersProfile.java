@@ -264,7 +264,7 @@ public class AdminUsersProfile extends Activity {
 			}	
 			else //if user not an admin then display a toast
 			{
-				Toast.makeText(this, userName +" is not an admin",
+				Toast.makeText(this, userName +" was not an admin",
 						Toast.LENGTH_LONG).show();
 			}
 		}
@@ -302,12 +302,6 @@ public class AdminUsersProfile extends Activity {
 					Toast.makeText(this, "Network isn't available.", Toast.LENGTH_LONG).show();
 				}
 			} 
-			
-//			//if clicked cancel
-//			else 
-//			{
-//				Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-//			}
 		}
 		
 		//Method to set CommunityNames
@@ -416,13 +410,15 @@ public class AdminUsersProfile extends Activity {
 			@Override
 			protected String doInBackground(String... params) {
 				HttpManager.deleteData(deleteAdmin + adminId);
-				String result = "Admin Removed";
+				String result = userName + " removed as an Administrator";
 				return result;
 			}
 
 			@Override
 			protected void onPostExecute(String result) {
 				deleteAdminTask.remove(this);
+				//Update Admin list
+				adminInfo();
 				String messageResult = result;
 				Toast.makeText(AdminUsersProfile.this, messageResult , Toast.LENGTH_LONG).show();
 			}
@@ -448,12 +444,15 @@ public class AdminUsersProfile extends Activity {
 			@Override
 			protected String doInBackground(String... params) {
 				HttpManager.postData("http://gb3it.pickworth.info:3000/administrators", adminEntityString);
-				String result = "Admin added";
+				String result = userName + " added as an Administrator";
 				return result;
 			}
 
 			@Override
 			protected void onPostExecute(String result) {
+				
+				//Update Admin list
+				adminInfo();
 
 				String messageResult = (result);
 
