@@ -1,54 +1,67 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:layout_height="fill_parent" >
 
-    <TextView
-        android:id="@+id/tvMsgboardHeader"
-        style="@style/page_headings"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <ListView
-        android:id="@android:id/list"
+    <LinearLayout
+        android:id="@+id/tablet_container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_margin="7dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="8dp" >
-    </ListView>
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/fragment_container1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tvMsgboardHeader"
+                style="@style/page_headings"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <ListView
+                android:id="@android:id/list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="7dp"
+                android:layout_weight="1"
+                android:paddingBottom="10dp"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="8dp" >
+            </ListView>
+
+            <LinearLayout
+                android:id="@+id/laytbtns"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:weightSum="1" >
+
+                <EditText
+                    android:id="@+id/text_Comments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/edit_message"
+                    android:inputType="textCapSentences" />
+
+                <Button
+                    android:id="@+id/button_Post_Comments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/post" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressBar1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
 
-<LinearLayout
-        android:id="@+id/laytbtns"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:weightSum="1" >
-        
-      <EditText
-          android:id="@+id/text_Comments"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:hint="@string/edit_message"
-          android:inputType="textCapSentences" />
-
-      <Button
-          android:id="@+id/button_Post_Comments"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:text="@string/post" 
-          />
-
-      </LinearLayout>
-    
-</LinearLayout>
-
+</RelativeLayout>
