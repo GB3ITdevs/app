@@ -51,6 +51,7 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
 	
 	int userCommunityID;
 	int userID;
+	int roundID;
 	
 	
 	AdminProjectOptionsDialog optionsDialog;
@@ -75,6 +76,13 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
 		// Session class instance
 		session = new SessionManager(getApplicationContext());
 		HashMap<String, String> userStored = session.getUserDetails();
+		
+		//get all data from passed in intent
+		Intent intent = getIntent();
+		Bundle allData = intent.getExtras();
+
+		//get data
+		roundID = allData.getInt("RoundId");
  		
  		//If the phone is online retrieve the projects info from the url
  		if (isOnline()) 
@@ -207,56 +215,61 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  	
  	//*********************************************************************************************Need to display from the grant round not comm id
  	//Method to setup the project name list and display the project list fragment
- 	public void setProjectList(List<Project> projectList)
+ 	public void setProjectList(List<Project> tempProjectList)
  	{
- 
- 		projectNames = new String[projectList.size()];
- 		int i = 0;
+ 		projectList = new ArrayList<>();
+ 		
  		//Add each project name from the project list to the array of strings
- 		for(Project project : projectList)
+ 		for(Project project : tempProjectList)
  		{
  			//If the project belongs to the same community as the logged in user, add it to the list to display
- 			if (project.getRoundID() == userCommunityID)
+ 			if (project.getRoundID() == roundID)
  			{
- 				projectNames[i] = project.getProjectName();
- 				i++;
+	 				projectList.add(project);
  			}
  		}
+ 		if((projectList != null) && !(projectList.isEmpty()))
+ 		{
+	 		//Create new Fragments
+	 		Fragment projectListFrag = new AdminProjectListFragment();
+	 		
+	 		//Create a fragment manager
+	 		FragmentManager fm = getFragmentManager();
+	 		
+	 		//Create a new fragment transaction
+	 		FragmentTransaction ft = fm.beginTransaction();
+	 		
+	 		//Replace the empty container with the fragment
+	 		ft.replace(R.id.fragment_container1, projectListFrag);
+	 		
+	 		//Commit the transaction changes
+	 		ft.commit();
+ 		}
+ 		else
+ 		{
+ 			emptyProjectListDisplay();
+ 		}
  		
- 		//Create new Fragments
- 		Fragment projectListFrag = new AdminProjectListFragment();
- 		
- 		//Create a fragment manager
- 		FragmentManager fm = getFragmentManager();
- 		
- 		//Create a new fragment transaction
- 		FragmentTransaction ft = fm.beginTransaction();
- 		
- 		//Replace the empty container with the fragment
- 		ft.replace(R.id.fragment_container1, projectListFrag);
- 		
- 		//Commit the transaction changes
- 		ft.commit();	
  	}
  	
-//	//Method to show the empty project list fragment when there are no projects to display
-//	public void emptyProjectListDisplay()
-//	{
-//		//Create new Fragments
-//		Fragment emptyProjectListFrag = new EmptyAdminProjectListFragment();
-//		
-//		//Create a fragment manager
-//		FragmentManager fm = getFragmentManager();
-//		
-//		//Create a new fragment transaction
-//		FragmentTransaction ft = fm.beginTransaction();
-//		
-//		//Replace the empty container with the fragment
-//		ft.replace(R.id.fragment_container1, emptyProjectListFrag);
-//		
-//		//Commit the transaction changes
-//		ft.commit();	
-//	}
+	//Method to show the empty project list fragment when there are no projects to display
+	public void emptyProjectListDisplay()
+	{
+		//Create new Fragments
+		Fragment emptyProjectListFrag = new AdminEmptyProjectListFragment();
+		
+		//Create a fragment manager
+		FragmentManager fm = getFragmentManager();
+		
+		//Create a new fragment transaction
+		FragmentTransaction ft = fm.beginTransaction();
+		
+		//Replace the empty container with the fragment
+		ft.replace(R.id.fragment_container1, emptyProjectListFrag);
+		
+		//Commit the transaction changes
+		ft.commit();	
+	}
  	
  	//Method to retrieve the array of grant rounds for use in the fragments
  	public List<GrantRound> getGrantRounds()
@@ -386,6 +399,7 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  	//Inner class for performing network activity - getting and setting project list from the database
  	private class GetProjectsTask extends AsyncTask<String, String, String> 
  	{
+ 		List<Project> tempProjectList;
  		
  		//Tasks pre-execute method
  		@Override
@@ -415,14 +429,11 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
 			if(!result.isEmpty())
 			{
 				//Create a new list of projects from the JSON parser using the passed in string from the http manager
-				projectList = ProjectsJSONParser.parseFeed(result);
+				tempProjectList = ProjectsJSONParser.parseFeed(result);
 				//Populate the list fragment using the set project list method
-				setProjectList(projectList);
+				setProjectList(tempProjectList);
 			}
-//			else
-//			{
-//				emptyProjectListDisplay();
-//			}
+
  			//Remove the current task and set the progress bar to be invisible again
  			projectTasks.remove(this);
  			if (projectTasks.size() == 0) 
@@ -430,12 +441,6 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  				pb.setVisibility(View.INVISIBLE);
  			}
  
- 		}
- 		
- 		@Override
- 		protected void onProgressUpdate(String... values) 
- 		{
- //			updateDisplay(values[0]);
  		}
  		
  	}
