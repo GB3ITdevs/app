@@ -85,6 +85,7 @@ public class AdminProjectItemAdapter extends ArrayAdapter<Project>
 
 			int averageRating = calculate.CalculateAverageRating(ratingList, currentProject.getProjectID());
 			itemRating.setRating(averageRating);
+			itemRating.setIsIndicator(true);
 			
 			//return the view
 			return view;
