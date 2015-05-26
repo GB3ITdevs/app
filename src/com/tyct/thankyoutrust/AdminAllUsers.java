@@ -107,6 +107,10 @@ public class AdminAllUsers extends Activity {
 			startActivity(goTo);
 			finish();
 			return true;
+		case R.id.admin:
+			goTo = new Intent(AdminAllUsers.this, AdminHomePage.class);
+			startActivity(goTo);
+			return true;
 		case R.id.action_profile:
 			goTo = new Intent(AdminAllUsers.this, ProfileActivity.class);
 			startActivity(goTo);
