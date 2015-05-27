@@ -164,11 +164,11 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 
 		// set title
 		alertDialogBuilder
-				.setTitle("Are you sure you want to delete this comment?");
+				.setTitle(comment);
 
 		// set dialog message
 		alertDialogBuilder
-				.setMessage(comment)
+				.setMessage("Are you sure you want to delete this message?")
 				.setCancelable(false)
 				.setPositiveButton("Yes",
 						new DialogInterface.OnClickListener() {
