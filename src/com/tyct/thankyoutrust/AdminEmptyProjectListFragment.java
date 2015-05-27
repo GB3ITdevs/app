@@ -25,42 +25,15 @@ import com.tyct.thankyoutrust.model.GrantRound;
 import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.ProjectRating;
 
-public class AdminProjectListFragment extends Fragment {
-	// Declare the class fields
-
-	List<Project> projectListUnsorted;
-	List<Project> projectList;
-	List<ProjectRating> ratings;
+public class AdminEmptyProjectListFragment extends Fragment {
+	
 	//String[] projectNames;
 	AdminReports ma;
-	ListView projectListView;
-	List<GrantRound> grantRounds;
-	
-	Animation anim;
-	
-	
-	//AdminProjectOptionsDialog optionsDialog;
-	boolean dialogResult;
-	
-	private Callbacks mCallbacks = sCallbacks;
-
-	public interface Callbacks {
-		/**
-		 * Callback for when an item has been selected.
-		 */
-		public void onItemSelected(String id);
-	}
-
-	private static Callbacks sCallbacks = new Callbacks() {
-		@Override
-		public void onItemSelected(String id) {
-		}
-	};
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_admin_project_list, container,
+		View v = inflater.inflate(R.layout.fragment_admin_empty_projects_list, container,
 				false);
 
 		ma = (AdminReports) getActivity();
@@ -74,21 +47,6 @@ public class AdminProjectListFragment extends Fragment {
 		String communityName = allData.getString("CommunityName");
 		String startDate = allData.getString("startDate");
 		String endDate = allData.getString("endDate");
-		
-		projectListUnsorted = ma.getProjectList();
-		projectList = new ArrayList<>();
-		
-		ratings = ma.getProjectRatingList();
- 		
- 		//Add each project name from the project list to the array of strings
- 		for(Project project : projectListUnsorted)
- 		{
- 			//If the project belongs to the same community as the logged in user, add it to the list to display
- 			if (project.getRoundID() == roundID)
- 			{
-					projectList.add(project);
- 			}
- 		}
  		
  	// Set up date formatter
  			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -121,45 +79,11 @@ public class AdminProjectListFragment extends Fragment {
  				formattedStartDate = newFormat.format(formatStartDate);
  			}
  		
- 		// Load animation
- 		anim = AnimationUtils.loadAnimation(ma, R.anim.scale_anim);
+ 		TextView communityTitle = (TextView) v.findViewById(R.id.adminEmptyProjectListCommunityTitle);
  		
- 		TextView communityTitle = (TextView) v.findViewById(R.id.adminProjectListCommunityTitle);
- 		
- 		communityTitle.setText(communityName + " Projects For " + formattedStartDate + " - " + formattedEndDate);
-
-		projectListView = (ListView) v.findViewById(R.id.projectListView);
-
-		AdminProjectItemAdapter projectAdapter = new AdminProjectItemAdapter(getActivity(), R.layout.item_project, projectList ,ratings);
-		
-		
-		OnItemClickListener listItemClick = new onListItemClick();
-
-		projectListView.setAdapter(projectAdapter);
-
-		projectListView.setOnItemClickListener(listItemClick);
+ 		communityTitle.setText(communityName + "Projects For " + formattedStartDate + " - " + formattedEndDate);
 
 		return v;
 	}
-	
 
-	public class onListItemClick implements OnItemClickListener {
-
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			
-			view.startAnimation(anim);
-			
-			Project clickedItem = (Project) projectListView.getItemAtPosition(position);         
-			
-	   		ma.optionsDialog = new AdminProjectOptionsDialog(clickedItem);
-	   		FragmentManager fm = getFragmentManager();
-			ma.optionsDialog.show(fm, "projectOptions");			
-			
-			//ma.changeProjectDetails(clickedItem.getProjectID());
-
-		}
-
-	}
 }

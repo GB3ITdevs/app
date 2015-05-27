@@ -33,7 +33,7 @@ public class ProjectListFragment extends Fragment {
 
 	Projects ma;
 	ListView projectListView;
-	int roundID;
+	int commID;
 	TextView tvCommunityName;
 	
 	Animation anim;
@@ -63,25 +63,15 @@ public class ProjectListFragment extends Fragment {
 
 		ma = (Projects) getActivity();
 		
-		projectListUnsorted = ma.getProjectList();
-		projectList = new ArrayList<>();
-
+		projectList = ma.getProjectList();
 		
 		ratings = ma.getProjectRatingList();
 		
 		int userID = ma.userID;
-		roundID = ma.userCommunityID;//**********************************************************************************************
-		
-		for (Project project : projectListUnsorted) 
-		{
-			if(project.getRoundID() == roundID)
-			{
-				projectList.add(project);
-			}
-		}
+		commID = ma.userCommunityID;
 		
 		// Load animation
-		anim = AnimationUtils.loadAnimation(ma, R.anim.fade_anim);
+		anim = AnimationUtils.loadAnimation(ma, R.anim.scale_anim);
 
 		tvCommunityName = (TextView) v.findViewById(R.id.projectListCommunityTitle);
 		
@@ -133,7 +123,7 @@ public class ProjectListFragment extends Fragment {
 	{
 		for (Community com : communities)
 		{
-			if(com.getCommunityID() == roundID)
+			if(com.getCommunityID() == commID)
 			{
 				tvCommunityName.setText(com.getCommunityName() + " Projects");
 			}

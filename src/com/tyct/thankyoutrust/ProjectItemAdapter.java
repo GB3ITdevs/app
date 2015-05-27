@@ -81,6 +81,7 @@ public class ProjectItemAdapter extends ArrayAdapter<Project>
 				if((rating.getUserID()== userID) && (rating.getProjectID() == currentProject.getProjectID()))
 				{
 					itemRating.setRating(rating.getRating());
+					itemRating.setIsIndicator(true);
 				}
 			}
 			

@@ -18,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 	Context context;
 	List<User> userList;
 	List<DeleteCommentTask> deleteCommentTask;
+	Animation anim;
 
 	// User Session Manager Class
 	SessionManager session;
@@ -42,6 +45,9 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 
 		context = contextPassed;
 		userList = o1;
+		
+		// Load animation
+		anim = AnimationUtils.loadAnimation(context, R.anim.scale_anim);
 
 		// Session class instance
 		session = new SessionManager(context);
@@ -150,6 +156,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 
 		@Override
 		public void onClick(View v) {
+			v.startAnimation(anim);
 			deleteDialog(commentID, comment);
 		}
 	}
@@ -212,7 +219,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 			((Activity) context).finish();
 			Intent goTo = new Intent(context, HomeActivity.class);
 			context.startActivity(goTo);
-			Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+			//Toast.makeText(context, result, Toast.LENGTH_LONG).show();
 		}
 	}
 }

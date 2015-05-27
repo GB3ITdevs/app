@@ -4,16 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-     <TextView
-        android:id="@+id/adminProjectListCommunityTitle"
+    <TextView
+        android:id="@+id/adminEmptyProjectListCommunityTitle"
         style="@style/page_headings"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <ListView
-        android:id="@+id/projectListView"
+    <TextView
+        android:id="@+id/AdminNoProjectsTextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="30dp"
+        android:text="@string/adminEmptyProjectListText"
+        android:textAlignment="center" />
 
 </LinearLayout>

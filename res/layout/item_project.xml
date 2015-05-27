@@ -22,10 +22,6 @@
         android:layout_marginLeft="5dp"
         android:layout_marginStart="2dp"
         android:layout_below="@+id/tvItemProjectName"
-        android:isIndicator="true"
-        android:numStars="5" 
-        android:clickable="false"     
-		android:focusableInTouchMode="false"    
-		android:focusable="false"/>
+        android:numStars="5"/>
 
 </RelativeLayout>

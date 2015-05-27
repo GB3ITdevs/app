@@ -1,4 +1,4 @@
- package com.tyct.thankyoutrust;
+package com.tyct.thankyoutrust;
  
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -206,68 +206,103 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  	
  	
  	//Method to setup the project name list and display the project list fragment
- 	public void setProjectList(List<Project> projectList)
+ 	public void setProjectList(List<Project> tempProjectList)
  	{
- 		GrantRound currentRound = new GrantRound();
+ 		projectList = new ArrayList<>();
  		
+ 		//Create a new grant round
+ 		GrantRound currentRound = new GrantRound();
+ 		SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm"); 	
+ 		String todayString = timeFormat.format(new Date());
+ 		
+ 		
+ 		//Loop through each grant round in the retrieved list
  		for(GrantRound gR : grantRounds)
  		{
+ 			//if the community Id of the grant round matches the users community ID
  			if (gR.getCommunityID() == userCommunityID)
  			{
- 				currentRound = gR;
+ 			
+ 		 		String startDate = gR.getStartDate();
+ 		 		String endDate = gR.getEndDate();
+ 		 		
+ 		 		Date today = new Date();
+ 		 		Date roundStart = new Date();		
+ 		 		Date roundEnd = new Date();
+ 		 		
+ 				try {
+ 					
+ 					today = (Date) timeFormat.parse(todayString);	
+ 					roundStart = (Date) timeFormat.parse(startDate);
+ 					roundEnd = (Date) timeFormat.parse(endDate);
+ 					
+ 				} catch (ParseException e) {
+ 					e.printStackTrace();
+ 				}
+ 				
+ 				if((today.before(roundEnd))&& (today.after(roundStart)))
+ 				{
+	 				currentRound = gR;
+ 				}	
+ 				
  			}
  		}
  		
- 		SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
- 		
  		String startDate = currentRound.getStartDate();
  		String endDate = currentRound.getEndDate();
- 		String todayString = timeFormat.format(new Date());
+ 		
  		
  		Date today = new Date();
  		Date roundStart = new Date();		
  		Date roundEnd = new Date();
  		
-		try {
-			
-			today = (Date) timeFormat.parse(todayString);	
-			roundStart = (Date) timeFormat.parse(startDate);
-			roundEnd = (Date) timeFormat.parse(endDate);
-			
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+ 		if((currentRound.getRoundID() != 0) && (currentRound.getCommunityID() !=0 ))
+ 		{
+			try {
+				
+				today = (Date) timeFormat.parse(todayString);	
+				roundStart = (Date) timeFormat.parse(startDate);
+				roundEnd = (Date) timeFormat.parse(endDate);
+				
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+ 		}
  		
- 		projectNames = new String[projectList.size()];
- 		int i = 0;
  		//Add each project name from the project list to the array of strings
- 		for(Project project : projectList)
+ 		for(Project project : tempProjectList)
  		{
  			//If the project belongs to the same community as the logged in user, add it to the list to display
  			if (project.getRoundID() == currentRound.getRoundID())
  			{
  				if((today.before(roundEnd))&& (today.after(roundStart)))
  				{
-	 				projectNames[i] = project.getProjectName();
-	 				i++;
+	 				projectList.add(project);
  				}
  			}
  		}
  		
- 		//Create new Fragments
- 		Fragment projectListFrag = new ProjectListFragment();
- 		
- 		//Create a fragment manager
- 		FragmentManager fm = getFragmentManager();
- 		
- 		//Create a new fragment transaction
- 		FragmentTransaction ft = fm.beginTransaction();
- 		
- 		//Replace the empty container with the fragment
- 		ft.replace(R.id.fragment_container1, projectListFrag);
- 		
- 		//Commit the transaction changes
- 		ft.commit();	
+ 		if((projectList != null) && !(projectList.isEmpty()))
+ 		{
+	 		//Create new Fragments
+	 		Fragment projectListFrag = new ProjectListFragment();
+	 		
+	 		//Create a fragment manager
+	 		FragmentManager fm = getFragmentManager();
+	 		
+	 		//Create a new fragment transaction
+	 		FragmentTransaction ft = fm.beginTransaction();
+	 		
+	 		//Replace the empty container with the fragment
+	 		ft.replace(R.id.fragment_container1, projectListFrag);
+	 		
+	 		//Commit the transaction changes
+	 		ft.commit();
+ 		}
+ 		else
+ 		{
+ 			emptyProjectListDisplay();
+ 		}
  	}
  	
 	//Method to show the empty project list fragment when there are no projects to display
@@ -304,11 +339,11 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  	}
  	
  	//Method to retrieve the array of project names for use in the fragments
- 	public String[] getProjects()
- 	{
- 		
- 		return projectNames;
- 	}
+// 	public String[] getProjects()
+// 	{
+// 		
+// 		return projectNames;
+// 	}
  	
  	//Method to retrieve the array of project names for use in the fragments
  	public Project getSelectProject()
@@ -352,6 +387,7 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  	//Inner class for performing network activity - getting and setting project list from the database
  	private class GetProjectsTask extends AsyncTask<String, String, String> 
  	{
+ 		List<Project> tempProjectList;
  		
  		//Tasks pre-execute method
  		@Override
@@ -378,12 +414,12 @@ import com.tyct.thankyoutrust.parsers.ProjectsJSONParser;
  		@Override
  		protected void onPostExecute(String result) 
  		{
-			if(!result.isEmpty())
+			if((!result.isEmpty()) && !(result==null))
 			{
 				//Create a new list of projects from the JSON parser using the passed in string from the http manager
-				projectList = ProjectsJSONParser.parseFeed(result);
+				tempProjectList = ProjectsJSONParser.parseFeed(result);
 				//Populate the list fragment using the set project list method
-				setProjectList(projectList);
+				setProjectList(tempProjectList);
 			}
 			else
 			{
