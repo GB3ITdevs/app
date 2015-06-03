@@ -103,15 +103,7 @@ public class AdminSingleProjectReport extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		if(!admin)
-		{
-			getMenuInflater().inflate(R.menu.admin_all_users, menu);
-		}
-		
-		if(admin)
-		{
-		getMenuInflater().inflate(R.menu.main, menu);
-		}
+		getMenuInflater().inflate(R.menu.main_admin, menu);
 		return true;
 	}
 
@@ -134,10 +126,6 @@ public class AdminSingleProjectReport extends Activity {
 			return true;
 		case R.id.action_profile:
 			goTo = new Intent(this, ProfileActivity.class);
-			startActivity(goTo);
-			return true;
-		case R.id.action_about_us:
-			goTo = new Intent(this, AboutUs.class);
 			startActivity(goTo);
 			return true;
 		case R.id.action_logout:

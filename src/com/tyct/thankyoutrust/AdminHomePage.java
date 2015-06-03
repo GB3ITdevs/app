@@ -33,7 +33,7 @@ public class AdminHomePage extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.main_admin, menu);
 		return true;
 	}
 
@@ -52,10 +52,6 @@ public class AdminHomePage extends Activity {
 			return true;
 		case R.id.action_profile:
 			goTo = new Intent(AdminHomePage.this, ProfileActivity.class);
-			startActivity(goTo);
-			return true;
-		case R.id.action_about_us:
-			goTo = new Intent(AdminHomePage.this, AboutUs.class);
 			startActivity(goTo);
 			return true;
 		case R.id.action_logout:

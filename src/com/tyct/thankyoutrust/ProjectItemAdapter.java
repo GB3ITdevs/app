@@ -61,9 +61,9 @@ public class ProjectItemAdapter extends ArrayAdapter<Project>
 			
 			 GradientDrawable shape = (GradientDrawable) view.findViewById(R.id.backgroundShape).getBackground();
 			
-			 if(currentProject.getStatus().equals("In Progress"))
+			 if(currentProject.getStatus().equals("inProgress"))
 			 {
-				 if(currentProject.getStatus().equals("In Progress"))
+				 if(currentProject.getStatus().equals("inProgress"))
 				 {
 					 shape.setColor(Color.LTGRAY);
 				 }
