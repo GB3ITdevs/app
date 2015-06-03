@@ -75,7 +75,7 @@ public class AdminAllCommunities extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.main_admin, menu);
 		return true;
 	}
 
@@ -98,10 +98,6 @@ public class AdminAllCommunities extends Activity {
 			return true;
 		case R.id.action_profile:
 			goTo = new Intent(AdminAllCommunities.this, ProfileActivity.class);
-			startActivity(goTo);
-			return true;
-		case R.id.action_about_us:
-			goTo = new Intent(AdminAllCommunities.this, AboutUs.class);
 			startActivity(goTo);
 			return true;
 		case R.id.action_logout:
