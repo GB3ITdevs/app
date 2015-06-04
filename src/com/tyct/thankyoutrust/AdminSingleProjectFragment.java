@@ -66,13 +66,13 @@ public class AdminSingleProjectFragment extends Fragment {
 
 	ConfirmProjectRatingDialog confirmDialog;
 
-	public static String currProjectName;
-	public static String currProjectID;
-	public static String currCommunityID;
-	public static String currApplicantName;
+	public static String currApplicantEmail;
 	public static String currProjectBlurb;
-	public static String currFundsRequested;
-	public static String currUseOfFunds;
+	public static String currApplicantName;
+	public static String currOrganizationBlurb;
+	public static String currFundsBlurb;
+	public static String currCommunityID;
+	public static String currProjectID;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,7 +89,7 @@ public class AdminSingleProjectFragment extends Fragment {
 		getRatings();
 		
 		// Initialize the layout vies
-		TextView tvProjectTitle = (TextView) v.findViewById(R.id.projectName);
+		TextView tvProjectTitle = (TextView) v.findViewById(R.id.applicantEmail);
 
 		TextView tvApplicantName = (TextView) v.findViewById(R.id.applicantName);
 		TextView tvProjectBlurb = (TextView) v.findViewById(R.id.projectBlurb);
@@ -104,7 +104,7 @@ public class AdminSingleProjectFragment extends Fragment {
 
 
 		// Set the text views to display the project information
-		tvProjectTitle.setText(projectDisplayed.getProjectName());
+		tvProjectTitle.setText(projectDisplayed.getApplicantEmail());
 		
 		tvApplicantName.setText(projectDisplayed.getApplicantName());
 		tvProjectBlurb.setText(projectDisplayed.getProjectBlurb());

@@ -55,7 +55,7 @@ public class ProjectItemAdapter extends ArrayAdapter<Project>
 			//Text View that displays the comments
 			TextView tvProjectName = (TextView) view.findViewById(R.id.tvItemProjectName);
 			
-			tvProjectName.setText(currentProject.getProjectName());
+			tvProjectName.setText(currentProject.getApplicantName());
 
 			RatingBar itemRating = (RatingBar) view.findViewById(R.id.itemRatingBar);
 			

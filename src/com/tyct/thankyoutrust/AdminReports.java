@@ -202,13 +202,18 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  		}
  		
  		Intent detailIntent = new Intent(this, AdminSingleProjectReport.class);
- 		detailIntent.putExtra("currProjectName", selectedProject.getProjectName());
- 		detailIntent.putExtra("currProjectBlurb", selectedProject.getProjectBlurb());
- 		detailIntent.putExtra("currApplicantName", selectedProject.getApplicantName());
- 		detailIntent.putExtra("currUseOfFunds", selectedProject.getUseOfFunds());
- 		detailIntent.putExtra("currFundsRequested", selectedProject.getFundsRequested());
- 		detailIntent.putExtra("currCommunityID", selectedProject.getRoundID());
- 		detailIntent.putExtra("currProjectID", selectedProject.getProjectID());
+		detailIntent.putExtra("currApplicantEmail",
+				selectedProject.getApplicantEmail());
+		detailIntent.putExtra("currProjectBlurb",
+				selectedProject.getProjectBlurb());
+		detailIntent.putExtra("currApplicantName",
+				selectedProject.getApplicantName());
+		detailIntent
+				.putExtra("currOrganizationBlurb", selectedProject.getOrganizationBlurb());
+		detailIntent.putExtra("currFundsBlurb",
+				selectedProject.getFundsBlurb());
+		detailIntent.putExtra("currCommunityID", selectedProject.getRoundID());
+		detailIntent.putExtra("currProjectID", selectedProject.getProjectID());
  		startActivity(detailIntent);
  		
  	}
@@ -385,13 +390,20 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  	public void onItemSelected(String id) 
  	{
  		Intent detailIntent = new Intent(this, AdminSingleProjectReport.class);
- 		detailIntent.putExtra(AdminSingleProjectFragment.currProjectName, selectedProject.getProjectName());
- 		detailIntent.putExtra(AdminSingleProjectFragment.currProjectBlurb, selectedProject.getProjectBlurb());
- 		detailIntent.putExtra(AdminSingleProjectFragment.currApplicantName, selectedProject.getApplicantName());
- 		detailIntent.putExtra(AdminSingleProjectFragment.currUseOfFunds, selectedProject.getUseOfFunds());
- 		detailIntent.putExtra(AdminSingleProjectFragment.currFundsRequested, selectedProject.getFundsRequested());
- 		detailIntent.putExtra(AdminSingleProjectFragment.currCommunityID, selectedProject.getRoundID());
- 		detailIntent.putExtra(AdminSingleProjectFragment.currProjectID, selectedProject.getProjectID());
+		detailIntent.putExtra(ProjectDetailsFragment.currApplicantEmail,
+				selectedProject.getApplicantEmail());
+		detailIntent.putExtra(ProjectDetailsFragment.currProjectBlurb,
+				selectedProject.getProjectBlurb());
+		detailIntent.putExtra(ProjectDetailsFragment.currApplicantName,
+				selectedProject.getApplicantName());
+		detailIntent.putExtra(ProjectDetailsFragment.currOrganizationBlurb,
+				selectedProject.getOrganizationBlurb());
+		detailIntent.putExtra(ProjectDetailsFragment.currFundsBlurb,
+				selectedProject.getFundsBlurb());
+		detailIntent.putExtra(ProjectDetailsFragment.currCommunityID,
+				selectedProject.getRoundID());
+		detailIntent.putExtra(ProjectDetailsFragment.currProjectID,
+				selectedProject.getProjectID());
  		startActivity(detailIntent);
  	}	
  	

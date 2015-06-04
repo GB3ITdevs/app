@@ -38,11 +38,11 @@ public class ProjectsJSONParser
 				//Set each JSON Project field to the appropriate Project object field
 				project.setProjectID(obj.getInt("projectID"));
 				project.setApplicantName(obj.getString("applicantName"));
-				project.setFundsRequested(obj.getInt("fundsRequested"));
+				project.setFundsBlurb(obj.getString("fundsBlurb"));
 				project.setRoundID(obj.getInt("roundID"));
 				project.setProjectBlurb(obj.getString("projectBlurb"));
-				project.setProjectName(obj.getString("projectName"));
-				project.setUseOfFunds(obj.getString("useOfFunds"));
+				project.setApplicantEmail(obj.getString("applicantEmail"));
+				project.setOrganizationBlurb(obj.getString("organizationBlurb"));
 				project.setStatus(obj.getString("status"));
 			
 				//Add the Project object to the list of Projects
@@ -73,10 +73,10 @@ public class ProjectsJSONParser
 		try {
 				//For each field in the parsed in Project object, set it to the appropriate JSON object field
 				jsonProject.accumulate("projectBlurb", project.getProjectBlurb());
-				jsonProject.accumulate("fundsRequested", Integer.toString(project.getFundsRequested()));
-				jsonProject.accumulate("useOfFunds", project.getUseOfFunds());
+				jsonProject.accumulate("fundsBlurb", project.getFundsBlurb());
+				jsonProject.accumulate("organizationBlurb", project.getOrganizationBlurb());
 				jsonProject.accumulate("applicantName", project.getApplicantName());
-				jsonProject.accumulate("projectName", project.getProjectName());
+				jsonProject.accumulate("applicantEmail", project.getApplicantEmail());
 				jsonProject.accumulate("roundID", Integer.toString(project.getRoundID()));
 				jsonProject.accumulate("status", project.getStatus());
 			} 

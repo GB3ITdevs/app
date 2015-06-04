@@ -176,16 +176,16 @@ public class Projects extends Activity implements ProjectListFragment.Callbacks 
 		}
 
 		Intent detailIntent = new Intent(this, ProjectDetailsActivity.class);
-		detailIntent.putExtra("currProjectName",
-				selectedProject.getProjectName());
+		detailIntent.putExtra("currApplicantEmail",
+				selectedProject.getApplicantEmail());
 		detailIntent.putExtra("currProjectBlurb",
 				selectedProject.getProjectBlurb());
 		detailIntent.putExtra("currApplicantName",
 				selectedProject.getApplicantName());
 		detailIntent
-				.putExtra("currUseOfFunds", selectedProject.getUseOfFunds());
-		detailIntent.putExtra("currFundsRequested",
-				selectedProject.getFundsRequested());
+				.putExtra("currOrganizationBlurb", selectedProject.getOrganizationBlurb());
+		detailIntent.putExtra("currFundsBlurb",
+				selectedProject.getFundsBlurb());
 		detailIntent.putExtra("currCommunityID", selectedProject.getRoundID());
 		detailIntent.putExtra("currProjectID", selectedProject.getProjectID());
 		startActivity(detailIntent);
@@ -338,16 +338,16 @@ public class Projects extends Activity implements ProjectListFragment.Callbacks 
 	@Override
 	public void onItemSelected(String id) {
 		Intent detailIntent = new Intent(this, ProjectDetailsActivity.class);
-		detailIntent.putExtra(ProjectDetailsFragment.currProjectName,
-				selectedProject.getProjectName());
+		detailIntent.putExtra(ProjectDetailsFragment.currApplicantEmail,
+				selectedProject.getApplicantEmail());
 		detailIntent.putExtra(ProjectDetailsFragment.currProjectBlurb,
 				selectedProject.getProjectBlurb());
 		detailIntent.putExtra(ProjectDetailsFragment.currApplicantName,
 				selectedProject.getApplicantName());
-		detailIntent.putExtra(ProjectDetailsFragment.currUseOfFunds,
-				selectedProject.getUseOfFunds());
-		detailIntent.putExtra(ProjectDetailsFragment.currFundsRequested,
-				selectedProject.getFundsRequested());
+		detailIntent.putExtra(ProjectDetailsFragment.currOrganizationBlurb,
+				selectedProject.getOrganizationBlurb());
+		detailIntent.putExtra(ProjectDetailsFragment.currFundsBlurb,
+				selectedProject.getFundsBlurb());
 		detailIntent.putExtra(ProjectDetailsFragment.currCommunityID,
 				selectedProject.getRoundID());
 		detailIntent.putExtra(ProjectDetailsFragment.currProjectID,

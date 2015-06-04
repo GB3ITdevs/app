@@ -4,10 +4,10 @@ public class Project {
 	private int projectID;
 	private int roundID;
 	private String applicantName;
-	private String projectName;
+	private String applicantEmail;
 	private String projectBlurb;
-	private int fundsRequested;
-	private String useOfFunds;
+	private String fundsBlurb;
+	private String organizationBlurb;
 	private String status;
 	
 	
@@ -27,16 +27,7 @@ public class Project {
 	public void setApplicantName(String applicantName) {
 		this.applicantName = applicantName;
 	}
-	
-	
-	public String getProjectName() {
-		return projectName;
-	}
-	
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-	
+
 	
 	public String getProjectBlurb() {
 		return projectBlurb;
@@ -45,23 +36,7 @@ public class Project {
 	public void setProjectBlurb(String projectBlurb) {
 		this.projectBlurb = projectBlurb;
 	}
-	
-	
-	public int getFundsRequested() {
-		return fundsRequested;
-	}
-	
-	public void setFundsRequested(int fundsRequested) {
-		this.fundsRequested = fundsRequested;
-	}
-	
-	
-	public String getUseOfFunds() {
-		return useOfFunds;
-	}
-	public void setUseOfFunds(String useOfFunds) {
-		this.useOfFunds = useOfFunds;
-	}
+
 
 	public int getRoundID() {
 		return roundID;
@@ -77,5 +52,29 @@ public class Project {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getApplicantEmail() {
+		return applicantEmail;
+	}
+
+	public void setApplicantEmail(String applicantEmail) {
+		this.applicantEmail = applicantEmail;
+	}
+
+	public String getFundsBlurb() {
+		return fundsBlurb;
+	}
+
+	public void setFundsBlurb(String fundsBlurb) {
+		this.fundsBlurb = fundsBlurb;
+	}
+
+	public String getOrganizationBlurb() {
+		return organizationBlurb;
+	}
+
+	public void setOrganizationBlurb(String organizationBlurb) {
+		this.organizationBlurb = organizationBlurb;
 	}
 }

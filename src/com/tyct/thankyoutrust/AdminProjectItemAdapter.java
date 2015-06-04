@@ -57,7 +57,7 @@ public class AdminProjectItemAdapter extends ArrayAdapter<Project>
 			TextView tvStatus = (TextView) view.findViewById(R.id.adminStatusText);
 			
 			tvStatus.setText("(" + currentProject.getStatus() + ")");
-			tvProjectName.setText(currentProject.getProjectName());
+			tvProjectName.setText(currentProject.getApplicantName());
 
 			RatingBar itemRating = (RatingBar) view.findViewById(R.id.itemAdminRatingBar);
 			

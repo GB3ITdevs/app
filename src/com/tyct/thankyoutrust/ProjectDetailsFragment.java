@@ -70,13 +70,13 @@ public class ProjectDetailsFragment extends Fragment {
 
 	ConfirmProjectRatingDialog confirmDialog;
 
-	public static String currProjectName;
+	public static String currApplicantEmail;
 	public static String currProjectID;
 	public static String currCommunityID;
 	public static String currApplicantName;
 	public static String currProjectBlurb;
-	public static String currFundsRequested;
-	public static String currUseOfFunds;
+	public static String currFundsBlurb;
+	public static String currOrganizationBlurb;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,7 +87,7 @@ public class ProjectDetailsFragment extends Fragment {
 		View v = inflater.inflate(R.layout.fragment_project_details, container,
 				false);
 		// Initialize the layout vies
-		TextView tvProjectTitle = (TextView) v.findViewById(R.id.projectName);
+		TextView tvOrganizationBlurb = (TextView) v.findViewById(R.id.organizationBlurb);
 		TextView tvApplicantName = (TextView) v
 				.findViewById(R.id.applicantName);
 		TextView tvFundsRequested = (TextView) v
@@ -98,12 +98,7 @@ public class ProjectDetailsFragment extends Fragment {
 		// Get Text from editText field
 		noteData = (EditText) v.findViewById(R.id.textProjectNotes);
 		
-		
-		viewWebsite = (Button) v.findViewById(R.id.btnViewWebsite);
 		viewWebsite.setVisibility(View.INVISIBLE);
-		
-		android.view.View.OnClickListener websiteListener = new ViewWebsiteListener();
-		viewWebsite.setOnClickListener(websiteListener);
 		
 		//ProjectNotes textview
 		tvProjectNotes = (ListView) v.findViewById(R.id.projectDetailsNotes);
@@ -114,15 +109,11 @@ public class ProjectDetailsFragment extends Fragment {
 		OnRatingBarChangeListener ratingChangeListener = new ratingChange();
 
 		// Set the text views to display the project information
-		tvProjectTitle.setText(projectDisplayed.getProjectName());
 		
 		tvApplicantName.setText(projectDisplayed.getApplicantName());
-		tvFundsRequested.setText("$");
-		tvFundsRequested.append(Integer.toString(projectDisplayed
-				.getFundsRequested()));
-		tvFundsRequested.append(" Needed For: ");
-		tvFundsRequested.append(projectDisplayed.getUseOfFunds());
+		tvFundsRequested.setText(projectDisplayed.getFundsBlurb());
 		tvProjectBlurb.setText(projectDisplayed.getProjectBlurb());
+		tvOrganizationBlurb.setText(projectDisplayed.getOrganizationBlurb());
 		ratingBar.setOnRatingBarChangeListener(ratingChangeListener);
 		
 		OnClickListener postNoteListener = new postNoteHandler();
@@ -327,23 +318,6 @@ public class ProjectDetailsFragment extends Fragment {
 			}
 		}
 
-	}
-	
-	public class ViewWebsiteListener implements View.OnClickListener
-	{
-
-		@Override
-		public void onClick(View v) 
-		{
-			Uri goToProjectSite = Uri.parse(websiteAddress);
-			
-			Intent websiteIntent = new Intent(Intent.ACTION_VIEW, goToProjectSite);
-			
-			startActivity(websiteIntent);
-			
-		}
-
-		
 	}
 	
 	public class postNoteHandler implements OnClickListener {

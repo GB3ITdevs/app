@@ -19,11 +19,11 @@ public class AdminSingleProjectReport extends Activity {
 	// Session Manager Class
 	SessionManager session;
 	
-	public static String currProjectName;
+	public static String currApplicantEmail;
 	public static String currProjectBlurb;
 	public static String currApplicantName;
-	public static String currUseOfFunds;
-	public static String currFundsRequested;
+	public static String currOrganizationBlurb;
+	public static String currFundsBlurb;
 	public static String currCommunityID;
 	public static String currProjectID;
 
@@ -54,21 +54,21 @@ public class AdminSingleProjectReport extends Activity {
 		Intent intent = getIntent();
 		Bundle allData = intent.getExtras();
 
-		String currProjectName = allData.getString("currProjectName");
+		String currApplicantEmail = allData.getString("currApplicantEmail");
 		int currProjectID = allData.getInt("currProjectID");
 		int currCommunityID = allData.getInt("currCommunityID");
 		String currApplicantName = allData.getString("currApplicantName");
 		String currProjectBlurb = allData.getString("currProjectBlurb");
-		int currFundsRequested = allData.getInt("currFundsRequested");
-		String currUseOfFunds = allData.getString("currUseOfFunds");
+		String currFundsBlurb = allData.getString("currFundsBlurb");
+		String currOrganizationBlurb = allData.getString("currOrganizationBlurb");
 
-		projectDisplayed.setProjectName(currProjectName);
+		projectDisplayed.setApplicantEmail(currApplicantEmail);
 		projectDisplayed.setProjectID(currProjectID);
 		projectDisplayed.setProjectBlurb(currProjectBlurb);
 		projectDisplayed.setApplicantName(currApplicantName);
-		projectDisplayed.setFundsRequested(currFundsRequested);
+		projectDisplayed.setFundsBlurb(currFundsBlurb);
 		projectDisplayed.setRoundID(currCommunityID);
-		projectDisplayed.setUseOfFunds(currUseOfFunds);
+		projectDisplayed.setOrganizationBlurb(currOrganizationBlurb);
 
 		// Create new Fragments
 		Fragment projectReportFrag = new AdminSingleProjectFragment();
