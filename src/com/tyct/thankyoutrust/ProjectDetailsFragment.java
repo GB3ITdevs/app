@@ -13,8 +13,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -94,6 +96,15 @@ public class ProjectDetailsFragment extends Fragment {
 		Button postNote = (Button) v.findViewById(R.id.btnPostNotes);
 		// Get Text from editText field
 		noteData = (EditText) v.findViewById(R.id.textProjectNotes);
+		noteData.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				v.setFocusable(true);
+	            v.setFocusableInTouchMode(true);
+	            return false;
+			}
+		});
 		
 		//ProjectNotes textview
 		tvProjectNotes = (ListView) v.findViewById(R.id.projectDetailsNotes);
