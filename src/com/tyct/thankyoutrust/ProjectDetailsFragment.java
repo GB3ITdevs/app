@@ -49,7 +49,6 @@ public class ProjectDetailsFragment extends Fragment {
 	List<RetrieveProjectRatings> tasks;
 	List<RetrieveProjectNotes> noteTasks;
 	List<RetrieveCommunityTask> communityTasks;
-	List<RetrieveWebsite> websiteTasks;
 	List<PostProjectNotes> postProjectTasks;
 	
 	List<ProjectRating> projectRatingList;
@@ -59,8 +58,6 @@ public class ProjectDetailsFragment extends Fragment {
 	RatingBar ratingBar;
 	
 	ListView tvProjectNotes;
-	
-	Button viewWebsite;
 	
 	String websiteAddress;
 
@@ -98,8 +95,6 @@ public class ProjectDetailsFragment extends Fragment {
 		// Get Text from editText field
 		noteData = (EditText) v.findViewById(R.id.textProjectNotes);
 		
-		viewWebsite.setVisibility(View.INVISIBLE);
-		
 		//ProjectNotes textview
 		tvProjectNotes = (ListView) v.findViewById(R.id.projectDetailsNotes);
 				
@@ -132,9 +127,6 @@ public class ProjectDetailsFragment extends Fragment {
 		
 		//Method to check for existing notes that the user has entered about the current project
 		checkForExistingNotes();
-		
-		//Method to check if the project has an existing website
-		checkForWebsite();
 
 		// Return the view
 		return v;
@@ -209,28 +201,6 @@ public class ProjectDetailsFragment extends Fragment {
 		
 		tvProjectNotes.setAdapter(adapter);
 
-		
-	}
-	
-	public void checkForWebsite() {
-		if (isOnline()) {
-			websiteTasks = new ArrayList<>();
-			RetrieveWebsite websiteTask = new RetrieveWebsite();
-			websiteTask.execute("http://gb3it.pickworth.info:3000/project_websites");
-		}
-
-	}
-	
-	public void checkRetrievedWebsites(List<ProjectWebsite> websites) {
-		for (ProjectWebsite projectWebsite : websites) 
-		{
-			if(projectWebsite.getProjectID() == projectDisplayed.getProjectID())
-			{
-				viewWebsite.setVisibility(View.VISIBLE);
-				websiteAddress = "http://" + projectWebsite.getSiteAddress();
-			}
-		}
-			
 		
 	}
 
@@ -528,47 +498,6 @@ public class ProjectDetailsFragment extends Fragment {
 			}
 
 		}
-		
-		// ASync task to populate the rating bar if there is an existing rating
-				// stored
-				private class RetrieveWebsite extends AsyncTask<String, String, String> {
-
-					// Tasks pre-execute method
-					@Override
-					protected void onPreExecute() {
-
-						websiteTasks.add(this);
-					}
-
-					// Tasks do in background method
-					@Override
-					protected String doInBackground(String... params) {
-						// Create a new string from the http managers get data method and
-						// return it
-						String content = HttpManager.getData(params[0]);
-						return content;
-					}
-
-					// Tasks post-execute method
-					@Override
-					protected void onPostExecute(String result) {
-						// Create a new list of project ratings from the JSON parser using
-						// the passed in string from the http manager
-						List<ProjectWebsite> websiteList = ProjectWebsiteJSONParser.parseFeed(result);
-						checkRetrievedWebsites(websiteList);
-						// Remove the current task and set the progress bar to be invisible
-						// again
-						websiteTasks.remove(this);
-
-					}
-
-					@Override
-					protected void onProgressUpdate(String... values) {
-						// updateDisplay(values[0]);
-					}
-
-				}
-		
 				
 				
 				// ASync task to post enter project notes
