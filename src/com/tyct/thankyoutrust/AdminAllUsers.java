@@ -89,7 +89,7 @@ public class AdminAllUsers extends Activity {
 	// Top menu
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.main_admin, menu);
 		return true;
 	}
 
@@ -113,10 +113,6 @@ public class AdminAllUsers extends Activity {
 			return true;
 		case R.id.action_profile:
 			goTo = new Intent(AdminAllUsers.this, ProfileActivity.class);
-			startActivity(goTo);
-			return true;
-		case R.id.action_about_us:
-			goTo = new Intent(AdminAllUsers.this, AboutUs.class);
 			startActivity(goTo);
 			return true;
 		case R.id.action_logout:

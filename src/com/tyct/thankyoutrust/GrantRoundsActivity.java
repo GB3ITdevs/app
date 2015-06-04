@@ -81,7 +81,7 @@ public class GrantRoundsActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.main_admin, menu);
 		return true;
 	}
 
@@ -104,10 +104,6 @@ public class GrantRoundsActivity extends Activity {
 			return true;
 		case R.id.action_profile:
 			goTo = new Intent(GrantRoundsActivity.this, ProfileActivity.class);
-			startActivity(goTo);
-			return true;
-		case R.id.action_about_us:
-			goTo = new Intent(GrantRoundsActivity.this, AboutUs.class);
 			startActivity(goTo);
 			return true;
 		case R.id.action_logout:

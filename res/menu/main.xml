@@ -18,13 +18,6 @@
         android:showAsAction="always"
         android:title="@string/profile"/>      
         
-     <item 
-    	android:id="@+id/admin"
-        android:title="@string/admin"
-        android:orderInCategory="400"
-        android:visible="true"
-        android:showAsAction="ifRoom"/>   
-        
     <item
         android:id="@+id/action_logout"
         android:orderInCategory="600"

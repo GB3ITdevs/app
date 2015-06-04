@@ -106,11 +106,11 @@ public class ProfileActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		if (!admin) {
-			getMenuInflater().inflate(R.menu.admin_all_users, menu);
+			getMenuInflater().inflate(R.menu.main, menu);
 		}
 
 		if (admin) {
-			getMenuInflater().inflate(R.menu.main, menu);
+			getMenuInflater().inflate(R.menu.main_admin, menu);
 		}
 		return true;
 	}
@@ -135,10 +135,6 @@ public class ProfileActivity extends Activity {
 			goTo = new Intent(ProfileActivity.this, ProfileActivity.class);
 			startActivity(goTo);
 			finish();
-			return true;
-		case R.id.action_about_us:
-			goTo = new Intent(ProfileActivity.this, AboutUs.class);
-			startActivity(goTo);
 			return true;
 		case R.id.action_logout:
 			session.logoutUser();
