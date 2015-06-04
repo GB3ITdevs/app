@@ -381,7 +381,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 	public void personInfo() {
 		if (isOnline()) {
-			requestData("http://gb3it.pickworth.info:3000/users");
+			requestData(HttpManager.serverURL+"users");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -390,7 +390,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	
 	public void adminInfo() {
 		if (isOnline()) {
-			requestAdminData("http://gb3it.pickworth.info:3000/administrators");
+			requestAdminData(HttpManager.serverURL+"administrators");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -426,7 +426,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 					}
 					else
 					{
-						String content = HttpManager.getData("http://gb3it.pickworth.info:3000/users/" + user.getUserID() + "/" + mPassword);
+						String content = HttpManager.getData(HttpManager.serverURL+"users/" + user.getUserID() + "/" + mPassword);
 						if(content != null)
 						{
 							if((authUser = UserJSONParser.AuthenticateUser(content)) != null)

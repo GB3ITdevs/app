@@ -162,7 +162,7 @@ public class AdminMessageBoard extends ListActivity {
 
 	public void display() {
 		if (isOnline()) {
-			requestData("http://gb3it.pickworth.info:3000/comments");
+			requestData(HttpManager.serverURL + "comments");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -171,7 +171,7 @@ public class AdminMessageBoard extends ListActivity {
 
 	public void userDisplay() {
 		if (isOnline()) {
-			requestUserData("http://gb3it.pickworth.info:3000/users");
+			requestUserData(HttpManager.serverURL + "users");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -358,7 +358,7 @@ public class AdminMessageBoard extends ListActivity {
 
 		@Override
 		protected String doInBackground(String... params) {
-			HttpManager.postData("http://gb3it.pickworth.info:3000/comments",
+			HttpManager.postData(HttpManager.serverURL+ "comments",
 					commentEntityString);
 			String result = "Comment Posted";
 			return result;

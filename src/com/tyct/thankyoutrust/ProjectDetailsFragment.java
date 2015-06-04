@@ -161,7 +161,7 @@ public class ProjectDetailsFragment extends Fragment {
 		if (isOnline()) {
 			tasks = new ArrayList<>();
 			RetrieveProjectRatings task = new RetrieveProjectRatings();
-			task.execute("http://gb3it.pickworth.info:3000/ratings");
+			task.execute(HttpManager.serverURL+"ratings");
 		}
 
 	}
@@ -183,7 +183,7 @@ public class ProjectDetailsFragment extends Fragment {
 		if (isOnline()) {
 			noteTasks = new ArrayList<>();
 			RetrieveProjectNotes noteTask = new RetrieveProjectNotes();
-			noteTask.execute("http://gb3it.pickworth.info:3000/project_notes");
+			noteTask.execute(HttpManager.serverURL+"project_notes");
 		}
 
 	}
@@ -225,7 +225,7 @@ public class ProjectDetailsFragment extends Fragment {
 		{
 			communityTasks = new ArrayList<>();
 			RetrieveCommunityTask communityTask = new RetrieveCommunityTask();
-			communityTask.execute("http://gb3it.pickworth.info:3000/communities");
+			communityTask.execute(HttpManager.serverURL+"communities");
 		}		
 	}
 	
@@ -361,7 +361,7 @@ public class ProjectDetailsFragment extends Fragment {
 
 		@Override
 		protected String doInBackground(String... params) {
-			HttpManager.postData("http://gb3it.pickworth.info:3000/ratings",
+			HttpManager.postData(HttpManager.serverURL+"ratings",
 					ratingString);
 			String result = "Rating Posted";
 			return result;
@@ -527,7 +527,7 @@ public class ProjectDetailsFragment extends Fragment {
 
 					@Override
 					protected String doInBackground(String... params) {
-						HttpManager.postData("http://gb3it.pickworth.info:3000/project_notes", noteEntityString);
+						HttpManager.postData(HttpManager.serverURL+"project_notes", noteEntityString);
 						String result = "Note Posted";
 						return result;
 					}

@@ -159,19 +159,19 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  	private void requestData() 
  	{
  		
- 		String uri = "http://gb3it.pickworth.info:3000/grant_rounds";	
+ 		String uri = HttpManager.serverURL+"grant_rounds";	
  		GetRoundsTask roundTask = new GetRoundsTask();
  		roundTask.execute(uri);
  		
  		//Set the uri string
- 		uri = "http://gb3it.pickworth.info:3000/ratings";
+ 		uri = HttpManager.serverURL+"ratings";
  		//Create the new async task
  		GetProjectRatingsTask ratingTask = new GetProjectRatingsTask();
  		//Start it using the url that has been passed into the method
  		ratingTask.execute(uri);
  		
  		//Set the new uri string
- 		uri = "http://gb3it.pickworth.info:3000/projects";		
+ 		uri = HttpManager.serverURL+"projects";		
  		//Create the new async task
  		GetProjectsTask task = new GetProjectsTask();
  		//Start it using the url that has been passed into the method
@@ -505,7 +505,7 @@ public class AdminReports extends Activity implements AdminProjectListFragment.C
  	 		
  	 	    public UpdateProjectStatusTask(String jsonData) {
  	 	        super();
- 	 	 		uri = "http://gb3it.pickworth.info:3000/projects/" + selectedProject.getProjectID();
+ 	 	 		uri = HttpManager.serverURL+"projects/" + selectedProject.getProjectID();
  	 	 		jsonString = jsonData;
  	 	    }
  	 		

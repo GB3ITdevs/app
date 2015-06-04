@@ -343,7 +343,7 @@ public class AdminUsersProfile extends Activity {
 		//************************************************** URI STRINGS FOR DATA *******************************************************************
 		public void adminInfo() {
 			if (isOnline()) {
-				requestAdminData("http://gb3it.pickworth.info:3000/administrators");
+				requestAdminData(HttpManager.serverURL+"administrators");
 			} else {
 				Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 						.show();
@@ -352,7 +352,7 @@ public class AdminUsersProfile extends Activity {
 
 		public void communityInfo() {
 			if (isOnline()) {
-				requestCommunityData("http://gb3it.pickworth.info:3000/communities");
+				requestCommunityData(HttpManager.serverURL+"communities");
 			} else {
 				Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 						.show();
@@ -396,7 +396,7 @@ public class AdminUsersProfile extends Activity {
     	 * Delete an admin Async task (DELETE)
     	 */
 		private class DeleteAdminTask extends AsyncTask<String, String, String> {
-			String deleteAdmin = "http://gb3it.pickworth.info:3000/administrators/";
+			String deleteAdmin = HttpManager.serverURL+"administrators/";
 
 			@Override
 			protected void onPreExecute() {
@@ -439,7 +439,7 @@ public class AdminUsersProfile extends Activity {
 
 			@Override
 			protected String doInBackground(String... params) {
-				HttpManager.postData("http://gb3it.pickworth.info:3000/administrators", adminEntityString);
+				HttpManager.postData(HttpManager.serverURL+"administrators", adminEntityString);
 				String result = userName + " added as an Administrator";
 				return result;
 			}
@@ -508,7 +508,7 @@ public class AdminUsersProfile extends Activity {
 			protected Boolean doInBackground(Void... params) {
 				// update details here
 				HttpManager.updateData(
-						"http://gb3it.pickworth.info:3000/users/" + userId,
+						HttpManager.serverURL+"users/" + userId,
 						changeCommunity);
 				return true;
 			}

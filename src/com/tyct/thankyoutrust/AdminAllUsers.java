@@ -149,7 +149,7 @@ public class AdminAllUsers extends Activity {
 	// Method that checks if phone is online
 	public void display() {
 		if (isOnline()) {
-			requestData("http://gb3it.pickworth.info:3000/users");
+			requestData(HttpManager.serverURL + "users");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -158,7 +158,7 @@ public class AdminAllUsers extends Activity {
 
 	public void phoneNumberInfo() {
 		if (isOnline()) {
-			requestPhoneNumberData("http://gb3it.pickworth.info:3000/phone_numbers");
+			requestPhoneNumberData(HttpManager.serverURL + "phone_numbers");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -167,7 +167,7 @@ public class AdminAllUsers extends Activity {
 
 	public void communityInfo() {
 		if (isOnline()) {
-			requestCommunityData("http://gb3it.pickworth.info:3000/communities");
+			requestCommunityData(HttpManager.serverURL + "communities");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();

@@ -162,7 +162,7 @@ public class ProfileActivity extends Activity {
 
 	public void personInfo() {
 		if (isOnline()) {
-			requestData("http://gb3it.pickworth.info:3000/users");
+			requestData(HttpManager.serverURL+"users");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -610,7 +610,7 @@ public class ProfileActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 
 			// update details here
-			HttpManager.updateData("http://gb3it.pickworth.info:3000/users/"
+			HttpManager.updateData(HttpManager.serverURL+"users/"
 					+ usID, mInfo);
 			return true;
 		}
@@ -659,7 +659,7 @@ public class ProfileActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 
 			// update details here
-			HttpManager.updateData("http://gb3it.pickworth.info:3000/users/"
+			HttpManager.updateData(HttpManager.serverURL+"users/"
 					+ usID, mInfo);
 			return true;
 		}
@@ -694,7 +694,7 @@ public class ProfileActivity extends Activity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// update details here
-			HttpManager.updateData("http://gb3it.pickworth.info:3000/users/"
+			HttpManager.updateData(HttpManager.serverURL+"users/"
 					+ usID, mPassword);
 			return true;
 		}
@@ -728,7 +728,7 @@ public class ProfileActivity extends Activity {
 
 			// Check if the password matches, retrieve further user info
 			String content = HttpManager
-					.getData("http://gb3it.pickworth.info:3000/users/" + mId
+					.getData(HttpManager.serverURL+"users/" + mId
 							+ "/" + mPassword);
 
 			User authUser;

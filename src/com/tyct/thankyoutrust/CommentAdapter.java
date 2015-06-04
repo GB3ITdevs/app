@@ -205,7 +205,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 	 * Delete comment Async task (DELETE)
 	 */
 	private class DeleteCommentTask extends AsyncTask<Integer, String, String> {
-		String deleteURI = "http://gb3it.pickworth.info:3000/comments/";
+		String deleteURI = HttpManager.serverURL+"comments/";
 
 		@Override
 		protected String doInBackground(Integer... params) {

@@ -137,7 +137,7 @@ public class AdminSingleProjectFragment extends Fragment {
 		if (isOnline()) {
 			tasks = new ArrayList<>();
 			RetrieveProjectRatings task = new RetrieveProjectRatings();
-			task.execute("http://gb3it.pickworth.info:3000/ratings");
+			task.execute(HttpManager.serverURL+"ratings");
 		}
 
 	}
@@ -235,7 +235,7 @@ public class AdminSingleProjectFragment extends Fragment {
 		{
 			communityUserTasks = new ArrayList<>();
 			RetrieveCommunityUsersTask communityUsersTask = new RetrieveCommunityUsersTask();
-			communityUsersTask.execute("http://gb3it.pickworth.info:3000/users");
+			communityUsersTask.execute(HttpManager.serverURL+"users");
 		}		
 	}
 	

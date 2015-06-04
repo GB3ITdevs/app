@@ -203,7 +203,7 @@ public class AdminAllCommunities extends Activity {
 
 	public void display() {
 		if (isOnline()) {
-			requestData("http://gb3it.pickworth.info:3000/communities");
+			requestData(HttpManager.serverURL + "communities");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -332,7 +332,7 @@ public class AdminAllCommunities extends Activity {
 		@Override
 		protected String doInBackground(String... params) {
 			HttpManager.postData(
-					"http://gb3it.pickworth.info:3000/communities",
+					HttpManager.serverURL + "communities",
 					newCommunityString);
 			String result = "new community added";
 			return result;
@@ -383,7 +383,7 @@ public class AdminAllCommunities extends Activity {
 		@Override
 		protected String doInBackground(String... params) {
 			HttpManager.updateData(
-					"http://gb3it.pickworth.info:3000/communities/"
+					HttpManager.serverURL + "communities/"
 							+ communityID, updateCommunityInfo);
 			String result = displayCommunityName + " updated";
 			return result;

@@ -158,7 +158,7 @@ public class RegisterActivity extends Activity implements
 
 	public void personInfo() {
 		if (isOnline()) {
-			requestData("http://gb3it.pickworth.info:3000/users");
+			requestData(HttpManager.serverURL+"users");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -167,7 +167,7 @@ public class RegisterActivity extends Activity implements
 
 	public void communityInfo() {
 		if (isOnline()) {
-			requestCommunityData("http://gb3it.pickworth.info:3000/communities");
+			requestCommunityData(HttpManager.serverURL+"communities");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -496,7 +496,7 @@ public class RegisterActivity extends Activity implements
 			}
 
 			// register the new account here.
-			HttpManager.postData("http://gb3it.pickworth.info:3000/users",
+			HttpManager.postData(HttpManager.serverURL+"users",
 					newUserString);
 			return true;
 		}
@@ -554,7 +554,7 @@ public class RegisterActivity extends Activity implements
 
 			// register the new phone number here.
 			HttpManager.postData(
-					"http://gb3it.pickworth.info:3000/phone_numbers",
+					HttpManager.serverURL+"phone_numbers",
 					newPhoneString);
 			return true;
 		}

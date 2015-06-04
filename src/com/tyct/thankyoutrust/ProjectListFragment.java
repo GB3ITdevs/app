@@ -94,7 +94,7 @@ public class ProjectListFragment extends Fragment {
 	// Method to create a and start a new task
 	private void requestData() {
 		// Set the uri string
-		String uri = "http://gb3it.pickworth.info:3000/communities";
+		String uri = HttpManager.serverURL+"communities";
 		// Create the new async task
 		GetCommunitiesTask ratingTask = new GetCommunitiesTask();
 		// Start it using the url that has been passed into the method

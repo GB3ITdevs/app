@@ -128,7 +128,7 @@ public class GrantRoundsActivity extends Activity {
 
 	public void retrieveGrantRounds() {
 		if (isOnline()) {
-			requestData("http://gb3it.pickworth.info:3000/grant_rounds");
+			requestData(HttpManager.serverURL+"grant_rounds");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -137,7 +137,7 @@ public class GrantRoundsActivity extends Activity {
 
 	public void retrieveCommunities() {
 		if (isOnline()) {
-			requestCommunityData("http://gb3it.pickworth.info:3000/communities");
+			requestCommunityData(HttpManager.serverURL+"communities");
 		} else {
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
 					.show();
@@ -287,7 +287,7 @@ public class GrantRoundsActivity extends Activity {
 		@Override
 		protected String doInBackground(String... params) {
 			HttpManager.postData(
-					"http://gb3it.pickworth.info:3000/grant_rounds",
+					HttpManager.serverURL+"grant_rounds",
 					newGrantRoundString);
 			String result = "success";
 			return result;

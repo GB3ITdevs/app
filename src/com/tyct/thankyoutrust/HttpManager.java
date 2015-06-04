@@ -15,8 +15,10 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 public class HttpManager {
-
+	public static final String serverURL = "http://gb3it.pickworth.info:3000/";
+	
 	public static String getData(String uri) {
+		
 
 		BufferedReader reader = null;
 
