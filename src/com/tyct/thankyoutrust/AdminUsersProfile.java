@@ -52,6 +52,8 @@ public class AdminUsersProfile extends Activity {
 	String[] communityNames;
 	int newCommunityId = 0;
 	int userCommunityId;
+	String yesAdmin = "Yes";
+	String noAdmin = "No";
 
 	// Dialog Fragements
 	AdminOptionsDialog adminDialog;
@@ -70,7 +72,7 @@ public class AdminUsersProfile extends Activity {
 		// makes connection to database
 		adminInfo();
 		communityInfo();
-
+		
 		// Populate Text fields with chosen user
 		populateFields();
 
@@ -143,6 +145,7 @@ public class AdminUsersProfile extends Activity {
 		TextView uCommunityName = (TextView) findViewById(R.id.tvPCommunity);
 		TextView uPhone = (TextView) findViewById(R.id.tvPPhoneNumber);
 
+
 		// set text fields
 		uName.setText(name);
 		uEmail.setText(email);
@@ -156,6 +159,20 @@ public class AdminUsersProfile extends Activity {
 		userName = name;
 		userId = id;
 		userCommunityId = communityId;
+		
+	}
+	
+	void populateAdminRights()
+	{
+		TextView uAdminRights = (TextView) findViewById(R.id.tvAdminRights);		
+		uAdminRights.setText(noAdmin);
+		
+		for (AdminID adm : adminList) {
+			if (userId == adm.getUserID()) {
+				uAdminRights.setText(yesAdmin);
+				break;
+			}	
+		}
 	}
 
 	// button that brings up admins options for said user
@@ -376,6 +393,7 @@ public class AdminUsersProfile extends Activity {
 		protected void onPostExecute(String result) {
 			adminList = AdminIDJSONParser.parseFeed(result);
 			adminTask.remove(this);
+			populateAdminRights();
 		}
 
 		@Override
@@ -407,6 +425,7 @@ public class AdminUsersProfile extends Activity {
 			deleteAdminTask.remove(this);
 			// Update Admin list
 			adminInfo();
+			populateAdminRights();
 		}
 
 		@Override
@@ -439,7 +458,6 @@ public class AdminUsersProfile extends Activity {
 
 			// Update Admin list
 			adminInfo();
-
 			postadmintask.remove(this);
 		}
 
@@ -470,6 +488,7 @@ public class AdminUsersProfile extends Activity {
 			communityTask.remove(this);
 
 			setCommunityNames(communityList);
+			
 		}
 	}
 

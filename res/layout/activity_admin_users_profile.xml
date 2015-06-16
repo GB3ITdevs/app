@@ -57,7 +57,7 @@
               <TextView
                 android:id="@+id/textView10"
                  android:textColor="#699ffc"
-                 android:paddingEnd="3dp"
+                 android:paddingRight="3dp"
                 android:text="@string/phone_number" />
 
              <TextView
@@ -132,6 +132,23 @@
                  android:id="@+id/tvPCommunity"
                  android:gravity="left"
                  android:text="@string/community" />
+        </TableRow>
+        
+        <TableRow
+            android:id="@+id/tableRow8"
+             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp">
+             
+             <TextView
+                android:id="@+id/textView15"
+                 android:textColor="#699ffc"
+                android:text="Administrator:" />
+
+             <TextView
+                 android:id="@+id/tvAdminRights"
+                 android:gravity="left"
+                 android:text="" />
         </TableRow>
     </TableLayout>
     
