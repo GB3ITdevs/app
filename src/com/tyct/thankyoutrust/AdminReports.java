@@ -490,11 +490,6 @@ public class AdminReports extends Activity implements
 		@Override
 		protected void onPostExecute(Boolean result) {
 			if (result == true) {
-				Toast.makeText(
-						AdminReports.this,
-						"Project Status changed to "
-								+ selectedProject.getStatus(),
-						Toast.LENGTH_LONG).show();
 
 				// Create new Fragments
 				Fragment projectListFrag = new AdminProjectListFragment();
