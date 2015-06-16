@@ -490,7 +490,7 @@ public class AdminReports extends Activity implements
 		@Override
 		protected void onPostExecute(Boolean result) {
 			if (result == true) {
-				
+
 				// Create new Fragments
 				Fragment projectListFrag = new AdminProjectListFragment();
 

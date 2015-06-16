@@ -197,9 +197,6 @@ public class AdminAddGrantRoundDialog extends android.app.DialogFragment {
 							String startDateStr = startDay.getText().toString() + "-" + startMonth.getText().toString() + "-" + startYear.getText().toString();
 							// Put Text into string form
 							String endDateStr = endDay.getText().toString() + "-" + endMonth.getText().toString() + "-" + endYear.getText().toString();
-							
-							Toast.makeText(myActivity, "Grand Round created",
-									Toast.LENGTH_SHORT).show();
 
 							returnToTarget(result, startDateStr, endDateStr);
 						}
@@ -210,62 +207,6 @@ public class AdminAddGrantRoundDialog extends android.app.DialogFragment {
 
 		return dialog;
 	}
-
-	/*public class positiveListener implements DialogInterface.OnClickListener {
-
-		@Override
-		public void onClick(DialogInterface dialog, int which) {
-			result = true;
-			boolean cancel = false; // Deals with input errors
-			View focusView = null;
-
-			// Get Text from editText field
-			EditText startDate = (EditText) getDialog()
-					.findViewById(R.id.editTextStartDate);
-			// Get Text from editText field
-			EditText endDate = (EditText) getDialog().findViewById(
-					R.id.editTextEndDate);
-
-			// Check required fields are filled
-			if (startDate.getText().toString().equals("")) {
-				startDate.setError(getString(R.string.error_field_required));
-				focusView = startDate;
-				cancel = true;
-			}
-
-			if (endDate.getText().toString().equals("")) {
-				endDate.setError(getString(R.string.error_field_required));
-				focusView = endDate;
-				cancel = true;
-			}
-
-			if (cancel) {
-				// There was an error; don't attempt registration and focus the
-				// first
-				// form field with an error.
-				Toast.makeText(myActivity, "Unsuccessful", Toast.LENGTH_SHORT)
-						.show();
-				focusView.requestFocus();
-			} else {
-				// Put Text into string form
-				String startDateString = startDate.getText()
-						.toString();
-				// Put Text into string form
-				String endDateString = endDate.getText().toString();
-
-				returnToTarget(result, startDateString, endDateString);
-			}
-		}
-	}
-
-	public class negativeListener implements DialogInterface.OnClickListener {
-
-		@Override
-		public void onClick(DialogInterface dialog, int which) {
-			result = false;
-			returnToTarget(result, null, null);
-		}
-	}*/
 	
 	private boolean checkEmptyEditTextFields(EditText field) {
 		boolean result = false;

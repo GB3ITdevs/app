@@ -88,9 +88,6 @@ public class AdminAddNewCommunity extends android.app.DialogFragment {
 							// convert post code to int
 							int postCode = Integer.parseInt(postCodeString);
 
-							Toast.makeText(myActivity, "Community created",
-									Toast.LENGTH_SHORT).show();
-
 							returnToTarget(result, communityName, postCode);
 						}
 					}
@@ -101,66 +98,6 @@ public class AdminAddNewCommunity extends android.app.DialogFragment {
 		return dialog;
 	}
 
-/*	public class positiveListener implements DialogInterface.OnClickListener {
-
-		@Override
-		public void onClick(DialogInterface dialog, int which) {
-			result = true;
-			boolean cancel = false; // Deals with input errors
-			View focusView = null;
-
-			// Get Text from editText field
-			EditText communityNamedEditTextField = (EditText) getDialog()
-					.findViewById(R.id.editTextEditCName);
-			// Get Text from editText field
-			EditText pcEditTextField = (EditText) getDialog().findViewById(
-					R.id.editTextPostCodeEdit);
-
-			// Check required fields are filled
-			if (communityNamedEditTextField.getText().toString().equals("")) {
-				communityNamedEditTextField
-						.setError(getString(R.string.error_field_required));
-				focusView = communityNamedEditTextField;
-				cancel = true;
-			}
-
-			if (pcEditTextField.getText().toString().equals("")) {
-				pcEditTextField
-						.setError(getString(R.string.error_field_required));
-				focusView = pcEditTextField;
-				cancel = true;
-			}
-
-			if (cancel) {
-				// There was an error; don't attempt registration and focus the
-				// first
-				// form field with an error.
-				Toast.makeText(myActivity, "Unsuccessful", Toast.LENGTH_SHORT)
-						.show();
-				focusView.requestFocus();
-			} else {
-				// Put Text into string form
-				String communityName = communityNamedEditTextField.getText()
-						.toString();
-				// Put Text into string form
-				String postCodeString = pcEditTextField.getText().toString();
-				// convert post code to int
-				int postCode = Integer.parseInt(postCodeString);
-
-				returnToTarget(result, communityName, postCode);
-			}
-		}
-
-	}
-
-	public class negativeListener implements DialogInterface.OnClickListener {
-
-		@Override
-		public void onClick(DialogInterface dialog, int which) {
-			result = false;
-			returnToTarget(result, null, 0);
-		}
-	}*/
 
 	private void returnToTarget(boolean result, String communityName,
 			int postCode) {
