@@ -1,5 +1,8 @@
 package com.tyct.thankyoutrust;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -16,13 +19,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -33,14 +34,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.tyct.thankyoutrust.model.Community;
-import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.model.AdminID;
+import com.tyct.thankyoutrust.model.User;
 import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
-import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
 import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
 /**

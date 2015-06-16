@@ -1,15 +1,12 @@
 package com.tyct.thankyoutrust.dialogs;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.widget.Toast;
 
-import com.tyct.thankyoutrust.AdminProjectListFragment;
 import com.tyct.thankyoutrust.AdminReports;
-import com.tyct.thankyoutrust.AdminUsersProfile;
 import com.tyct.thankyoutrust.model.Project;
 
 public class AdminSetProjectStateDialog extends android.app.DialogFragment{
