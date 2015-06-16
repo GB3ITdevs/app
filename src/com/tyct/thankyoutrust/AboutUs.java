@@ -26,9 +26,9 @@ public class AboutUs extends Activity {
         userIsLoggedIn = session.isUserLoggedIn();
         
         //Make background image transparent
-        View backgroundimage = findViewById(R.id.about_us);
-        Drawable background = backgroundimage.getBackground();
-        background.setAlpha(70);
+//        View backgroundimage = findViewById(R.id.about_us);
+//        Drawable background = backgroundimage.getBackground();
+//        background.setAlpha(70);
         
 	}
 }
