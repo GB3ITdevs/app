@@ -5,12 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.tyct.thankyoutrust.dialogs.AdminAddNewCommunity;
-import com.tyct.thankyoutrust.dialogs.AdminCommunityDialog;
-import com.tyct.thankyoutrust.dialogs.AdminEditCommunityDialog;
-import com.tyct.thankyoutrust.model.Community;
-import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
-
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -24,12 +18,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.tyct.thankyoutrust.dialogs.AdminAddNewCommunity;
+import com.tyct.thankyoutrust.dialogs.AdminCommunityDialog;
+import com.tyct.thankyoutrust.dialogs.AdminEditCommunityDialog;
+import com.tyct.thankyoutrust.model.Community;
+import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
 
 public class AdminAllCommunities extends Activity {
 	// Session Manager Class
@@ -132,9 +131,6 @@ public class AdminAllCommunities extends Activity {
 			addCommunityTask = new ArrayList<>();
 			AddCommunityTask task = new AddCommunityTask();
 			task.execute();
-			Toast.makeText(AdminAllCommunities.this,
-					communityName + ", " + postCode + " added.",
-					Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -165,18 +161,12 @@ public class AdminAllCommunities extends Activity {
 			// communityId + "; " +communityName + ", " + postCode +" updated.",
 			// Toast.LENGTH_LONG).show();
 		}
-		if (result == false) {
-			Toast.makeText(AdminAllCommunities.this, "Cancelled",
-					Toast.LENGTH_LONG).show();
-		}
 	}
 
 	// Method where selected options are implemented
 	public void setOptionIntents(String options, int selectedCommunityId,
 			String selectedCommunityName) {
 		if (options == "Post a message in community") {
-
-			// Toast.makeText(this, "New page", Toast.LENGTH_LONG).show();
 			Intent intent = new Intent(AdminAllCommunities.this,
 					AdminMessageBoard.class);
 			intent.putExtra("CommunityId", selectedCommunityId);

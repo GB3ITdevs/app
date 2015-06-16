@@ -5,43 +5,28 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.tyct.thankyoutrust.model.AdminID;
-import com.tyct.thankyoutrust.model.Community;
-import com.tyct.thankyoutrust.model.PhoneNumber;
-import com.tyct.thankyoutrust.model.ProjectRating;
-import com.tyct.thankyoutrust.model.User;
-import com.tyct.thankyoutrust.parsers.AdminIDJSONParser;
-import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
-import com.tyct.thankyoutrust.parsers.PhoneNumberJSONParser;
-import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
-import com.tyct.thankyoutrust.parsers.UserJSONParser;
-
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.tyct.thankyoutrust.model.AdminID;
+import com.tyct.thankyoutrust.model.Community;
+import com.tyct.thankyoutrust.model.PhoneNumber;
+import com.tyct.thankyoutrust.model.User;
+import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
+import com.tyct.thankyoutrust.parsers.PhoneNumberJSONParser;
+import com.tyct.thankyoutrust.parsers.UserJSONParser;
 
 public class AdminAllUsers extends Activity {
 
@@ -151,8 +136,7 @@ public class AdminAllUsers extends Activity {
 		if (isOnline()) {
 			requestData(HttpManager.serverURL + "users");
 		} else {
-			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
-					.show();
+			networkUnavailableToast();
 		}
 	}
 
@@ -160,8 +144,7 @@ public class AdminAllUsers extends Activity {
 		if (isOnline()) {
 			requestPhoneNumberData(HttpManager.serverURL + "phone_numbers");
 		} else {
-			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
-					.show();
+			networkUnavailableToast();
 		}
 	}
 
@@ -169,9 +152,13 @@ public class AdminAllUsers extends Activity {
 		if (isOnline()) {
 			requestCommunityData(HttpManager.serverURL + "communities");
 		} else {
-			Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
-					.show();
+			networkUnavailableToast();
 		}
+	}
+	
+	public void networkUnavailableToast() {
+		Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG)
+		.show();
 	}
 
 	// Connect to database

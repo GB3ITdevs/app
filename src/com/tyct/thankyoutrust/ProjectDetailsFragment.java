@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,11 +31,9 @@ import com.tyct.thankyoutrust.model.Community;
 import com.tyct.thankyoutrust.model.Project;
 import com.tyct.thankyoutrust.model.ProjectNote;
 import com.tyct.thankyoutrust.model.ProjectRating;
-import com.tyct.thankyoutrust.model.ProjectWebsite;
 import com.tyct.thankyoutrust.parsers.CommunityJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectNoteJSONParser;
 import com.tyct.thankyoutrust.parsers.ProjectRatingsJSONParser;
-import com.tyct.thankyoutrust.parsers.ProjectWebsiteJSONParser;
 
 public class ProjectDetailsFragment extends Fragment {
 	
@@ -370,12 +367,8 @@ public class ProjectDetailsFragment extends Fragment {
 		@Override
 		protected void onPostExecute(String result) {
 
-			// String messageResult = (result);
-			//Toast.makeText(ma, result, Toast.LENGTH_LONG).show();
 			posttasks.remove(this);
-			// if (posttasks.size() == 0) {
-			// pb.setVisibility(View.INVISIBLE);
-			// }
+
 			ratingBar.setIsIndicator(true);
 			
 			Intent intent = new Intent(ma, Projects.class);
@@ -535,8 +528,6 @@ public class ProjectDetailsFragment extends Fragment {
 					@Override
 					protected void onPostExecute(String result) {
 
-						// String commentResult = (result);
-						Toast.makeText(ma, result, Toast.LENGTH_LONG).show();
 						postProjectTasks.remove(this);
 						if (postProjectTasks.size() == 0) {
 							

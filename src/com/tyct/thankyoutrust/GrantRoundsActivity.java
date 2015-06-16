@@ -167,9 +167,6 @@ public class GrantRoundsActivity extends Activity {
 
 			AddGrantRoundTask task = new AddGrantRoundTask();
 			task.execute();
-			Toast.makeText(GrantRoundsActivity.this,
-					"Grant round starting " + startDate + ", ending " + endDate + " added.",
-					Toast.LENGTH_LONG).show();
 		}
 	}
 

@@ -308,9 +308,6 @@ public class AdminMessageBoard extends ListActivity {
 				// If Edit Text is not empty it will Post to the new comment to
 				// the database
 
-				// TODO Debugging, DO NOT LEAVE THIS TOAST HERE
-				Toast.makeText(AdminMessageBoard.this, "Posted", Toast.LENGTH_LONG)
-						.show();
 				// Create new Comment Object, then pass data into sets
 				commentEntity = new Comment();
 				// Passes the infoID

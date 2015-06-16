@@ -216,7 +216,6 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 			((Activity) context).finish();
 			Intent goTo = new Intent(context, HomeActivity.class);
 			context.startActivity(goTo);
-			//Toast.makeText(context, result, Toast.LENGTH_LONG).show();
 		}
 	}
 }

@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -364,14 +363,7 @@ public class HomeActivity extends ListActivity {
 				display();
 				userDisplay();
 			}
-			// Debugging Activity
-			// String commentEntityString =
-			// CommentJSONParser.POSTComment(commentEntity);
-			// Toast.makeText(MainActivity.this, commentEntityString,
-			// Toast.LENGTH_LONG).show();
-
 		}
-
 	}
 
 	// Handles the posting side

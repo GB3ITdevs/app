@@ -112,11 +112,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 				{
 					attemptLogin();
 				}
-				else
-				{
-					Toast.makeText(LoginActivity.this, "Error: There is a problem with your internet connection.", Toast.LENGTH_LONG).show();
-				}
-
 			}
 		});
 
