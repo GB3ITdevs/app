@@ -330,12 +330,7 @@ public class AdminAllCommunities extends Activity {
 
 		@Override
 		protected void onPostExecute(String result) {
-
-			String messageResult = (result);
-
 			addCommunityTask.remove(this);
-			Toast.makeText(AdminAllCommunities.this, messageResult,
-					Toast.LENGTH_LONG).show();
 			// start communites task
 			display();
 		}
